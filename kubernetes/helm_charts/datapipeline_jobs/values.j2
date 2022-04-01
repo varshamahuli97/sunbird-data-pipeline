@@ -556,8 +556,8 @@ summary-denormalization:
     taskmanager.memory.process.size: {{ flink_job_names['summary-denormalization'].taskmanager_process_memory }}
     jobmanager.memory.process.size: {{ flink_job_names['summary-denormalization'].jobmanager_process_memory }}
 
- rating:
-   rating: |+
+rating:
+  rating: |+
     include file("/data/flink/conf/base-config.conf")
     kafka {
       input.topic = {{ env_name }}.rating.event
