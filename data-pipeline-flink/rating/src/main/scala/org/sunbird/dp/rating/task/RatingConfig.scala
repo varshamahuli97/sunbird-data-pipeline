@@ -29,6 +29,7 @@ class RatingConfig (override val config: Config) extends BaseJobConfig(config, "
   val dbKeyspace: String = config.getString("ext-cassandra.keyspace")
   val dbHost: String = config.getString("ext-cassandra.host")
   val dbPort: Int = config.getInt("ext-cassandra.port")
+  val dbCoursesKeyspace: String = config.getString("ext-cassandra.courses_keyspace")
 
   // constants
   val courseId = "courseid"

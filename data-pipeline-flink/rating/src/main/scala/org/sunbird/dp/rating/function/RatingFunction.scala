@@ -42,7 +42,7 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
     var userStatus: Boolean = false
     try {
 
-      val query = QueryBuilder.select().column("userid").from(config.dbKeyspace, config.courseTable)
+      val query = QueryBuilder.select().column("userid").from(config.dbCoursesKeyspace, config.courseTable)
         .where(QueryBuilder.eq(config.userId, event.userId)).and(QueryBuilder.eq(config.courseId, event.activityId))
       val rows: java.util.List[Row] = cassandraUtil.find(query.toString);
       if (null != rows && !rows.isEmpty) {

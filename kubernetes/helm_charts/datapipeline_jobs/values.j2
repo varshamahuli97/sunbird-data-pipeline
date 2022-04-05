@@ -564,6 +564,16 @@ rating:
       output.topic = {{ env_name }}.rating.failedRating
       groupId = {{ env_name }}-rating-group
     }
+    ext-cassandra {
+      course_table = "user_enrolments"
+      ratings_table = "ratings"
+      ratings_summary_table = "ratings_summary"
+      ratings_lookup_table = "ratings_lookup"
+      keyspace = "sunbird"
+      courses_keyspace = "sunbird_courses"
+      host = "{{ core_cassandra_host }}"
+      port = "9042"
+    }
     skip.events = ["INTERRUPT"]
     permit.eid = ["AUDIT"]
     task {
