@@ -565,13 +565,13 @@ summary-denormalization:
       groupId = {{ env_name }}-rating-group
     }
     skip.events = ["INTERRUPT"]
-    permit.eid=["AUDIT"]
+    permit.eid = ["AUDIT"]
     task {
       consumer.parallelism = {{ rating_consumer_parallelism }}
-      downstream.operators.parallelism = {{ rating_operators_parallelism  }}
+      downstream.operators.parallelism = {{ rating_operators_parallelism }}
       rating {
-              parallelism = {{ rating_parallelism }}
-            }
+        parallelism = {{ rating_parallelism }}
+      }
     }
     redis {
       database {
@@ -597,8 +597,6 @@ summary-denormalization:
       user.port = {{ redis_meta_user_port }}
       dialcode.port = {{ redis_meta_dialcode_port }}
     }
-    # config version
-    user_denorm_version = v2
 
   flink-conf: |+
     jobmanager.memory.flink.size: {{ flink_job_names['rating'].jobmanager_memory }}
