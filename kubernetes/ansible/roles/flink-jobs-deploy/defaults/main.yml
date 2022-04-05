@@ -113,6 +113,7 @@ summary_denorm_key_expiry_seconds: 3600
 rating_consumer_parallelism: 1
 rating_operators_parallelism: 1
 rating_key_expiry_seconds: 3600
+rating_parallelism: 1
 
 
 ### Druid-validator related vars

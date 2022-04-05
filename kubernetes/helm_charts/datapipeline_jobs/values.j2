@@ -569,6 +569,9 @@ summary-denormalization:
     task {
       consumer.parallelism = {{ rating_consumer_parallelism }}
       downstream.operators.parallelism = {{ rating_operators_parallelism  }}
+      rating {
+              parallelism = {{ rating_parallelism }}
+            }
     }
     redis {
       database {
