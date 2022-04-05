@@ -556,47 +556,47 @@ summary-denormalization:
     taskmanager.memory.process.size: {{ flink_job_names['summary-denormalization'].taskmanager_process_memory }}
     jobmanager.memory.process.size: {{ flink_job_names['summary-denormalization'].jobmanager_process_memory }}
 
- rating:
-   rating: |+
-     include file("/data/flink/conf/base-config.conf")
-     kafka {
-       input.topic = {{ env_name }}.rating.event
-       output.topic = {{ env_name }}.rating.failedRating
-       groupId = {{ env_name }}-rating-group
-     }
-     skip.events = ["INTERRUPT"]
-     permit.eid = ["AUDIT"]
-     task {
-       consumer.parallelism = {{ rating_consumer_parallelism }}
-       downstream.operators.parallelism = {{ rating_operators_parallelism }}
-       rating {
-         parallelism = {{ rating_parallelism }}
-       }
-     }
-     redis {
-       database {
-         duplicationstore.id = 9
-         key.expiry.seconds = {{ rating_key_expiry_seconds }}
-       }
-     }
-     # redis-metadata
-     redis-meta {
-       database {
-         devicestore.id = 2
-         userstore.id = 12
-         contentstore.id = 5
-         dialcodestore.id = 6
-         key.expiry.seconds = {{ rating_key_expiry_seconds }}
-       }
-       content.host = {{ redis_meta_content_host }}
-       device.host = {{ redis_meta_device_host }}
-       user.host = {{ redis_meta_user_host }}
-       dialcode.host = {{ redis_meta_dialcode_host }}
-       content.port = {{ redis_meta_content_port }}
-       device.port = {{ redis_meta_device_port }}
-       user.port = {{ redis_meta_user_port }}
-       dialcode.port = {{ redis_meta_dialcode_port }}
-     }
+rating:
+  rating: |+
+    include file("/data/flink/conf/base-config.conf")
+    kafka {
+      input.topic = {{ env_name }}.rating.event
+      output.topic = {{ env_name }}.rating.failedRating
+      groupId = {{ env_name }}-rating-group
+    }
+    skip.events = ["INTERRUPT"]
+    permit.eid = ["AUDIT"]
+    task {
+      consumer.parallelism = {{ rating_consumer_parallelism }}
+      downstream.operators.parallelism = {{ rating_operators_parallelism }}
+      rating {
+        parallelism = {{ rating_parallelism }}
+      }
+    }
+    redis {
+      database {
+        duplicationstore.id = 9
+        key.expiry.seconds = {{ rating_key_expiry_seconds }}
+      }
+    }
+    # redis-metadata
+    redis-meta {
+      database {
+        devicestore.id = 2
+        userstore.id = 12
+        contentstore.id = 5
+        dialcodestore.id = 6
+        key.expiry.seconds = {{ rating_key_expiry_seconds }}
+      }
+      content.host = {{ redis_meta_content_host }}
+      device.host = {{ redis_meta_device_host }}
+      user.host = {{ redis_meta_user_host }}
+      dialcode.host = {{ redis_meta_dialcode_host }}
+      content.port = {{ redis_meta_content_port }}
+      device.port = {{ redis_meta_device_port }}
+      user.port = {{ redis_meta_user_port }}
+      dialcode.port = {{ redis_meta_dialcode_port }}
+    }
 
   flink-conf: |+
     jobmanager.memory.flink.size: {{ flink_job_names['rating'].jobmanager_memory }}
