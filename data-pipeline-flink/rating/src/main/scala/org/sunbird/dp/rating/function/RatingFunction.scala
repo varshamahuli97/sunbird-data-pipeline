@@ -40,7 +40,7 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
 
   override def processElement(event: Event, context: ProcessFunction[Event, Event]#Context, metrics: Metrics): Unit = {
     var userStatus: Boolean = false
-    try {
+    //try {
 
       val query = QueryBuilder.select().column("userid").from(config.dbCoursesKeyspace, config.courseTable)
         .where(QueryBuilder.eq(config.userId, event.userId)).and(QueryBuilder.eq(config.courseId, event.activityId))
@@ -102,14 +102,15 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
       } else {
         context.output(config.failedEvent, event)
       }
-    } catch {
-      case ex: Exception => {
-        ex.printStackTrace()
-        println(ex)
-        logger.info("Event throwing exception: ", JSONUtil.serialize(event))
-        throw ex
-      }
-    }
+    //}
+//    catch {
+//      case ex: Exception => {
+//        ex.printStackTrace()
+//        println(ex)
+//        logger.info("Event throwing exception: ", JSONUtil.serialize(event))
+//        throw ex
+//      }
+//    }
   }
 
   def updateDB(event: Event, updatedRatingValues: HashMap[Float, Float],
@@ -312,7 +313,7 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
     val updateQuery = QueryBuilder.update(config.dbKeyspace, config.ratingsSummaryTable)
       .`with`(QueryBuilder.set("latest50reviews", summary))
       .and(QueryBuilder.set("sum_of_total_ratings", sumOfTotalRating))
-      .and(QueryBuilder.set("total_number_of_ratings", sumOfTotalRating))
+      .and(QueryBuilder.set("total_number_of_ratings", totalRating))
       .and(QueryBuilder.set("totalcount1stars", updatedRatingValues.get(1.0f)))
       .and(QueryBuilder.set("totalcount2stars", updatedRatingValues.get(2.0f)))
       .and(QueryBuilder.set("totalcount3stars", updatedRatingValues.get(3.0f)))

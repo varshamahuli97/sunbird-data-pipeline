@@ -3,8 +3,8 @@ package org.sunbird.dp.rating.domain
 import java.util
 import org.sunbird.dp.core.domain.{Events, EventsPath}
 
-class Event(eventMap: util.Map[String, Any]) extends Events(eventMap) {
 
+class Event(eventMap: util.Map[String, Any]) extends Events(eventMap) {
   private val jobName = "ratingFeature"
 
   def versionNumber: String = {
