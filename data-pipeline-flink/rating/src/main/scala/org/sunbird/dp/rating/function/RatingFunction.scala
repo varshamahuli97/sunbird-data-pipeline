@@ -106,10 +106,8 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
     catch {
       case ex: Exception => {
         ex.printStackTrace()
-       // println(ex)
-        context.output(config.failedEvent, event)
+       context.output(config.failedEvent, event)
        logger.info("Event throwing exception: ", ex.getMessage)
-      //  throw ex
       }
     }
   }
