@@ -7,8 +7,8 @@ import org.sunbird.dp.core.domain.{Events, EventsPath}
 class Event(eventMap: util.Map[String, Any]) extends Events(eventMap) {
   private val jobName = "ratingFeature"
 
-  def versionNumber: String = {
-    telemetry.read[String]("version").get
+  def versionNumber: Int = {
+    telemetry.read[Int]("version").get
 
   }
 
