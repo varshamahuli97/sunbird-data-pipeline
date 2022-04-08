@@ -48,7 +48,7 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
       if (null != rows && !rows.isEmpty) {
         userStatus = true
         var delta = 0.0f
-        val prevRatingValue = event.prevValues.get("rating").asInstanceOf[Double].toFloat
+        val prevRatingValue = event.prevValues
         if(prevRatingValue!=null){
           delta = event.updatedValues.get("rating").asInstanceOf[Double].toFloat - event.prevValues.get("rating").asInstanceOf[Double].toFloat
         }else{
@@ -269,7 +269,7 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
       .from(config.dbKeyspace, config.ratingsSummaryTable)
       .where(QueryBuilder.eq("activityid", event.activityId))
       .and(QueryBuilder.eq("activitytype", event.activityType))
-      .and(QueryBuilder.eq("rating", event.updatedValues.get("rating").asInstanceOf[Double].toFloat))
+      .and(QueryBuilder.eq("rating", event.prevValues.get("rating").asInstanceOf[Double].toFloat))
       .and(QueryBuilder.eq("updatedon", timeBasedUuid)).toString
 
     logger.info("inside beginning of deleteRatingLookup befor query exec : " + query)
@@ -300,7 +300,7 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
   }
 
   def createRatingLookup(event: Event): Unit = {
-    val updatingTime = event.prevValues.get("updatedOn").asInstanceOf[String]
+    val updatingTime = event.updatedValues.get("updatedOn").asInstanceOf[String]
     val timeBasedUuid = UUID.fromString(updatingTime)
     val query = QueryBuilder.insertInto(config.dbKeyspace, config.ratingsLookupTable)
       .value("activityid", event.activityId)
