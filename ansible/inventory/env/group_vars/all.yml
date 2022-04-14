@@ -180,4 +180,5 @@ s3_request_signature_version: AWS4-HMAC-SHA256
 s3_path_style_access: false
 s3_https_only: false
 s3_default_bucket_location: ""
-s3_dp_storage_container: "telemetry-data-store"
+s3_storage_container: "igot"
+s3_dp_storage_container: "igotlogs"

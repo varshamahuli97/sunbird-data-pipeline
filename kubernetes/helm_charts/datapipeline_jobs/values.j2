@@ -13,7 +13,7 @@ s3_path_style_access: {{ s3_path_style_access }}
 
 serviceMonitor:
   enabled: {{ service_monitor_enabled | lower}}
-replicaCount: {{taskmana_replicacount|default(1)}}
+replicaCount: {{taskmanager_replicacount|default(1)}}
 
 scale_properties:
   telemetry-extractor:
