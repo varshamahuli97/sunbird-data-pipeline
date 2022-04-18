@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import org.slf4j.LoggerFactory
 import org.sunbird.dp.core.job.BaseJobConfig
 import redis.clients.jedis.Jedis
-import redis.clients.jedis.exceptions.{JedisConnectionException, JedisException}
+import redis.clients.jedis.exceptions.JedisException
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable
