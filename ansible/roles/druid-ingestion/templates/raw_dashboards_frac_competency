@@ -10,18 +10,18 @@
           "useFieldDiscovery": false,
           "fields": [
             {
-              "type": "root",
-              "name": "fracCompetencyID",
+              "type": "path",
+              "name": "competencyID",
               "expr": "$.fracCompetencyID"
             },
             {
-              "type": "root",
-              "name": "fracCompetencyName",
+              "type": "path",
+              "name": "competencyName",
               "expr": "$.fracCompetencyName"
             },
             {
-              "type": "root",
-              "name": "fracCompetencyStatus",
+              "type": "path",
+              "name": "competencyStatus",
               "expr": "$.fracCompetencyStatus"
             }
           ]

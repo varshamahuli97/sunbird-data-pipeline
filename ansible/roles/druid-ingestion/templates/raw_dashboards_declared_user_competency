@@ -10,17 +10,17 @@
           "useFieldDiscovery": false,
           "fields": [
             {
-              "type": "root",
+              "type": "path",
               "name": "userID",
               "expr": "$.decUserID"
             },
             {
-              "type": "root",
+              "type": "path",
               "name": "competencyID",
               "expr": "$.decCompetencyID"
             },
             {
-              "type": "root",
+              "type": "path",
               "name": "competencyLevel",
               "expr": "$.decCompetencyLevel"
             }

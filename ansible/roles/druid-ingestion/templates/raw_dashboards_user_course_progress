@@ -10,24 +10,22 @@
           "useFieldDiscovery": false,
           "fields": [
             {
-              "type": "root",
+              "type": "path",
               "name": "userID",
               "expr": "$.completionUserID"
             },
             {
-              "type": "root",
+              "type": "path",
               "name": "courseID",
               "expr": "$.completionCourseID"
             },
             {
               "type": "root",
-              "name": "completionPercentage",
-              "expr": "$.completionPercentage"
+              "name": "completionPercentage"
             },
             {
               "type": "root",
-              "name": "completionStatus",
-              "expr": "$.completionStatus"
+              "name": "completionStatus"
             }
           ]
         },

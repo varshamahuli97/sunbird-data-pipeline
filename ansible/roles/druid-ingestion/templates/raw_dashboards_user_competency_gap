@@ -11,48 +11,39 @@
           "fields": [
             {
               "type": "root",
-              "name": "userID",
-              "expr": "$.userID"
+              "name": "userID"
             },
             {
               "type": "root",
-              "name": "competencyID",
-              "expr": "$.competencyID"
+              "name": "competencyID"
             },
             {
               "type": "root",
-              "name": "orgID",
-              "expr": "$.orgID"
+              "name": "orgID"
             },
             {
               "type": "root",
-              "name": "workOrderID",
-              "expr": "$.workOrderID"
+              "name": "workOrderID"
             },
             {
               "type": "root",
-              "name": "expectedLevel",
-              "expr": "$.expectedLevel"
+              "name": "expectedLevel"
             },
             {
               "type": "root",
-              "name": "declaredLevel",
-              "expr": "$.declaredLevel"
+              "name": "declaredLevel"
             },
             {
               "type": "root",
-              "name": "competencyGap",
-              "expr": "$.competencyGap"
+              "name": "competencyGap"
             },
             {
               "type": "root",
-              "name": "completionPercentage",
-              "expr": "$.completionPercentage"
+              "name": "completionPercentage"
             },
             {
               "type": "root",
-              "name": "completionStatus",
-              "expr": "$.completionStatus"
+              "name": "completionStatus"
             }
           ]
         },
