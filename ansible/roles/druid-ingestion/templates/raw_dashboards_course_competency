@@ -11,7 +11,7 @@
           "fields": [
             {
               "type": "root",
-              "name": "courseId",
+              "name": "courseID",
               "expr": "$.courseID"
             },
             {
@@ -26,7 +26,7 @@
             },
             {
               "type": "root",
-              "name": "courseCompetencyId",
+              "name": "courseCompetencyID",
               "expr": "$.courseCompetencyID"
             },
             {
@@ -40,7 +40,7 @@
           "dimensions": [
             {
               "type": "string",
-              "name": "courseId"
+              "name": "courseID"
             },
             {
               "type": "string",
@@ -52,10 +52,10 @@
             },
             {
               "type": "string",
-              "name": "courseCompetencyId"
+              "name": "courseCompetencyID"
             },
             {
-              "type": "string",
+              "type": "long",
               "name": "courseCompetencyLevel"
             }
           ],

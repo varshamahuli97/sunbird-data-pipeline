@@ -11,13 +11,48 @@
           "fields": [
             {
               "type": "root",
-              "name": "courseId",
+              "name": "courseID",
               "expr": "$.courseID"
             },
             {
               "type": "root",
-              "name": "ratingSummary",
-              "expr": "$.ratingSummary"
+              "name": "ratingSum",
+              "expr": "$.ratingSum"
+            },
+            {
+              "type": "root",
+              "name": "ratingCount",
+              "expr": "$.ratingCount"
+            },
+            {
+              "type": "root",
+              "name": "ratingAverage",
+              "expr": "$.ratingAverage"
+            },
+            {
+              "type": "root",
+              "name": "count1Star",
+              "expr": "$.count1Star"
+            },
+            {
+              "type": "root",
+              "name": "count2Star",
+              "expr": "$.count2Star"
+            },
+            {
+              "type": "root",
+              "name": "count3Star",
+              "expr": "$.count3Star"
+            },
+            {
+              "type": "root",
+              "name": "count4Star",
+              "expr": "$.count4Star"
+            },
+            {
+              "type": "root",
+              "name": "count5Star",
+              "expr": "$.count5Star"
             }
           ]
         },
@@ -25,11 +60,39 @@
           "dimensions": [
             {
               "type": "string",
-              "name": "courseId"
+              "name": "courseID"
             },
             {
-              "type": "string",
-              "name": "ratingSummary"
+              "type": "float",
+              "name": "ratingSum"
+            },
+            {
+              "type": "float",
+              "name": "ratingCount"
+            },
+            {
+              "type": "float",
+              "name": "ratingAverage"
+            },
+            {
+              "type": "float",
+              "name": "count1Star"
+            },
+            {
+              "type": "float",
+              "name": "count2Star"
+            },
+            {
+              "type": "float",
+              "name": "count3Star"
+            },
+            {
+              "type": "float",
+              "name": "count4Star"
+            },
+            {
+              "type": "float",
+              "name": "count5Star"
             }
           ],
           "dimensionsExclusions": []

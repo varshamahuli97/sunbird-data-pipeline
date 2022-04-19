@@ -11,22 +11,22 @@
           "fields": [
             {
               "type": "root",
-              "name": "userId",
+              "name": "userID",
               "expr": "$.userID"
             },
             {
               "type": "root",
-              "name": "competencyId",
+              "name": "competencyID",
               "expr": "$.competencyID"
             },
             {
               "type": "root",
-              "name": "orgId",
+              "name": "orgID",
               "expr": "$.orgID"
             },
             {
               "type": "root",
-              "name": "workOrderId",
+              "name": "workOrderID",
               "expr": "$.workOrderID"
             },
             {
@@ -60,34 +60,34 @@
           "dimensions": [
             {
               "type": "string",
-              "name": "userId"
+              "name": "userID"
             },
             {
               "type": "string",
-              "name": "competencyId"
+              "name": "competencyID"
             },
             {
               "type": "string",
-              "name": "orgId"
+              "name": "orgID"
             },
             {
               "type": "string",
-              "name": "workOrderId"
+              "name": "workOrderID"
             },
             {
-              "type": "string",
+              "type": "long",
               "name": "expectedLevel"
             },
             {
-              "type": "string",
+              "type": "long",
               "name": "declaredLevel"
             },
             {
-              "type": "string",
+              "type": "long",
               "name": "competencyGap"
             },
             {
-              "type": "string",
+              "type": "float",
               "name": "completionPercentage"
             },
             {
