@@ -38,7 +38,7 @@
             },
             {
               "type": "string",
-              "name": "completionPercentage"
+              "name": "fracCompetencyStatus"
             }
           ],
           "dimensionsExclusions": []

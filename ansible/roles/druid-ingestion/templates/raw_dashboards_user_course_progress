@@ -11,12 +11,12 @@
           "fields": [
             {
               "type": "root",
-              "name": "userId",
+              "name": "userID",
               "expr": "$.completionUserID"
             },
             {
               "type": "root",
-              "name": "courseId",
+              "name": "courseID",
               "expr": "$.completionCourseID"
             },
             {
@@ -35,14 +35,14 @@
           "dimensions": [
             {
               "type": "string",
-              "name": "userId"
+              "name": "userID"
             },
             {
               "type": "string",
-              "name": "courseId"
+              "name": "courseID"
             },
             {
-              "type": "string",
+              "type": "float",
               "name": "completionPercentage"
             },
             {

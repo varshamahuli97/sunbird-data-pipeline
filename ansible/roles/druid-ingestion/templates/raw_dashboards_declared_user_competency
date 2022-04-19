@@ -11,12 +11,12 @@
           "fields": [
             {
               "type": "root",
-              "name": "userId",
+              "name": "userID",
               "expr": "$.decUserID"
             },
             {
               "type": "root",
-              "name": "competencyId",
+              "name": "competencyID",
               "expr": "$.decCompetencyID"
             },
             {
@@ -30,14 +30,14 @@
           "dimensions": [
             {
               "type": "string",
-              "name": "userId"
+              "name": "userID"
             },
             {
               "type": "string",
-              "name": "competencyId"
+              "name": "competencyID"
             },
             {
-              "type": "string",
+              "type": "long",
               "name": "competencyLevel"
             }
           ],

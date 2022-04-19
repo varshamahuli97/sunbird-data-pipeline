@@ -11,22 +11,22 @@
           "fields": [
             {
               "type": "root",
-              "name": "orgId",
+              "name": "orgID",
               "expr": "$.expOrgID"
             },
             {
               "type": "root",
-              "name": "workOrderId",
+              "name": "workOrderID",
               "expr": "$.expWorkOrderID"
             },
             {
               "type": "root",
-              "name": "userId",
+              "name": "userID",
               "expr": "$.expUserID"
             },
             {
               "type": "root",
-              "name": "competencyId",
+              "name": "competencyID",
               "expr": "$.expCompetencyID"
             },
             {
@@ -40,22 +40,22 @@
           "dimensions": [
             {
               "type": "string",
-              "name": "orgId"
+              "name": "orgID"
             },
             {
               "type": "string",
-              "name": "workOrderId"
+              "name": "workOrderID"
             },
             {
               "type": "string",
-              "name": "userId"
+              "name": "userID"
             },
             {
               "type": "string",
-              "name": "competencyId"
+              "name": "competencyID"
             },
             {
-              "type": "string",
+              "type": "long",
               "name": "competencyLevel"
             }
           ],
