@@ -10,27 +10,27 @@
           "useFieldDiscovery": false,
           "fields": [
             {
-              "type": "root",
+              "type": "path",
               "name": "orgID",
               "expr": "$.expOrgID"
             },
             {
-              "type": "root",
+              "type": "path",
               "name": "workOrderID",
               "expr": "$.expWorkOrderID"
             },
             {
-              "type": "root",
+              "type": "path",
               "name": "userID",
               "expr": "$.expUserID"
             },
             {
-              "type": "root",
+              "type": "path",
               "name": "competencyID",
               "expr": "$.expCompetencyID"
             },
             {
-              "type": "root",
+              "type": "path",
               "name": "competencyLevel",
               "expr": "$.expCompetencyLevel"
             }

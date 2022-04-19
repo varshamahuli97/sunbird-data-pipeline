@@ -11,28 +11,23 @@
           "fields": [
             {
               "type": "root",
-              "name": "courseID",
-              "expr": "$.courseID"
+              "name": "courseID"
             },
             {
               "type": "root",
-              "name": "courseStatus",
-              "expr": "$.courseStatus"
+              "name": "courseStatus"
             },
             {
               "type": "root",
-              "name": "courseChannel",
-              "expr": "$.courseChannel"
+              "name": "courseChannel"
             },
             {
               "type": "root",
-              "name": "courseCompetencyID",
-              "expr": "$.courseCompetencyID"
+              "name": "courseCompetencyID"
             },
             {
               "type": "root",
-              "name": "courseCompetencyLevel",
-              "expr": "$.courseCompetencyLevel"
+              "name": "courseCompetencyLevel"
             }
           ]
         },

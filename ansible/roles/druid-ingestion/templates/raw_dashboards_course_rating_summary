@@ -11,48 +11,39 @@
           "fields": [
             {
               "type": "root",
-              "name": "courseID",
-              "expr": "$.courseID"
+              "name": "courseID"
             },
             {
               "type": "root",
-              "name": "ratingSum",
-              "expr": "$.ratingSum"
+              "name": "ratingSum"
             },
             {
               "type": "root",
-              "name": "ratingCount",
-              "expr": "$.ratingCount"
+              "name": "ratingCount"
             },
             {
               "type": "root",
-              "name": "ratingAverage",
-              "expr": "$.ratingAverage"
+              "name": "ratingAverage"
             },
             {
               "type": "root",
-              "name": "count1Star",
-              "expr": "$.count1Star"
+              "name": "count1Star"
             },
             {
               "type": "root",
-              "name": "count2Star",
-              "expr": "$.count2Star"
+              "name": "count2Star"
             },
             {
               "type": "root",
-              "name": "count3Star",
-              "expr": "$.count3Star"
+              "name": "count3Star"
             },
             {
               "type": "root",
-              "name": "count4Star",
-              "expr": "$.count4Star"
+              "name": "count4Star"
             },
             {
               "type": "root",
-              "name": "count5Star",
-              "expr": "$.count5Star"
+              "name": "count5Star"
             }
           ]
         },
