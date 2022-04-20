@@ -97,7 +97,7 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
             updatedRating = event.updatedValues.get("rating").asInstanceOf[Double].toFloat
             updatedRatingValues = update_ratings_count(tempRow, 0.0f, updatedRating)
             sumOfTotalRating = 0.0f + event.updatedValues.get("rating").asInstanceOf[Double].toFloat
-            totalNumberOfRatings = 0.0f + 1
+            totalNumberOfRatings = 0.0f + 1.0f
           }
           updateDB(event, updatedRatingValues, sumOfTotalRating,
             totalNumberOfRatings,
@@ -130,17 +130,21 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
 
     var updatedReviews = ""
     if (null == ratingDBResult) {
-      if (validReview.size > 100) {
+   //   if (validReview.size > 100) {
         updatedReviews = update_Top50_Review_Summary("", event)
-        saveRatingSummary(event, updatedRatingValues, "", sumOfTotalRating, totalRating)
-      }
+        saveRatingSummary(event, updatedRatingValues, updatedReviews, sumOfTotalRating, totalRating)
+     // }
+//      else {
+//       // updatedReviews = update_Top50_Review_Summary("", event)
+//        saveRatingSummary(event, updatedRatingValues, "", sumOfTotalRating, totalRating)
+//      }
 
     }
     else {
-      if (validReview.size > 100) {
+   //   if (validReview.size > 100) {
         updatedReviews = update_Top50_Review_Summary(summary, event)
         updateRatingSummary(event, updatedRatingValues, updatedReviews, sumOfTotalRating, totalRating)
-      }
+     // }
     }
     if (null != getRatingLookUp(event)) {
       deleteRatingLookup(event)
@@ -168,7 +172,7 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
     if (ratingMap.containsKey(newRating) && newRating != oldRating) {
       ratingMap.put(newRating, ratingMap.get(newRating) + 1)
     }
-    if (prevRating != 0.0f) {
+    if (oldRating != 0.0f) {
       if (ratingMap.containsKey(oldRating) && newRating != oldRating) {
         ratingMap.put(oldRating, ratingMap.get(oldRating) - 1)
       }
@@ -265,8 +269,9 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
     val timeBasedUuid = UUID.fromString(updatingTime)
 
     logger.info("inside beginning of deleteRatingLookup ")
-    val query = QueryBuilder.delete(config.dbKeyspace, config.ratingsLookupTable)
-      .from(config.dbKeyspace, config.ratingsSummaryTable)
+    //val query = QueryBuilder.delete(config.dbKeyspace, config.ratingsLookupTable)
+    val query = QueryBuilder.delete()
+      .from(config.dbKeyspace, config.ratingsLookupTable)
       .where(QueryBuilder.eq("activityid", event.activityId))
       .and(QueryBuilder.eq("activitytype", event.activityType))
       .and(QueryBuilder.eq("rating", event.prevValues.get("rating").asInstanceOf[Double].toFloat))
