@@ -23,6 +23,18 @@
               "type": "path",
               "name": "competencyStatus",
               "expr": "$.fracCompetencyStatus"
+            },
+            {
+              "type": "root",
+              "name": "liveCourseCount"
+            },
+            {
+              "type": "root",
+              "name": "officerCountExpected"
+            },
+            {
+              "type": "root",
+              "name": "officerCountDeclared"
             }
           ]
         },
@@ -39,6 +51,18 @@
             {
               "type": "string",
               "name": "fracCompetencyStatus"
+            },
+            {
+              "type": "long",
+              "name": "liveCourseCount"
+            },
+            {
+              "type": "long",
+              "name": "officerCountExpected"
+            },
+            {
+              "type": "long",
+              "name": "officerCountDeclared"
             }
           ],
           "dimensionsExclusions": []
