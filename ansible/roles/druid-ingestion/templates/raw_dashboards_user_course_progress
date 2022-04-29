@@ -10,14 +10,24 @@
           "useFieldDiscovery": false,
           "fields": [
             {
-              "type": "path",
-              "name": "userID",
-              "expr": "$.completionUserID"
+              "type": "root",
+              "name": "userID"
             },
             {
-              "type": "path",
-              "name": "courseID",
-              "expr": "$.completionCourseID"
+              "type": "root",
+              "name": "courseID"
+            },
+            {
+              "type": "root",
+              "name": "courseName"
+            },
+            {
+              "type": "root",
+              "name": "courseStatus"
+            },
+            {
+              "type": "root",
+              "name": "courseOrgID"
             },
             {
               "type": "root",
@@ -38,6 +48,18 @@
             {
               "type": "string",
               "name": "courseID"
+            },
+            {
+              "type": "string",
+              "name": "courseName"
+            },
+            {
+              "type": "string",
+              "name": "courseStatus"
+            },
+            {
+              "type": "string",
+              "name": "courseOrgID"
             },
             {
               "type": "float",

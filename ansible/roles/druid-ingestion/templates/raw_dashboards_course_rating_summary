@@ -15,6 +15,18 @@
             },
             {
               "type": "root",
+              "name": "courseName"
+            },
+            {
+              "type": "root",
+              "name": "courseStatus"
+            },
+            {
+              "type": "root",
+              "name": "courseOrgID"
+             },
+            {
+              "type": "root",
               "name": "ratingSum"
             },
             {
@@ -52,6 +64,18 @@
             {
               "type": "string",
               "name": "courseID"
+            },
+            {
+              "type": "string",
+              "name": "courseName"
+            },
+            {
+              "type": "string",
+              "name": "courseStatus"
+            },
+            {
+              "type": "string",
+              "name": "courseOrgID"
             },
             {
               "type": "float",

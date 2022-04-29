@@ -10,19 +10,16 @@
           "useFieldDiscovery": false,
           "fields": [
             {
-              "type": "path",
-              "name": "userID",
-              "expr": "$.decUserID"
+              "type": "root",
+              "name": "userID"
             },
             {
-              "type": "path",
-              "name": "competencyID",
-              "expr": "$.decCompetencyID"
+              "type": "root",
+              "name": "competencyID"
             },
             {
-              "type": "path",
-              "name": "competencyLevel",
-              "expr": "$.decCompetencyLevel"
+              "type": "root",
+              "name": "declaredCompetencyLevel"
             }
           ]
         },
@@ -38,7 +35,7 @@
             },
             {
               "type": "long",
-              "name": "competencyLevel"
+              "name": "declaredCompetencyLevel"
             }
           ],
           "dimensionsExclusions": []

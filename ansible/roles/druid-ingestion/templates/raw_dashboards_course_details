@@ -1,7 +1,7 @@
 {
   "type": "kafka",
   "dataSchema": {
-    "dataSource": "dashboards-course-competency",
+    "dataSource": "dashboards-course-details",
     "parser": {
       "type": "string",
       "parseSpec": {
@@ -24,14 +24,6 @@
             {
               "type": "root",
               "name": "courseOrgID"
-            },
-            {
-              "type": "root",
-              "name": "competencyID"
-            },
-            {
-              "type": "root",
-              "name": "competencyLevel"
             }
           ]
         },
@@ -52,14 +44,6 @@
             {
               "type": "string",
               "name": "courseOrgID"
-            },
-            {
-              "type": "string",
-              "name": "competencyID"
-            },
-            {
-              "type": "long",
-              "name": "competencyLevel"
             }
           ],
           "dimensionsExclusions": []

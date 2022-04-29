@@ -10,19 +10,16 @@
           "useFieldDiscovery": false,
           "fields": [
             {
-              "type": "path",
-              "name": "competencyID",
-              "expr": "$.fracCompetencyID"
+              "type": "root",
+              "name": "competencyID"
             },
             {
-              "type": "path",
-              "name": "competencyName",
-              "expr": "$.fracCompetencyName"
+              "type": "root",
+              "name": "competencyName"
             },
             {
-              "type": "path",
-              "name": "competencyStatus",
-              "expr": "$.fracCompetencyStatus"
+              "type": "root",
+              "name": "competencyStatus"
             },
             {
               "type": "root",
@@ -42,15 +39,15 @@
           "dimensions": [
             {
               "type": "string",
-              "name": "fracCompetencyID"
+              "name": "competencyID"
             },
             {
               "type": "string",
-              "name": "fracCompetencyName"
+              "name": "competencyName"
             },
             {
               "type": "string",
-              "name": "fracCompetencyStatus"
+              "name": "competencyStatus"
             },
             {
               "type": "long",

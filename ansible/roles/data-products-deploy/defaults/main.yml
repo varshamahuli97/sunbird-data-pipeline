@@ -23,6 +23,7 @@ sink_topic: "{{ env }}.telemetry.sink"
 assess_topic: "{{ env }}.telemetry.assess"
 metrics_topic: "{{ env }}.telemetry.metrics"
 
+dashboards_course_details_topic: "{{ env }}.dashboards.course.details"
 dashboards_user_progress_topic: "{{ env }}.dashboards.user.course.progress"
 dashboards_frac_competency_topic: "{{ env }}.dashboards.competency.frac"
 dashboards_course_competency_topic: "{{ env }}.dashboards.competency.course"

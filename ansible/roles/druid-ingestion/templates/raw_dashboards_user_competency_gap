@@ -27,11 +27,11 @@
             },
             {
               "type": "root",
-              "name": "expectedLevel"
+              "name": "expectedCompetencyLevel"
             },
             {
               "type": "root",
-              "name": "declaredLevel"
+              "name": "declaredCompetencyLevel"
             },
             {
               "type": "root",
@@ -67,11 +67,11 @@
             },
             {
               "type": "long",
-              "name": "expectedLevel"
+              "name": "expectedCompetencyLevel"
             },
             {
               "type": "long",
-              "name": "declaredLevel"
+              "name": "declaredCompetencyLevel"
             },
             {
               "type": "long",
