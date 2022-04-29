@@ -62,7 +62,7 @@
     }
   },
   "ioConfig": {
-    "topic": "{{ env }}.dashboards.competency.course",
+    "topic": "{{ env }}.dashboards.course.details",
     "consumerProperties": {
       "bootstrap.servers": "{{kafka_brokers}}"
     },
