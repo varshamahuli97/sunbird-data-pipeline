@@ -20,6 +20,9 @@ ingestion_kafka_overriden_topics:
     replication_factor: 1
 
 processing_kafka_overriden_topics:
+  - name: dashboards.course.details
+    retention_time: 172800000
+    replication_factor: 1
   - name: dashboards.user.course.progress
     retention_time: 172800000
     replication_factor: 1
@@ -130,6 +133,9 @@ processing_kafka_overriden_topics:
     replication_factor: 1
 
 processing_kafka_topics:
+  - name: dashboards.course.details
+    num_of_partitions: 2
+    replication_factor: 1
   - name: dashboards.user.course.progress
     num_of_partitions: 2
     replication_factor: 1

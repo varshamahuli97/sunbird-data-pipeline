@@ -10,29 +10,24 @@
           "useFieldDiscovery": false,
           "fields": [
             {
-              "type": "path",
-              "name": "orgID",
-              "expr": "$.expOrgID"
+              "type": "root",
+              "name": "orgID"
             },
             {
-              "type": "path",
-              "name": "workOrderID",
-              "expr": "$.expWorkOrderID"
+              "type": "root",
+              "name": "workOrderID"
             },
             {
-              "type": "path",
-              "name": "userID",
-              "expr": "$.expUserID"
+              "type": "root",
+              "name": "userID"
             },
             {
-              "type": "path",
-              "name": "competencyID",
-              "expr": "$.expCompetencyID"
+              "type": "root",
+              "name": "competencyID"
             },
             {
-              "type": "path",
-              "name": "competencyLevel",
-              "expr": "$.expCompetencyLevel"
+              "type": "root",
+              "name": "expectedCompetencyLevel"
             },
             {
               "type": "root",
@@ -60,7 +55,7 @@
             },
             {
               "type": "long",
-              "name": "competencyLevel"
+              "name": "expectedCompetencyLevel"
             },
             {
               "type": "long",
