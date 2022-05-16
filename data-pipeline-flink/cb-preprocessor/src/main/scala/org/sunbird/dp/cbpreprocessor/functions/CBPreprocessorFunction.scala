@@ -4,16 +4,16 @@ import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.configuration.Configuration
 import org.apache.flink.streaming.api.functions.ProcessFunction
 import org.slf4j.LoggerFactory
-
 import org.sunbird.dp.core.cache.{DedupEngine, RedisConnect}
 import org.sunbird.dp.core.job.{BaseProcessFunction, Metrics}
 import org.sunbird.dp.cbpreprocessor.domain.Event
 import org.sunbird.dp.cbpreprocessor.task.CBPreprocessorConfig
-import org.sunbird.dp.cbpreprocessor.util.CBEventsFlattener
+import org.sunbird.dp.cbpreprocessor.util.{CBEventsFlattener, UserCacheUtil}
 
 class CBPreprocessorFunction(config: CBPreprocessorConfig,
                              @transient var cbEventsFlattener: CBEventsFlattener = null,
-                             @transient var dedupEngine: DedupEngine = null
+                             @transient var dedupEngine: DedupEngine = null,
+                             @transient var userCache: UserCacheUtil = null
                             )(implicit val eventTypeInfo: TypeInformation[Event])
   extends BaseProcessFunction[Event, Event](config) {
 
@@ -34,6 +34,10 @@ class CBPreprocessorFunction(config: CBPreprocessorConfig,
       val redisConnect = new RedisConnect(config.redisHost, config.redisPort, config)
       dedupEngine = new DedupEngine(redisConnect, config.dedupStore, config.cacheExpirySeconds)
     }
+    if (userCache == null) {
+      val userRedisConnect = new RedisConnect(config.userRedisHost, config.userRedisPort, config)
+      userCache = new UserCacheUtil(config, userRedisConnect, config.userCacheStore)
+    }
     if (cbEventsFlattener == null) {
       cbEventsFlattener = new CBEventsFlattener()
     }
@@ -41,7 +45,18 @@ class CBPreprocessorFunction(config: CBPreprocessorConfig,
 
   override def close(): Unit = {
     super.close()
-     dedupEngine.closeConnectionPool()
+    dedupEngine.closeConnectionPool()
+    userCache.close()
+  }
+
+  def fixOrgInfo(event: Event): Unit = {
+    if (null != event.actorId() && event.actorId().strip().nonEmpty) {
+      val userId = event.actorId().strip()
+      val orgData = userCache.getUserOrgWithRetry(userId)
+      val orgId = orgData._1
+      val orgName = orgData._2
+      if (orgId.nonEmpty) event.updateOrgInfo(orgId, orgName)
+    }
   }
 
   override def processElement(event: Event,
@@ -52,17 +67,18 @@ class CBPreprocessorFunction(config: CBPreprocessorConfig,
       deDuplicate[Event, Event](event.cbUid, event, context, config.duplicateEventsOutputTag,
         flagName = config.DEDUP_FLAG_NAME)(dedupEngine, metrics)
 
-    // TODO: remove, temp fix to null org
-    // event.correctCbObjectOrg()
-
     if (isUnique) {
+
+      val isWorkOrder = event.isWorkOrder
+
+      // if its not a work order event, update org info from cache
+      if (!isWorkOrder) fixOrgInfo(event) // first thing fix the org info
 
       // output to druid cb audit events topic, competency/role/activity/workorder state (Draft, Approved, Published)
       context.output(config.cbAuditEventsOutputTag, event)
       metrics.incCounter(metric = config.cbAuditEventMetricCount)
 
       // flatten work order events till officer data and output to druid work order officer topic
-      val isWorkOrder = event.isWorkOrder
       if (isWorkOrder) {
         cbEventsFlattener.flattenedOfficerEvents(event).foreach(itemEvent => {
           context.output(config.cbWorkOrderOfficerOutputTag, itemEvent)
