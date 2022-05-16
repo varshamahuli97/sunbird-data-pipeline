@@ -84,20 +84,25 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
               updatedRatingValues = update_ratings_count(tempRow, prevRating, updatedRating)
               sumOfTotalRating = tempRow.getFloat("sum_of_total_ratings") + delta
               totalNumberOfRatings = tempRow.getFloat("total_number_of_ratings")
+              if(prevRatingValue==null){
+                totalNumberOfRatings = totalNumberOfRatings + 1.0f
+              }
               summary  = tempRow.getString("latest50reviews")
             }
 
-            if (validReview.size > 100 && delta == 0) {
+            if (validReview.size > 100 && delta == 0.0f) {
               sumOfTotalRating = tempRow.getFloat("sum_of_total_ratings")
               totalNumberOfRatings = tempRow.getFloat("total_number_of_ratings")
               summary  = tempRow.getString("latest50reviews")
             }
+            logger.info("If case :sumOfTotalRating: " + sumOfTotalRating +"totalNumberOfRatings:" +totalNumberOfRatings)
           }
           else {
             updatedRating = event.updatedValues.get("rating").asInstanceOf[Double].toFloat
             updatedRatingValues = update_ratings_count(tempRow, 0.0f, updatedRating)
             sumOfTotalRating =  event.updatedValues.get("rating").asInstanceOf[Double].toFloat
             totalNumberOfRatings = 1.0f
+            logger.info("Else case :sumOfTotalRating: " + sumOfTotalRating +"totalNumberOfRatings:" +totalNumberOfRatings)
           }
           updateDB(event, updatedRatingValues, sumOfTotalRating,
             totalNumberOfRatings,
@@ -150,7 +155,7 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
     for (i <- 0 to 4) {
       ratingMap.put(i + 1.0f, 0.0f)
     }
-    logger.info("Before rating count ", ratingMap)
+    logger.info("Before rating count " +ratingMap)
     if (tempRow != null) {
       ratingMap.put(1.0f, (if (tempRow.getFloat("totalcount1stars")!=null)  tempRow.getFloat("totalcount1stars") else defaultCount))
       ratingMap.put(2.0f, (if (tempRow.getFloat("totalcount2stars")!=null)  tempRow.getFloat("totalcount2stars") else defaultCount))
@@ -159,17 +164,17 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
       ratingMap.put(5.0f, (if (tempRow.getFloat("totalcount5stars")!=null)  tempRow.getFloat("totalcount5stars") else defaultCount))
 
     }
-    logger.info("After rating count ", ratingMap)
+    logger.info("After rating count " + ratingMap)
     val newRating = (updatedRating).floor
     val oldRating = (prevRating).floor
     if (ratingMap.containsKey(newRating) && newRating != oldRating) {
       ratingMap.put(newRating, ratingMap.get(newRating) + 1)
-      logger.info("Increased rating count ", ratingMap)
+      logger.info("Increased rating count " + ratingMap)
     }
-    if (oldRating != 0.0f) {
+    if (oldRating!=0.0f && ratingMap.get(oldRating) != 0.0f && newRating != oldRating) {
       if (ratingMap.containsKey(oldRating) && newRating != oldRating) {
         ratingMap.put(oldRating, ratingMap.get(oldRating) - 1)
-        logger.info("Decreased rating count ", ratingMap)
+        logger.info("Decreased rating count " + ratingMap)
       }
     }
     ratingMap
