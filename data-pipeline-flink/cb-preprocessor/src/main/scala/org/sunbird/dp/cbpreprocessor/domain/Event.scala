@@ -8,7 +8,6 @@ import org.sunbird.dp.core.domain.{Events, EventsPath}
 import org.sunbird.dp.cbpreprocessor.task.CBPreprocessorConfig
 
 class Event(eventMap: util.Map[String, Any]) extends Events(eventMap) {
-
   private[this] val dateFormatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZoneUTC
   private val jobName = "CBPreprocessor"
 
@@ -100,15 +99,11 @@ class Event(eventMap: util.Map[String, Any]) extends Events(eventMap) {
 
   def cbUid: String = s"CB:${mid()}"
 
-  def correctCbObjectOrg(): Unit = {
-    if (cbObjectType == "Competency") {
-      val keyPath = s"${EventsPath.EDATA_PATH}.cb_object.org"
-      var org : String = telemetry.read[String](keyPath).orNull
-      if (org != null) org = org.trim()
-      if (org == null || org == "") {
-        telemetry.add(keyPath, "FRAC Department")
-      }
-    }
+  def updateOrgInfo(orgId: String, orgName: String): Unit = {
+    Map(
+      s"${EventsPath.EDATA_PATH}.cb_object.org" -> orgName,
+      s"${EventsPath.CONTEXT_CHANNEL_PATH}" -> orgId
+    ).foreach(i => telemetry.add(i._1, i._2))
   }
 
 }

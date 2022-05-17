@@ -26,6 +26,7 @@ class CBPreprocessorConfig(override val config: Config) extends BaseJobConfig(co
   val kafkaFailedTopic: String = config.getString("kafka.output.failed.topic")
 
   val defaultChannel: String = config.getString("default.channel")
+  val fracChannel: String = config.getString("frac.channel")
 
   // Output tags
   val cbAuditEventsOutputTag: OutputTag[Event] = OutputTag[Event]("cb-audit-events")
@@ -60,6 +61,15 @@ class CBPreprocessorConfig(override val config: Config) extends BaseJobConfig(co
 
   val dedupStore: Int = config.getInt("redis.database.duplicationstore.id")
   val cacheExpirySeconds: Int = config.getInt("redis.database.key.expiry.seconds")
+
+  val userCacheStore: Int = config.getInt("redis-meta.database.userstore.id")
+  val userRedisHost: String = config.getString("redis-meta.user.host")
+  val userRedisPort: Int = config.getInt("redis-meta.user.port")
+
+  val userStoreKeyPrefix = "user:"
+  val rootOrgId = "rootorgid"
+  val orgnameKey = "orgname"
+
   val duplicateEventsOutputTag: OutputTag[Event] = OutputTag[Event]("duplicate-events")
   val DEDUP_FLAG_NAME = "cb_duplicate"
 

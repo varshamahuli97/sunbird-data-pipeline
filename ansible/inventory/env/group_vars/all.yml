@@ -92,6 +92,9 @@ cassandra_hierarchy_store_prefix: "{{env}}_"
 data_exhaust_token: "{{dp_vault_data_exhaust_token}}"
 default_channel: "{{default_org_hash_id}}"
 
+telemetry_default_org_id: "{{ default_org_id }}"
+telemetry_frac_org_id: "{{ frac_org_id }}"
+
 # sunbird learner service
 sunbird_es_host: "{{groups['core-es']| join(',')}}"
 single_node_es_host: "{{ groups['core-es'][0] }}"
