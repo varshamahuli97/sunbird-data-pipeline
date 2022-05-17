@@ -26,6 +26,7 @@ class CBPreprocessorConfig(override val config: Config) extends BaseJobConfig(co
   val kafkaFailedTopic: String = config.getString("kafka.output.failed.topic")
 
   val defaultChannel: String = config.getString("default.channel")
+  val fracChannel: String = config.getString("frac.channel")
 
   // Output tags
   val cbAuditEventsOutputTag: OutputTag[Event] = OutputTag[Event]("cb-audit-events")

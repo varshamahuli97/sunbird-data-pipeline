@@ -50,8 +50,8 @@ class CBPreprocessorFunction(config: CBPreprocessorConfig,
   }
 
   def fixOrgInfo(event: Event): Unit = {
-    if (null != event.actorId() && event.actorId().strip().nonEmpty) {
-      val userId = event.actorId().strip()
+    if (null != event.actorId() && event.actorId().trim().nonEmpty) {
+      val userId = event.actorId().trim()
       val orgData = userCache.getUserOrgWithRetry(userId)
       val orgId = orgData._1
       val orgName = orgData._2

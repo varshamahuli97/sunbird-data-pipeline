@@ -302,7 +302,7 @@ pipeline-preprocessor:
       downstream.operators.parallelism = {{ pipeline_preprocessor_operators_parallelism }}
     }
     telemetry.schema.path="schemas/telemetry/3.0"
-    default.channel="b00bc992ef25f1a9a8d63291e20efc8d"
+    default.channel="{{ telemetry_default_org_id }}"
     dedup.producer.included.ids = ["{{ portal_id }}", "{{ desktop_id }}", "{{ frac_id }}", "{{ mdo_id }}"]
     secondary.events = ["INTERACT", "IMPRESSION", "SHARE_ITEM"]
     redis {
@@ -342,11 +342,17 @@ cb-preprocessor:
       downstream.operators.parallelism = {{ cb_preprocessor_operators_parallelism }}
     }
 
-    default.channel="b00bc992ef25f1a9a8d63291e20efc8d"
+    default.channel="{{ telemetry_default_org_id }}"
+    frac.channel="{{ telemetry_frac_org_id }}"
     redis {
       database {
         duplicationstore.id = 7
         key.expiry.seconds = {{ cb_preprocessor_key_expiry_seconds }}
+      }
+    }
+    redis-meta {
+      database {
+        userstore.id = 12
       }
     }
 
