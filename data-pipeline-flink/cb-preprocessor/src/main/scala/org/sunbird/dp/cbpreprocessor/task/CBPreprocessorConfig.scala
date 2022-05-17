@@ -63,8 +63,8 @@ class CBPreprocessorConfig(override val config: Config) extends BaseJobConfig(co
   val cacheExpirySeconds: Int = config.getInt("redis.database.key.expiry.seconds")
 
   val userCacheStore: Int = config.getInt("redis-meta.database.userstore.id")
-  val userRedisHost: String = config.getString("redis-meta.user.host")
-  val userRedisPort: Int = config.getInt("redis-meta.user.port")
+  val userRedisHost: String = config.getString("redis-meta.host")
+  val userRedisPort: Int = config.getInt("redis-meta.port")
 
   val userStoreKeyPrefix = "user:"
   val rootOrgId = "rootorgid"
