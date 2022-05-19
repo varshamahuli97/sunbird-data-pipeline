@@ -56,15 +56,27 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
         }
         val validReview = event.updatedValues.get("review").asInstanceOf[String]
 
+        //newly added
+
+        var tempRow: Row = null
+
+        val ratingQuery = QueryBuilder.select().all().from(config.dbKeyspace, config.ratingsSummaryTable)
+          .where(QueryBuilder.eq(config.activityId, event.activityId))
+          .and(QueryBuilder.eq(config.activityType, event.activityType)).toString
+
+        logger.info("line 66")
+        val ratingRows: java.util.List[Row] = cassandraUtil.find(ratingQuery.toString);
+        //
+
         if (delta != 0.0f || (validReview.size > 100)) {
-          var tempRow: Row = null
-
-          val ratingQuery = QueryBuilder.select().all().from(config.dbKeyspace, config.ratingsSummaryTable)
-            .where(QueryBuilder.eq(config.activityId, event.activityId))
-            .and(QueryBuilder.eq(config.activityType, event.activityType)).toString
-
-          logger.info("line 66")
-          val ratingRows: java.util.List[Row] = cassandraUtil.find(ratingQuery.toString);
+//          var tempRow: Row = null
+//
+//          val ratingQuery = QueryBuilder.select().all().from(config.dbKeyspace, config.ratingsSummaryTable)
+//            .where(QueryBuilder.eq(config.activityId, event.activityId))
+//            .and(QueryBuilder.eq(config.activityType, event.activityType)).toString
+//
+//          logger.info("line 66")
+//          val ratingRows: java.util.List[Row] = cassandraUtil.find(ratingQuery.toString);
           var updatedRating: Float = 0.0f
           var updatedRatingValues: HashMap[Float, Float] = new HashMap[Float, Float]()
           var prevRating: Float = 0.0f
@@ -76,6 +88,7 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
           if (null != ratingRows && !ratingRows.isEmpty) {
             tempRow = ratingRows.asScala.toList(0)
             logger.info("line 78 temprow :"+tempRow)
+
 
             if (delta != 0.0f) {
               if(prevRatingValue!=null) {
@@ -101,11 +114,18 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
             if (validReview.size > 100 && delta == 0.0f) {
               sumOfTotalRating = tempRow.getFloat("sum_of_total_ratings")
               totalNumberOfRatings = tempRow.getFloat("total_number_of_ratings")
+                prevRating = event.prevValues.get("rating").asInstanceOf[Double].toFloat
+              updatedRating = event.updatedValues.get("rating").asInstanceOf[Double].toFloat
+              logger.info("previous rating :"+prevRating+" updated rating :"+updatedRating)
+              updatedRatingValues = update_ratings_count(tempRow, prevRating, updatedRating)
+              logger.info(" updated rating values :"+updatedRatingValues)
+
               if(tempRow.getString("latest50reviews")!=null) {
                 summary = tempRow.getString("latest50reviews")
                 logger.info("line 102 summary :" + summary)
               }
             }
+
             logger.info("If case :sumOfTotalRating: " + sumOfTotalRating +"totalNumberOfRatings:" +totalNumberOfRatings)
           }
           else {
@@ -119,6 +139,20 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
             totalNumberOfRatings,
             summary)
 
+        }
+        if (validReview.size < 100 && delta == 0.0f) {
+              tempRow = ratingRows.asScala.toList(0)
+          val sumOfTotalRating = tempRow.getFloat("sum_of_total_ratings")
+          val totalNumberOfRatings = tempRow.getFloat("total_number_of_ratings")
+          val updatedRatingValues = update_ratings_count(tempRow, event.prevValues.get("rating").asInstanceOf[Double].toFloat, event.updatedValues.get("rating").asInstanceOf[Double].toFloat)
+          var summary: String = null
+          if(tempRow.getString("latest50reviews")!=null) {
+            summary = tempRow.getString("latest50reviews")
+            logger.info("line 102 summary :" + summary)
+          }
+          updateDB(event, updatedRatingValues, sumOfTotalRating,
+            totalNumberOfRatings,
+            summary)
         }
           if (null != getRatingLookUp(event)) {
             deleteRatingLookup(event)
@@ -184,7 +218,7 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
     val newRating = (updatedRating).floor
     val oldRating = (prevRating).floor
     if (ratingMap.containsKey(newRating) && newRating != oldRating) {
-      ratingMap.put(newRating, ratingMap.get(newRating) + 1)
+        ratingMap.put(newRating, ratingMap.get(newRating) + 1)
       logger.info("Increased rating count " + ratingMap)
     }
     if (oldRating!=0.0f && ratingMap.get(oldRating) != 0.0f && newRating != oldRating) {
@@ -201,7 +235,8 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
     var gson: Gson = new Gson()
     var ratingQueue = mutable.Queue[RatingJson]()
     val updatedReviewSize = event.updatedValues.get("review").asInstanceOf[String].size
-    if (updatedReviewSize > 100) {
+
+//    if (updatedReviewSize > 100) {
 
       if (summary!=null) {
         logger.info("summary : "+summary)
@@ -217,6 +252,8 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
         }
       }
       logger.info("ratingQueue : "+ratingQueue)
+    if (updatedReviewSize > 100) {
+
       ratingQueue.enqueue(RatingJson("review",
         event.userId.asInstanceOf[String],
         event.updatedValues.get("updatedOn").asInstanceOf[String],
@@ -230,8 +267,14 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
 
       gson.toJson(finalResult.toArray)
     } else {
-      gson.toJson(summary)
+      if(!ratingQueue.isEmpty){
+        logger.info("inside new if block 253")
+        gson.toJson(ratingQueue.toList.toArray)
+      }else {
+        logger.info("inside new else block 256")
 
+        null
+      }
     }
   }
 
