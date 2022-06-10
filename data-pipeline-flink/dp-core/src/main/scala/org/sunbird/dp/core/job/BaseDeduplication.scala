@@ -8,7 +8,7 @@ import org.apache.flink.streaming.api.scala.OutputTag
 import org.slf4j.LoggerFactory
 import org.sunbird.dp.core.cache.DedupEngine
 import org.sunbird.dp.core.domain.Events
-import redis.clients.jedis.exceptions.JedisException
+import redis.clients.jedis.exceptions.{JedisException, JedisConnectionException}
 
 trait BaseDeduplication {
 
