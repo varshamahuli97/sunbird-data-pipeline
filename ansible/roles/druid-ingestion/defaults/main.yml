@@ -10,8 +10,9 @@ druid_overlord_port: 8090
 
 ingestion_spec_configs:
   raw_telemetry_events:
-    minTaskMemory: 200m
-    maxTaskMemory: 400m
+    minTaskMemory: 512m
+    maxTaskMemory: 1024m
+    maxDirectTaskMemory: 1024m
 
 raw_offline_desktop_taskcount: 1
 raw_summary_events_taskcount: 1

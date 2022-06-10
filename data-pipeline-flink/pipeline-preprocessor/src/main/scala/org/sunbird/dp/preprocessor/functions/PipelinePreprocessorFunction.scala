@@ -57,7 +57,8 @@ class PipelinePreprocessorFunction(config: PipelinePreprocessorConfig,
   }
 
   def isDuplicateCheckRequired(producerId: String): Boolean = {
-    config.includedProducersForDedup.contains(producerId)
+    // config.includedProducersForDedup.contains(producerId)
+    true
   }
 
   def addHubField(event: Event): Unit = {
