@@ -1,7 +1,7 @@
 package org.sunbird.dp.core.cache
 
 import redis.clients.jedis.Jedis
-import redis.clients.jedis.exceptions.{JedisException, JedisConnectionException}
+import redis.clients.jedis.exceptions.JedisException
 
 
 class DedupEngine(redisConnect: RedisConnect, store: Int, expirySeconds: Int) extends Serializable {
@@ -11,13 +11,12 @@ class DedupEngine(redisConnect: RedisConnect, store: Int, expirySeconds: Int) ex
   redisConnection.select(store)
 
   @throws[JedisException]
-  @throws[JedisConnectionException]
   def isUniqueEvent(checksum: String): Boolean = {
     var unique = false
     try {
       unique = !redisConnection.exists(checksum)
     } catch {
-      case ex@(_: JedisException | _: JedisConnectionException) =>
+      case ex: JedisException =>
         ex.printStackTrace()
         this.redisConnection.close()
         this.redisConnection = redisConnect.getConnection(this.store, backoffTimeInMillis = 10000)
@@ -27,12 +26,11 @@ class DedupEngine(redisConnect: RedisConnect, store: Int, expirySeconds: Int) ex
   }
 
   @throws[JedisException]
-  @throws[JedisConnectionException]
   def storeChecksum(checksum: String): Unit = {
     try
       redisConnection.setex(checksum, expirySeconds, "")
     catch {
-      case ex@(_: JedisException | _: JedisConnectionException) =>
+      case ex: JedisException =>
         ex.printStackTrace()
         this.redisConnection.close()
         this.redisConnection = redisConnect.getConnection(this.store, backoffTimeInMillis = 10000)

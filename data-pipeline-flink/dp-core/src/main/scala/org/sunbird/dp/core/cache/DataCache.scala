@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import org.slf4j.LoggerFactory
 import org.sunbird.dp.core.job.BaseJobConfig
 import redis.clients.jedis.Jedis
-import redis.clients.jedis.exceptions.{JedisException, JedisConnectionException}
+import redis.clients.jedis.exceptions.JedisException
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable
@@ -31,7 +31,7 @@ class DataCache(val config: BaseJobConfig, val redisConnect: RedisConnect, val d
     try {
       convertToComplexDataTypes(hgetAll(key))
     } catch {
-      case ex@(_: JedisException | _: JedisConnectionException) =>
+      case ex: JedisException =>
         logger.error("Exception when retrieving data from redis cache", ex)
         this.redisConnection.close()
         this.redisConnection = redisConnect.getConnection(dbIndex)
@@ -80,7 +80,7 @@ class DataCache(val config: BaseJobConfig, val redisConnect: RedisConnect, val d
     try {
       get(key)
     } catch {
-      case ex@(_: JedisException | _: JedisConnectionException) =>
+      case ex: JedisException =>
         logger.error("Exception when retrieving data from redis cache", ex)
         this.redisConnection.close()
         this.redisConnection = redisConnect.getConnection(dbIndex)
@@ -117,7 +117,7 @@ class DataCache(val config: BaseJobConfig, val redisConnect: RedisConnect, val d
     } catch {
       // Write testcase for catch block
       // $COVERAGE-OFF$ Disabling scoverage
-      case ex@(_: JedisException | _: JedisConnectionException) => {
+      case ex: JedisException => {
         println("dataCache")
         logger.error("Exception when inserting data to redis cache", ex)
         this.redisConnection.close()
@@ -131,7 +131,7 @@ class DataCache(val config: BaseJobConfig, val redisConnect: RedisConnect, val d
     try {
       set(key, value);
     } catch {
-      case ex@(_: JedisException | _: JedisConnectionException) =>
+      case ex: JedisException =>
         logger.error("Exception when update data to redis cache", ex)
         this.redisConnection.close()
         this.redisConnection = redisConnect.getConnection(dbIndex);
@@ -150,7 +150,7 @@ class DataCache(val config: BaseJobConfig, val redisConnect: RedisConnect, val d
     try {
       sMembers(key)
     } catch {
-      case ex@(_: JedisException | _: JedisConnectionException) =>
+      case ex: JedisException =>
         logger.error("Exception when retrieving data from redis cache", ex)
         this.redisConnection.close()
         this.redisConnection = redisConnect.getConnection(dbIndex)
@@ -166,7 +166,7 @@ class DataCache(val config: BaseJobConfig, val redisConnect: RedisConnect, val d
     try {
       hdel(key, fieldSeq)
     } catch {
-      case ex@(_: JedisException | _: JedisConnectionException) =>
+      case ex: JedisException =>
         logger.error("Exception when deleting fields in hash", ex)
         this.redisConnection.close()
         this.redisConnection = redisConnect.getConnection(dbIndex)
@@ -182,7 +182,7 @@ class DataCache(val config: BaseJobConfig, val redisConnect: RedisConnect, val d
     try {
       hIncBy(key, field, value)
     } catch {
-      case ex@(_: JedisException | _: JedisConnectionException) => {
+      case ex: JedisException => {
         logger.error(s"Exception while incrementing count key=${key}, field=${field}, value=${value}", ex)
         this.redisConnection.close()
         this.redisConnection = redisConnect.getConnection(dbIndex)

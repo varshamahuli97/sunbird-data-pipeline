@@ -3,7 +3,7 @@ package org.sunbird.dp.cbpreprocessor.util
 import org.sunbird.dp.cbpreprocessor.task.CBPreprocessorConfig
 import org.sunbird.dp.core.cache.RedisConnect
 import redis.clients.jedis.Jedis
-import redis.clients.jedis.exceptions.{JedisException, JedisConnectionException}
+import redis.clients.jedis.exceptions.JedisException
 
 class UserCacheUtil(config: CBPreprocessorConfig, redisConnect: RedisConnect, store: Int) extends Serializable {
 
@@ -12,20 +12,18 @@ class UserCacheUtil(config: CBPreprocessorConfig, redisConnect: RedisConnect, st
   redisConnection.select(store)
 
   @throws[JedisException]
-  @throws[JedisConnectionException]
   def getUserOrg(userId: String): (String, String) = {
     val cacheData = redisConnection.hgetAll(config.userStoreKeyPrefix + userId)
     (cacheData.getOrDefault(config.rootOrgId, ""), cacheData.getOrDefault(config.orgnameKey, ""))
   }
 
   @throws[JedisException]
-  @throws[JedisConnectionException]
   def getUserOrgWithRetry(userId: String): (String, String) = {
     var orgData = ("", "")
     try {
       orgData = getUserOrg(userId)
     } catch {
-      case ex@(_: JedisException | _: JedisConnectionException) =>
+      case ex: JedisException =>
         ex.printStackTrace()
         this.redisConnection.close()
         this.redisConnection = redisConnect.getConnection(this.store, backoffTimeInMillis = 10000)
