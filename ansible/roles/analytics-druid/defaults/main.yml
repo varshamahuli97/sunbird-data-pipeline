@@ -212,12 +212,12 @@ default_druid_configs:
    s3_secret_key: "{{ s3_storage_secret }}"
    s3_bucket: "{{ s3_dp_storage_container }}"
    s3_endpoint: "{{ s3_storage_endpoint }}"
-   s3_segment_dir: "druid/raw/segments"
+   s3_segment_dir: "druid/rollup/segments"
    s3_path_like_access: {{ s3_path_style_access }}
    s3_v4_sign_region: "{{ s3_default_bucket_location }}"
    #Logging the indexing logs to s3
    s3_logging_bucket: "{{ s3_dp_storage_container }}"
-   s3_indexer_logs_dir: "druid/raw/stage/indexing_logs"
+   s3_indexer_logs_dir: "druid/rollup/stage/indexing_logs"
    #Druid coordinator node configuration
    druid_coordinator_heap_size: 128m
    druid_coordinator_period: PT30S

@@ -101,5 +101,5 @@ processing_cluster_zookeeper: "{{ groups['processing-cluster-zookeepers'] | diff
 processing_cluster_kafka: "{{ groups['processing-cluster-kafka'] | difference(['localhost']) | map('regex_replace', '^(.*)$', '\\1:9092') | list}}"
 
 ### ingestion kafka exporters related vars.
-ingestion_cluster_zookeeper: "{{ groups['ingestion-cluster-zookeeper'] | difference(['localhost']) | map('regex_replace', '^(.*)$', '\\1:2181') | list}}"
+ingestion_cluster_zookeeper: "{{ groups['ingestion-cluster-zookeepers'] | difference(['localhost']) | map('regex_replace', '^(.*)$', '\\1:2181') | list}}"
 ingestion_cluster_kafka: "{{ groups['ingestion-cluster-kafka'] | difference(['localhost']) | map('regex_replace', '^(.*)$', '\\1:9092') | list}}"
