@@ -68,6 +68,7 @@ portal_id: "{{ env }}.sunbird.portal"
 desktop_id: "{{ env }}.sunbird.desktop"
 frac_id: "{{ env }}.FRac.portal"
 mdo_id: "{{ env }}.mdo.portal"
+
 pipeline_preprocessor_key_expiry_seconds: 3600
 
 ### cb-preprocessor related vars
