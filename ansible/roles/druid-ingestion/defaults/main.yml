@@ -12,6 +12,7 @@ ingestion_spec_configs:
   raw_telemetry_events:
     minTaskMemory: 200m
     maxTaskMemory: 400m
+    maxDirectTaskMemory: 400m
 
 raw_offline_desktop_taskcount: 1
 raw_summary_events_taskcount: 1
