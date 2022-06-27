@@ -1,7 +1,6 @@
 package org.sunbird.dp.core.cache
 
 import java.util
-
 import com.google.gson.Gson
 import org.slf4j.LoggerFactory
 import org.sunbird.dp.core.job.BaseJobConfig

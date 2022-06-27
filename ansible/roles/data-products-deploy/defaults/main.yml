@@ -32,10 +32,19 @@ dashboards_declared_competency_topic: "{{ env }}.dashboards.competency.declared"
 dashboards_competency_gap_topic: "{{ env }}.dashboards.competency.gap"
 dashboards_course_rating_summary_topic: "{{ env }}.dashboards.course.rating.summary"
 dashboards_cassandra_user_table: "user"
+dashboards_cassandra_org_table: "organisation"
 dashboards_cassandra_user_content_consumption_table: "user_content_consumption"
 dashboards_cassandra_content_hierarchy_table: "content_hierarchy"
 dashboards_cassandra_rating_summary_table: "ratings_summary"
 dashboards_frac_backend_host: "frac-dictionary-backend.igot-{{ env }}.in"
+dashboards_broker_compression: "none"
+dashboards_redis_host: "{{ redis_host }}"
+dashboards_redis_port: "6379"
+dashboards_redis_db: "12"
+dashboards_redis_registered_officer_count_key: "mdo_registered_officer_count"
+dashboards_redis_total_officer_count_key: "mdo_total_officer_count"
+dashboards_redis_org_name_key: "mdo_name_by_org"
+
 
 
 job_manager_tmp_dir: "transient-data"
@@ -54,8 +63,8 @@ dataset_metadata_table: "{{ env }}_dataset_metadata"
 report_user_table_keyspace: "sunbird_courses"
 report_user_enrolment_table: "report_user_enrolments"
 
-analytics_job_list: '"wfs", "competency-metrics", "monitor-job-summ"'
-analytics_jobs_count: 3
+analytics_job_list: '"wfs", "competency-metrics", "user-org-redis-update", "monitor-job-summ"'
+analytics_jobs_count: 4
 
 cassandra_keyspace_prefix: '{{ env }}_'
 report_cassandra_cluster_host: "{{ report_cassandra_host | default(core_cassandra_host) }}"
