@@ -35,8 +35,8 @@ user_port: 6379
 dialcode_port: 6379
 
 # configure data-products
-bucket: "telemetry-data-store"
-secor_bucket: "telemetry-data-store"
+bucket: "igot"
+secor_bucket: "igot"
 dp_object_store_type: "cephs3"
 dp_raw_telemetry_backup_location: "secor-{{ env }}/unique/raw/"
 dp_storage_key_config: "s3_storage_key"
