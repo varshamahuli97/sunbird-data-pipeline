@@ -82,7 +82,7 @@
     "consumerProperties": {
       "bootstrap.servers": "{{kafka_brokers}}"
     },
-    "taskCount": "{{raw_dashboards_frac_competency_taskcount}}",
+    "taskCount": {{raw_dashboards_frac_competency_taskcount}},
     "replicas": 1,
     "taskDuration": "PT7200S",
     "useEarliestOffset": true,
