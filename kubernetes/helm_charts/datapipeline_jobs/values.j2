@@ -71,6 +71,11 @@ scale_properties:
     scale_target_value: {{ flink_job_names['device-profile-updater'].scale_target_value | default(0) }}
     min_replica: {{ flink_job_names['device-profile-updater'].min_replica | default(1) }}
     max_replica: {{ flink_job_names['device-profile-updater'].max_replica | default(2) }}
+  rating:
+    enabled: {{ flink_job_names['rating'].scale_enabled | lower}}
+    scale_target_value: {{ flink_job_names['rating'].scale_target_value | default(0) }}
+    min_replica: {{ flink_job_names['rating'].min_replica | default(1) }}
+    max_replica: {{ flink_job_names['rating'].max_replica | default(2) }}
   ingest-router:
     enabled: {{ flink_job_names['ingest-router'].scale_enabled | lower}}
     scale_target_value: {{ flink_job_names['ingest-router'].scale_target_value }}
