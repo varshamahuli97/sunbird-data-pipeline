@@ -143,6 +143,12 @@ processing_kafka_overriden_topics:
   - name: druid.cb.work.order.officer
     retention_time: 172800000
     replication_factor: 2
+  - name: rating.event
+    retention_time: 172800000
+    replication_factor: 2
+  - name: rating.failedRating
+    retention_time: 172800000
+    replication_factor: 2
 
 processing_kafka_topics:
   - name: dashboards.course.details
@@ -250,15 +256,6 @@ processing_kafka_topics:
   - name: telemetry.unique.secondary
     num_of_partitions: 16
     replication_factor: 2
-  - name: druid.events.log
-    num_of_partitions: 16
-    replication_factor: 2
-  - name: druid.events.telemetry
-    num_of_partitions: 16
-    replication_factor: 2
-  - name: druid.events.summary
-    num_of_partitions: 16
-    replication_factor: 2
   - name: ml.observation.raw
     num_of_partitions: 4
     replication_factor: 2
@@ -277,3 +274,10 @@ processing_kafka_topics:
   - name: druid.cb.work.order.officer
     num_of_partitions: 16
     replication_factor: 2
+  - name: rating.event
+    num_of_partitions: 4
+    replication_factor: 2
+  - name: rating.failedRating
+    num_of_partitions: 4
+    replication_factor: 2
+
