@@ -52,6 +52,11 @@ scale_properties:
     scale_target_value: {{ flink_job_names['assessment-aggregator'].scale_target_value | default(0) }}
     min_replica: {{ flink_job_names['assessment-aggregator'].min_replica | default(1) }}
     max_replica: {{ flink_job_names['assessment-aggregator'].max_replica | default(2) }}
+  assessment-submit:
+    enabled: {{ flink_job_names['assessment-submit'].scale_enabled | lower}}
+    scale_target_value: {{ flink_job_names['assessment-submit'].scale_target_value | default(0) }}
+    min_replica: {{ flink_job_names['assessment-submit'].min_replica | default(1) }}
+    max_replica: {{ flink_job_names['assessment-submit'].max_replica | default(2) }}
   content-cache-updater:
     enabled: {{ flink_job_names['content-cache-updater'].scale_enabled | lower}}
     scale_target_value: {{ flink_job_names['content-cache-updater'].scale_target_value | default(0) }}
@@ -838,6 +843,52 @@ assessment-aggregator:
     jobmanager.memory.flink.size: {{ flink_job_names['assessment-aggregator'].jobmanager_memory }}
     taskmanager.memory.flink.size: {{ flink_job_names['assessment-aggregator'].taskmanager_memory }}
     taskmanager.numberOfTaskSlots: {{ flink_job_names['assessment-aggregator'].taskslots }}
+    parallelism.default: 1
+    jobmanager.execution.failover-strategy: region
+    taskmanager.memory.network.fraction: 0.1
+    
+assessment-submit: 
+  assessment-submit: |+
+    include file("/data/flink/conf/base-config.conf")
+    kafka {
+      producer.broker-servers = "{{ ingestion_kafka_brokers }}"
+      consumer.broker-servers = "{{ ingestion_kafka_brokers }}"
+      zookeeper = "{{ ingestion_zookeepers }}"
+       output.topic = {{ env_name }}.assessment.final
+       input.topic = {{ env_name }}.assessment.submit
+       groupId = {{ env_name }}-assessment-submit-group
+       success.topic = {{ env_name }}.success.assessment.submit
+       failed.topic= {{ env_name }}.telemetry.assess.submit.failed      
+    }
+    task {
+      consumer.parallelism = {{ assesssubmit_consumer_parallelism }}
+      downstream.parallelism = {{ assesssubmit_downstream_parallelism }}
+      assesssubmit {
+        parallelism = {{ assesssubmit_parallelism }}
+      }
+      scoresubmit.parallelism = {{ assesssubmit_scoresubmit_parallelism }}
+    }
+    lms-cassandra {
+      keyspace = "{{ middleware_cassandra_courses_keyspace }}"
+      table = "{{ middleware_cassandra_assessment_aggregator_table }}"
+      questionudttype= "{{ middleware_cassandra_assessment_question_type }}"
+      enrolmentstable = "{{ middleware_cassandra_user_enrolments_table }}"
+      activitytable = "{{ middleware_cassandra_user_activity_agg_table }}"
+    }
+    redis {
+      database {
+        relationCache.id = 10
+        contentCache.id = 5
+      }
+    }
+    assessment.skip.missingRecords = true
+    content.read.api = "{{ content_read_api_host }}/{{ content_read_api_endpoint }}"
+    user.activity.agg.type="attempt_metrics"
+
+  flink-conf: |+
+    jobmanager.memory.flink.size: {{ flink_job_names['assessment-submit'].jobmanager_memory }}
+    taskmanager.memory.flink.size: {{ flink_job_names['assessment-submit'].taskmanager_memory }}
+    taskmanager.numberOfTaskSlots: {{ flink_job_names['assessment-submit'].taskslots }}
     parallelism.default: 1
     jobmanager.execution.failover-strategy: region
     taskmanager.memory.network.fraction: 0.1
