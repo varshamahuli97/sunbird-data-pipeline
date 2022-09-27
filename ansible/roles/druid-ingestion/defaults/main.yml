@@ -20,7 +20,6 @@ raw_telemetry_events_taskcount: 1
 raw_cb_audit_events_taskcount: 1
 raw_dashboards_user_course_progress_taskcount: 1
 raw_dashboards_course_competency_taskcount: 1
-raw_dashboards_course_rating_summary_taskcount: 1
 raw_dashboards_declared_user_competency_taskcount: 1
 raw_dashboards_expected_user_competency_taskcount: 1
 raw_dashboards_frac_competency_taskcount: 1

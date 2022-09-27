@@ -19,11 +19,23 @@
             },
             {
               "type": "root",
+              "name": "courseProgress"
+            },
+            {
+              "type": "root",
               "name": "courseName"
             },
             {
               "type": "root",
               "name": "courseStatus"
+            },
+            {
+              "type": "root",
+              "name": "courseDuration"
+            },
+            {
+              "type": "root",
+              "name": "courseResourceCount"
             },
             {
               "type": "root",
@@ -50,12 +62,24 @@
               "name": "courseID"
             },
             {
+              "type": "long",
+              "name": "courseProgress"
+            },
+            {
               "type": "string",
               "name": "courseName"
             },
             {
               "type": "string",
               "name": "courseStatus"
+            },
+            {
+              "type": "float",
+              "name": "courseDuration"
+            },
+            {
+              "type": "long",
+              "name": "courseResourceCount"
             },
             {
               "type": "string",

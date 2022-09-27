@@ -34,7 +34,6 @@ dashboards_course_competency_topic: "{{ env }}.dashboards.competency.course"
 dashboards_expected_competency_topic: "{{ env }}.dashboards.competency.expected"
 dashboards_declared_competency_topic: "{{ env }}.dashboards.competency.declared"
 dashboards_competency_gap_topic: "{{ env }}.dashboards.competency.gap"
-dashboards_course_rating_summary_topic: "{{ env }}.dashboards.course.rating.summary"
 dashboards_cassandra_user_table: "user"
 dashboards_cassandra_org_table: "organisation"
 dashboards_cassandra_user_content_consumption_table: "user_content_consumption"
@@ -48,8 +47,8 @@ dashboards_redis_db: "12"
 dashboards_redis_registered_officer_count_key: "mdo_registered_officer_count"
 dashboards_redis_total_officer_count_key: "mdo_total_officer_count"
 dashboards_redis_org_name_key: "mdo_name_by_org"
-
-
+dashboards_redis_total_registered_officer_count_key: "mdo_total_registered_officer_count"
+dashboards_redis_total_org_count_key: "mdo_total_org_count"
 
 job_manager_tmp_dir: "transient-data"
 channel: dev-test
