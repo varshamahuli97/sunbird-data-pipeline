@@ -44,6 +44,8 @@ dashboards_redis_db: "12"
 dashboards_redis_registered_officer_count_key: "mdo_registered_officer_count"
 dashboards_redis_total_officer_count_key: "mdo_total_officer_count"
 dashboards_redis_org_name_key: "mdo_name_by_org"
+dashboards_redis_total_registered_officer_count_key: "mdo_total_registered_officer_count"
+dashboards_redis_total_org_count_key: "mdo_total_org_count"
 
 
 
