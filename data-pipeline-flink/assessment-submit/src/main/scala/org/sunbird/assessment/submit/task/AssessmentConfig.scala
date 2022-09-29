@@ -22,7 +22,7 @@ class AssessmentConfig (override val config: Config) extends BaseJobConfig(confi
 
   val issueEventSink = "assessment-submit-issue-event-sink"
   val successIssueEventSink = "success-assessment-issue-event-sink"
-  val issueOutputTagName = "assessment-submit-issue-events"
+  //val issueOutputTagName = "assessment-submit-issue-events"
   val failedEvent: OutputTag[Event] = OutputTag[Event]("failed-assessment-submit-events")
   val failedEventsOutputTag: OutputTag[Event] = OutputTag[Event]("assess-submit-failed-events")
   val updateSuccessEventsOutputTag: OutputTag[Event] = OutputTag[Event]("update-success-event-count")
