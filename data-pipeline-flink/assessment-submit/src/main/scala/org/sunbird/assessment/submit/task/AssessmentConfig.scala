@@ -16,13 +16,13 @@ class AssessmentConfig (override val config: Config) extends BaseJobConfig(confi
   val inputTopic: String = config.getString("kafka.input.topic")
 
   // rating specific
-  val ratingParallelism: Int = config.getInt("task.rating.parallelism")
+  val assessmentSubmitParallelism: Int = config.getInt("task.assessmentSubmit.parallelism")
   val kafkaIssueTopic: String = config.getString("kafka.output.topic")
   val kafkaSuccessTopic: String = config.getString("kafka.success.topic")
 
   val issueEventSink = "assessment-submit-issue-event-sink"
   val successIssueEventSink = "success-assessment-issue-event-sink"
-  val issueOutputTagName = "assessment-sumit-issue-events"
+  val issueOutputTagName = "assessment-submit-issue-events"
   val failedEvent: OutputTag[Event] = OutputTag[Event]("failed-assessment-submit-events")
   val failedEventsOutputTag: OutputTag[Event] = OutputTag[Event]("assess-submit-failed-events")
   val updateSuccessEventsOutputTag: OutputTag[Event] = OutputTag[Event]("update-success-event-count")

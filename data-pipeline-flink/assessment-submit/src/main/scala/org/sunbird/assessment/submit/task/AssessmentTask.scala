@@ -26,14 +26,14 @@ class AssessmentTask(config: AssessmentConfig, kafkaConnector: FlinkKafkaConnect
 
     val stream =
       env.addSource(source, config.AssessmentConsumer).uid(config.AssessmentConsumer).rebalance()
-        .process(new AssessmentSubmitFunction(config)).setParallelism(config.ratingParallelism)
+        .process(new AssessmentSubmitFunction(config)).setParallelism(config.assessmentSubmitParallelism)
         .name(config.assessmentFunction).uid(config.assessmentFunction)
     stream.getSideOutput(config.updateSuccessEventsOutputTag).addSink(kafkaConnector.kafkaEventSink[Event](config.kafkaSuccessTopic))
       .name(config.successIssueEventSink).uid(config.successIssueEventSink)
-      .setParallelism(config.ratingParallelism)
+      .setParallelism(config.assessmentSubmitParallelism)
     stream.getSideOutput(config.failedEvent).addSink(kafkaConnector.kafkaEventSink[Event](config.kafkaIssueTopic))
       .name(config.issueEventSink).uid(config.issueEventSink)
-      .setParallelism(config.ratingParallelism)
+      .setParallelism(config.assessmentSubmitParallelism)
     env.execute(config.jobName)
   }
 

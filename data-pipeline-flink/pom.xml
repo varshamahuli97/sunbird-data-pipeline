@@ -39,7 +39,7 @@
 		<!-- maven specific properties -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<scala.maj.version>2.12</scala.maj.version>
-		<scala.version>2.12.10</scala.version>
+		<scala.version>2.12.11</scala.version>
 		<flink.version>1.13.5</flink.version>
 		<kafka.version>2.4.0</kafka.version>
 		<java.target.runtime>11</java.target.runtime>
@@ -60,7 +60,7 @@
 		<repository>
 			<id>scala-tools.org</id>
 			<name>Scala-tools Maven2 Repository</name>
-			<url>https://oss.sonatype.org/content/groups/scala-tools/</url>
+			<url>https://oss.sonatype.org/content/groups/scala-tools</url>
 		</repository>
 	</repositories>
 
