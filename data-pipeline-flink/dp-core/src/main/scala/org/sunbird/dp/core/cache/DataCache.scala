@@ -94,10 +94,8 @@ class DataCache(val config: BaseJobConfig, val redisConnect: RedisConnect, val d
       logger.info(data)
       try {
         val dataMap = gson.fromJson(data, new util.HashMap[String, AnyRef]().getClass)
-        logger.info(dataMap.toString)
         if (fields.nonEmpty) dataMap.keySet().retainAll(fields.asJava)
         dataMap.values().removeAll(util.Collections.singleton(""))
-        logger.info(dataMap.toString)
         val result = dataMap.asScala
         result
       } catch {

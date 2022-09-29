@@ -129,7 +129,6 @@ class AssessmentSubmitFunction(config: AssessmentConfig,
       val totalScore : Double = resp.getOrDefault("overallResult", 0.0).asInstanceOf[Double]
       logger.info(s"Total Score ${totalScore} :")
       totalScore
-    //      totalScore
   }
     else {
       0.0

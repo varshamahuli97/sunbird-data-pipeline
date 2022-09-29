@@ -15,7 +15,7 @@ class AssessmentConfig (override val config: Config) extends BaseJobConfig(confi
   // Kafka Topics Configuration
   val inputTopic: String = config.getString("kafka.input.topic")
 
-  // rating specific
+  // assessment specific
   val assessmentSubmitParallelism: Int = config.getInt("task.assessmentSubmit.parallelism")
   val kafkaIssueTopic: String = config.getString("kafka.output.topic")
   val kafkaSuccessTopic: String = config.getString("kafka.success.topic")
