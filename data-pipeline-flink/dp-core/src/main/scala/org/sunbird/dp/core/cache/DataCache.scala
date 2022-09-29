@@ -91,18 +91,10 @@ class DataCache(val config: BaseJobConfig, val redisConnect: RedisConnect, val d
   private def get(key: String): mutable.Map[String, AnyRef] = {
     val data = redisConnection.get(key)
     if (data != null && !data.isEmpty) {
-      logger.info(data)
-      try {
-        val dataMap = gson.fromJson(data, new util.HashMap[String, AnyRef]().getClass)
-        if (fields.nonEmpty) dataMap.keySet().retainAll(fields.asJava)
-        dataMap.values().removeAll(util.Collections.singleton(""))
-        val result = dataMap.asScala
-        result
-      } catch {
-        case ex: Exception =>
-          logger.error(s"Exception when retrieving data from redis cache ${ex.getMessage}")
-          mutable.Map[String, AnyRef]()
-      }
+      val dataMap = gson.fromJson(data, new util.HashMap[String, AnyRef]().getClass)
+      if (fields.nonEmpty) dataMap.keySet().retainAll(fields.asJava)
+      dataMap.values().removeAll(util.Collections.singleton(""))
+      dataMap.asScala
     } else {
       mutable.Map[String, AnyRef]()
     }
