@@ -14,8 +14,8 @@
     </parent>
 
     <groupId>org.sunbird.dp.jobs</groupId>
-    <artifactId>assessmentsubmit</artifactId>
-    <version>2.0.0</version>
+    <artifactId>assessment-submit</artifactId>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>Assessment Submit</name>
     <description>
