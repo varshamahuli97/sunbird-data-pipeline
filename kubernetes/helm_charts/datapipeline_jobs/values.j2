@@ -859,10 +859,9 @@ assessment-submit:
     task {
       consumer.parallelism = {{ assessment_submit_consumer_parallelism }}
       downstream.parallelism = {{ assessment_submit_operators_parallelism }}
-      assesssubmit {
+      assessmentSubmit {
         parallelism = {{ assessment_submit_parallelism }}
       }
-      scoresubmit.parallelism = {{ assessment_submit_scoresubmit_parallelism }}
     }
     ext-cassandra {
           keyspace = "sunbird"

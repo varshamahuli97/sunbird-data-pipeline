@@ -124,7 +124,6 @@ assessment_submit_consumer_parallelism: 1
 assessment_submit_operators_parallelism: 1
 assessment_submit_key_expiry_seconds: 3600
 assessment_submit_parallelism: 1
-assessment_submit_scoresubmit_parallelism: 1
 
 ### Druid-validator related vars
 druid_validator_consumer_parallelism: 1
