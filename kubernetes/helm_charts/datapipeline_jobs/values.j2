@@ -646,28 +646,28 @@ assessment-submit:
   assessment-submit: |+
     include file("/data/flink/conf/base-config.conf")
     kafka {
-      input.topic = {{ env_name }}.assessmentsubmit.event
-      output.topic = {{ env_name }}.assessmentsubmit.failedRating
-      groupId = {{ env_name }}-assessmentsubmit-group
+       output.topic = {{ env_name }}.assessment.final
+       input.topic = {{ env_name }}.assessment.submit
+       groupId = {{ env_name }}-assessment-submit-group
+       success.topic = {{ env_name }}.success.assessment.submit
     }
     ext-cassandra {
-      course_table = "user_enrolments"
-      ratings_table = "assessmentsubmit"
-      ratings_summary_table = "ratings_summary"
-      ratings_lookup_table = "ratings_lookup"
-      keyspace = "sunbird"
-      courses_keyspace = "sunbird_courses"
-      host = "{{ core_cassandra_host }}"
-      port = "9042"
-    }
+          keyspace = "sunbird"
+          user_assessment_data_table = "user_assessment_data"
+          courses_keyspace = "sunbird_courses"
+          table = "assessment_aggregator"
+          host = "{{ core_cassandra_host }}"
+          port = "9042"
+        }
     skip.events = ["INTERRUPT"]
     permit.eid = ["AUDIT"]
     task {
       consumer.parallelism = {{ assessment_submit_consumer_parallelism }}
-      downstream.operators.parallelism = {{ assessment_submit_operators_parallelism }}
-      assessmentsubmit {
+      downstream.parallelism = {{ assessment_submit_operators_parallelism }}
+      assesssubmit {
         parallelism = {{ assessment_submit_parallelism }}
       }
+      scoresubmit.parallelism = {{ assessment_submit_scoresubmit_parallelism }}
     }
     redis {
       database {
