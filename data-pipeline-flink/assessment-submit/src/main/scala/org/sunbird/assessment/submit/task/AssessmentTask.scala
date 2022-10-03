@@ -1,4 +1,4 @@
-package org.sunbird.dp.assessment.submit.task
+package org.sunbird.assessment.submit.task
 
 import java.io.File
 import com.typesafe.config.ConfigFactory
