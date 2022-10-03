@@ -664,13 +664,15 @@ assessment-submit:
     task {
       consumer.parallelism = {{ assessment_submit_consumer_parallelism }}
       downstream.parallelism = {{ assessment_submit_operators_parallelism }}
-      assesssubmit {
+      assessmentSubmit {
         parallelism = {{ assessment_submit_parallelism }}
       }
       scoresubmit.parallelism = {{ assessment_submit_scoresubmit_parallelism }}
     }
     redis {
       database {
+        relationCache.id = 10
+        contentCache.id = 0
         duplicationstore.id = 9
         key.expiry.seconds = {{ assessment_submit_key_expiry_seconds }}
       }
