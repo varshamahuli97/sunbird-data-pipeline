@@ -26,20 +26,7 @@ class AssessmentConfig (override val config: Config) extends BaseJobConfig(confi
   val failedEvent: OutputTag[Event] = OutputTag[Event]("failed-assessment-submit-events")
   val failedEventsOutputTag: OutputTag[Event] = OutputTag[Event]("assess-submit-failed-events")
   val updateSuccessEventsOutputTag: OutputTag[Event] = OutputTag[Event]("update-success-event-count")
-  val dbUpdateCount = "db-update-count"
-  val dbReadCount = "db-read-count"
-  val batchSuccessCount = "batch-success-event-count"
   val failedEventCount = "failed-event-count"
-  val ignoredEventsCount = "ignored-event-count"
-  val skippedEventCount = "skipped-event-count"
-  val cacheHitCount = "cache-hit-count"
-  val cacheHitMissCount = "cache-hit-miss-count"
-  val certIssueEventsCount = "cert-issue-events-count"
-  val dbScoreAggUpdateCount = "db-score-update-count"
-  val dbScoreAggReadCount = "db-score-read-count"
-  val apiHitSuccessCount = "api-hit-success-count"
-  val apiHitFailedCount = "api-hit-failed-count"
-  val recomputeAggEventCount = "recompute-agg-event-count"
   val updateCount = "update-count"
 
 
