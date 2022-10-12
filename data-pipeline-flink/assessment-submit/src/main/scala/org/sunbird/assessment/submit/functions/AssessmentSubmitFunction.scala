@@ -33,9 +33,7 @@ class AssessmentSubmitFunction(config: AssessmentConfig,
   private var restUtil: RestUtil = _
 
 
-  override def metricsList() = List(config.dbUpdateCount, config.dbReadCount,
-    config.failedEventCount, config.batchSuccessCount,
-    config.skippedEventCount, config.cacheHitCount, config.cacheHitMissCount, config.certIssueEventsCount, config.apiHitFailedCount, config.apiHitSuccessCount, config.ignoredEventsCount, config.recomputeAggEventCount)
+  override def metricsList() = List(config.updateCount, config.failedEventCount)
 
 
   override def open(parameters: Configuration): Unit = {
