@@ -73,7 +73,7 @@ class AssessmentSubmitFunction(config: AssessmentConfig,
         noOfAttempts = getNoOfAttemptsMadeForThisAssessment(event)
         logger.info(s"noOfAttempts ${noOfAttempts}")
       // Validating the contentId
-        if((event.primaryCategory.equalsIgnoreCase("Practice Question Set") && noOfAttempts==0) || (event.primaryCategory.equalsIgnoreCase("Course Assessment") && totalScore>0.0)) {
+        if((event.primaryCategory.equalsIgnoreCase("Practice Question Set") && noOfAttempts==0) || (event.primaryCategory.equalsIgnoreCase("Course Assessment") && totalScore>=0.0)) {
           logger.info("Saving to the Assessment Aggregator Table")
           saveAssessment(noOfAttempts, event, totalScore)
           metrics.incCounter(config.updateCount)
