@@ -27,6 +27,11 @@ class Event(eventMap: util.Map[String, Any]) extends Events(eventMap) {
     telemetry.read[String]("assessmentId").get
   }
 
+  def primaryCategory: String = {
+    telemetry.read[String]("primaryCategory").get
+  }
+
+
   def markFailed(errorMsg: String): Unit = {
     telemetry.addFieldIfAbsent(EventsPath.FLAGS_PATH, new util.HashMap[String, Boolean])
     telemetry.addFieldIfAbsent("metadata", new util.HashMap[String, AnyRef])

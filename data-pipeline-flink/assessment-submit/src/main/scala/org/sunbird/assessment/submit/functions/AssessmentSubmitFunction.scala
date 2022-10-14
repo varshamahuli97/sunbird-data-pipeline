@@ -60,19 +60,29 @@ class AssessmentSubmitFunction(config: AssessmentConfig,
                               context: ProcessFunction[Event, Event]#Context,
                               metrics: Metrics): Unit = {
     try {
-      // Validating the contentId
-      val totalScore = fetchScoreFromDatabase(event.userId, event.assessmentId)(metrics)
-      if (!totalScore.equals("0.0")) {
-        val noOfAttempts = getNoOfAttemptsMadeForThisAssessment(event)
+      var totalScore: Double = 0.0
+      var noOfAttempts: Int = 0
+      if(event.primaryCategory.equalsIgnoreCase("Practice Question Set"))
+        {
+          totalScore = 50.0
+        }
+        else
+        {
+          totalScore = fetchScoreFromDatabase(event.userId, event.assessmentId)(metrics)
+        }
+        noOfAttempts = getNoOfAttemptsMadeForThisAssessment(event)
         logger.info(s"noOfAttempts ${noOfAttempts}")
-        saveAssessment(noOfAttempts, event, totalScore)
-        metrics.incCounter(config.updateCount)
-        context.output(config.updateSuccessEventsOutputTag, event)
-      }
-      else {
-        context.output(config.failedEventsOutputTag, event)
-        metrics.incCounter(config.failedEventCount)
-      }
+      // Validating the contentId
+        if((event.primaryCategory.equalsIgnoreCase("Practice Question Set") && noOfAttempts==0) || (event.primaryCategory.equalsIgnoreCase("Course Assessment") && totalScore>0.0)) {
+          logger.info("Saving to the Assessment Aggregator Table")
+          saveAssessment(noOfAttempts, event, totalScore)
+          metrics.incCounter(config.updateCount)
+          context.output(config.updateSuccessEventsOutputTag, event)
+        }
+        else
+        {
+          logger.info("No Valid scenarios for this flink job")
+        }
     } catch {
       case ex: Exception =>
         ex.printStackTrace()
