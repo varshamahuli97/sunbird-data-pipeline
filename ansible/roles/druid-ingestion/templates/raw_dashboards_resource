@@ -1,0 +1,80 @@
+{
+  "type": "kafka",
+  "dataSchema": {
+    "dataSource": "dashboards-resource",
+    "parser": {
+      "type": "string",
+      "parseSpec": {
+        "format": "json",
+        "flattenSpec": {
+          "useFieldDiscovery": false,
+          "fields": [
+            {
+              "type": "root",
+              "name": "resourceID"
+            },
+            {
+              "type": "root",
+              "name": "resourceStatus"
+            },
+            {
+              "type": "root",
+              "name": "resourceReviewStatus"
+            },
+            {
+              "type": "root",
+              "name": "resourceOrgID"
+            }
+          ]
+        },
+        "dimensionsSpec": {
+          "dimensions": [
+            {
+              "type": "string",
+              "name": "resourceID"
+            },
+            {
+              "type": "string",
+              "name": "resourceStatus"
+            },
+            {
+              "type": "string",
+              "name": "resourceReviewStatus"
+            },
+            {
+              "type": "string",
+              "name": "resourceOrgID"
+            }
+          ],
+          "dimensionsExclusions": []
+        },
+        "timestampSpec": {
+          "column": "timestamp",
+          "format": "auto"
+        }
+      }
+    },
+    "metricsSpec": [],
+    "granularitySpec": {
+      "type": "uniform",
+      "segmentGranularity": "day",
+      "rollup": false
+    }
+  },
+  "ioConfig": {
+    "topic": "{{ env }}.dashboards.resource",
+    "consumerProperties": {
+      "bootstrap.servers": "{{kafka_brokers}}"
+    },
+    "taskCount": {{raw_dashboards_resource_taskcount}},
+    "replicas": 1,
+    "taskDuration": "PT7200S",
+    "useEarliestOffset": true,
+    "completionTimeout" : "PT7200S"
+  },
+  "tuningConfig": {
+    "type": "kafka",
+    "reportParseExceptions": false,
+    "maxRowsPerSegment": "2000000"
+  }
+}
