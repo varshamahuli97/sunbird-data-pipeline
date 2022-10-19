@@ -23,6 +23,10 @@
             },
             {
               "type": "root",
+              "name": "courseReviewStatus"
+            },
+            {
+              "type": "root",
               "name": "courseOrgID"
             }
           ]
@@ -40,6 +44,10 @@
             {
               "type": "string",
               "name": "courseStatus"
+            },
+            {
+              "type": "string",
+              "name": "courseReviewStatus"
             },
             {
               "type": "string",
