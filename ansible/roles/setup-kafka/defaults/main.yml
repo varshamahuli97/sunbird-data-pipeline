@@ -20,6 +20,15 @@ ingestion_kafka_overriden_topics:
     replication_factor: 1
 
 processing_kafka_overriden_topics:
+  - name: dashboards.course
+    retention_time: 172800000
+    replication_factor: 2
+  - name: dashboards.resource
+    retention_time: 172800000
+    replication_factor: 2
+  - name: dashboards.user.role
+    retention_time: 172800000
+    replication_factor: 2
   - name: dashboards.course.details
     retention_time: 172800000
     replication_factor: 2
@@ -148,6 +157,15 @@ processing_kafka_overriden_topics:
     replication_factor: 2
 
 processing_kafka_topics:
+  - name: dashboards.course
+    num_of_partitions: 4
+    replication_factor: 2
+  - name: dashboards.resource
+    num_of_partitions: 4
+    replication_factor: 2
+  - name: dashboards.user.role
+    num_of_partitions: 4
+    replication_factor: 2
   - name: dashboards.course.details
     num_of_partitions: 4
     replication_factor: 2
