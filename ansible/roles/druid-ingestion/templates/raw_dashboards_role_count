@@ -1,7 +1,7 @@
 {
   "type": "kafka",
   "dataSchema": {
-    "dataSource": "dashboards-user-role",
+    "dataSource": "dashboards-role-count",
     "parser": {
       "type": "string",
       "parseSpec": {
@@ -11,27 +11,11 @@
           "fields": [
             {
               "type": "root",
-              "name": "userID"
-            },
-            {
-              "type": "root",
-              "name": "userStatus"
-            },
-            {
-              "type": "root",
-              "name": "orgID"
-            },
-            {
-              "type": "root",
-              "name": "orgName"
-            },
-            {
-              "type": "root",
-              "name": "orgStatus"
-            },
-            {
-              "type": "root",
               "name": "role"
+            },
+            {
+              "type": "root",
+              "name": "count"
             }
           ]
         },
@@ -39,27 +23,11 @@
           "dimensions": [
             {
               "type": "string",
-              "name": "userID"
-            },
-            {
-              "type": "long",
-              "name": "userStatus"
-            },
-            {
-              "type": "string",
-              "name": "orgID"
-            },
-            {
-              "type": "string",
-              "name": "orgName"
-            },
-            {
-              "type": "long",
-              "name": "orgStatus"
-            },
-            {
-              "type": "string",
               "name": "role"
+            },
+            {
+              "type": "long",
+              "name": "count"
             }
           ],
           "dimensionsExclusions": []
@@ -78,11 +46,11 @@
     }
   },
   "ioConfig": {
-    "topic": "{{ env }}.dashboards.user.role",
+    "topic": "{{ env }}.dashboards.role.count",
     "consumerProperties": {
       "bootstrap.servers": "{{kafka_brokers}}"
     },
-    "taskCount": {{raw_dashboards_user_role_taskcount}},
+    "taskCount": {{raw_dashboards_role_count_taskcount}},
     "replicas": 1,
     "taskDuration": "PT7200S",
     "useEarliestOffset": true,

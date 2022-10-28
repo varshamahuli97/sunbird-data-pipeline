@@ -26,7 +26,10 @@ processing_kafka_overriden_topics:
   - name: dashboards.resource
     retention_time: 172800000
     replication_factor: 2
-  - name: dashboards.user.role
+  - name: dashboards.role.count
+    retention_time: 172800000
+    replication_factor: 2
+  - name: dashboards.org.role.count
     retention_time: 172800000
     replication_factor: 2
   - name: dashboards.course.details
@@ -163,7 +166,10 @@ processing_kafka_topics:
   - name: dashboards.resource
     num_of_partitions: 4
     replication_factor: 2
-  - name: dashboards.user.role
+  - name: dashboards.role.count
+    num_of_partitions: 4
+    replication_factor: 2
+  - name: dashboards.org.role.count
     num_of_partitions: 4
     replication_factor: 2
   - name: dashboards.course.details
