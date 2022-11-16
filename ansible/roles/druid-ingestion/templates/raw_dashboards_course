@@ -15,6 +15,10 @@
             },
             {
               "type": "root",
+              "name": "category"
+            },
+            {
+              "type": "root",
               "name": "courseName"
             },
             {
@@ -36,6 +40,10 @@
             {
               "type": "string",
               "name": "courseID"
+            },
+            {
+              "type": "string",
+              "name": "category"
             },
             {
               "type": "string",
