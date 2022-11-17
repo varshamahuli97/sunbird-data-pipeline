@@ -48,6 +48,10 @@
             {
               "type": "root",
               "name": "completionStatus"
+            },
+            {
+              "type": "root",
+              "name": "dbCompletionStatus"
             }
           ]
         },
@@ -92,6 +96,10 @@
             {
               "type": "string",
               "name": "completionStatus"
+            },
+            {
+              "type": "long",
+              "name": "dbCompletionStatus"
             }
           ],
           "dimensionsExclusions": []
