@@ -38,6 +38,9 @@ processing_kafka_overriden_topics:
   - name: dashboards.user.course.progress
     retention_time: 172800000
     replication_factor: 2
+  - name: dashboards.user.course.program.progress
+    retention_time: 172800000
+    replication_factor: 2
   - name: dashboards.competency.frac
     retention_time: 172800000
     replication_factor: 2
@@ -176,6 +179,9 @@ processing_kafka_topics:
     num_of_partitions: 4
     replication_factor: 2
   - name: dashboards.user.course.progress
+    num_of_partitions: 4
+    replication_factor: 2
+  - name: dashboards.user.course.program.progress
     num_of_partitions: 4
     replication_factor: 2
   - name: dashboards.competency.frac

@@ -19,6 +19,7 @@ raw_summary_events_taskcount: 1
 raw_telemetry_events_taskcount: 1
 raw_cb_audit_events_taskcount: 1
 raw_dashboards_user_course_progress_taskcount: 1
+raw_dashboards_user_course_program_progress_taskcount: 1
 raw_dashboards_course_taskcount: 1
 raw_dashboards_resource_taskcount: 1
 raw_dashboards_role_count_taskcount: 1
