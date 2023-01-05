@@ -48,6 +48,18 @@
             {
               "type": "root",
               "name": "userOrgID"
+            },
+            {
+              "type": "root",
+              "name": "firstName"
+            },
+            {
+              "type": "root",
+              "name": "lastName"
+            },
+            {
+              "type": "root",
+              "name": "maskedEmail"
             }
           ]
         },
@@ -92,6 +104,18 @@
             {
               "type": "string",
               "name": "userOrgID"
+            },
+            {
+              "type": "string",
+              "name": "firstName"
+            },
+            {
+              "type": "string",
+              "name": "lastName"
+            },
+            {
+              "type": "string",
+              "name": "maskedEmail"
             }
           ],
           "dimensionsExclusions": []
