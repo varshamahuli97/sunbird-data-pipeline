@@ -31,6 +31,13 @@ class Event(eventMap: util.Map[String, Any]) extends Events(eventMap) {
     telemetry.read[String]("primaryCategory").get
   }
 
+  def competency: util.Map[String, String] = {
+    telemetry.read[util.Map[String, String]]("competency").getOrElse(null)
+  }
+
+  def totalScore: Double = {
+    telemetry.read[Double]("totalScore").get
+  }
 
   def markFailed(errorMsg: String): Unit = {
     telemetry.addFieldIfAbsent(EventsPath.FLAGS_PATH, new util.HashMap[String, Boolean])
