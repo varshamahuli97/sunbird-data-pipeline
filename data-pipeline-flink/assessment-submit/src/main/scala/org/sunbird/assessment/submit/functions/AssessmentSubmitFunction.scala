@@ -58,21 +58,16 @@ class AssessmentSubmitFunction(config: AssessmentConfig,
                               context: ProcessFunction[Event, Event]#Context,
                               metrics: Metrics): Unit = {
     try {
-      var noOfAttempts: Int = 0
-      noOfAttempts = getNoOfAttemptsMadeForThisAssessment(event)
-      logger.info(s"noOfAttempts ${noOfAttempts}")
-      // Validating the contentId
-
-      if (event.totalScore > 0.0) {
+      if (!event.primaryCategory.equalsIgnoreCase(config.practiceQuestionSet)) {
+        var noOfAttempts: Int = 0
+        noOfAttempts = getNoOfAttemptsMadeForThisAssessment(event)
+        logger.info(s"noOfAttempts ${noOfAttempts}")
         logger.info("Saving to the Assessment Aggregator Table")
         saveAssessment(noOfAttempts, event, event.totalScore)
         metrics.incCounter(config.updateCount)
         context.output(config.updateSuccessEventsOutputTag, event)
       }
-
-      if (event.primaryCategory.equalsIgnoreCase(config.competencyAssessment) && event.totalScore >= 0.0) {
-        val gson = new Gson()
-        logger.info(s"noOfAttempts ${event.competency}")
+      if (event.primaryCategory.equalsIgnoreCase(config.competencyAssessment) && event.totalScore >= event.passPercentage) {
         getUserCompetencies(event)
       }
     } catch {
@@ -86,7 +81,7 @@ class AssessmentSubmitFunction(config: AssessmentConfig,
   }
 
   def getNoOfAttemptsMadeForThisAssessment(event: Event): Int = {
-    if(!event.primaryCategory.equalsIgnoreCase(config.competencyAssessment) && !event.courseId.isEmpty && !event.batchId.isEmpty) {
+    if (!event.primaryCategory.equalsIgnoreCase(config.competencyAssessment) && !event.courseId.isEmpty && !event.batchId.isEmpty) {
       val query = QueryBuilder.select(config.userIdKey)
         .from(config.dbCoursesKeyspace, config.table).
         where(QueryBuilder.eq(config.batchIdKey, event.batchId))
@@ -107,13 +102,13 @@ class AssessmentSubmitFunction(config: AssessmentConfig,
       val record = cassandraUtil.findOne(query)
       val profileDetails = record.getString(config.profileDetails)
       logger.info(s"profileDetails${profileDetails} :")
-      if (profileDetails.isEmpty || profileDetails!= null) {
+      if (profileDetails.isEmpty || profileDetails != null) {
         val mapper = new ObjectMapper
         val profileDetailsMapper = mapper.readValue(profileDetails, classOf[Map[String, String]])
-        logger.info(s"profileDetailsMapper${profileDetailsMapper} :")
-        var newCompetencyMap : util.Map[String, String] = new util.HashMap()
-        var competencies: util.List[Map[String, String]] = profileDetailsMapper.getOrDefault("competencies", null).asInstanceOf[util.List[Map[String, String]]]
-        logger.info(s"competencies${competencies} :")
+        logger.info(s"profileDetailsMapper: ${profileDetailsMapper} :")
+        var newCompetencyMap: util.Map[String, String] = new util.HashMap()
+        var competencies: util.List[Map[String, String]] = profileDetailsMapper.getOrDefault(config.competencies, null).asInstanceOf[util.List[Map[String, String]]]
+        logger.info(s"competencies: ${competencies} :")
         newCompetencyMap.put(config.id, event.competency.getOrDefault(config.id, ""))
         newCompetencyMap.put(config.name, event.competency.getOrDefault(config.name, ""))
         newCompetencyMap.put(config.description, event.competency.getOrDefault(config.description, ""))
@@ -123,30 +118,25 @@ class AssessmentSubmitFunction(config: AssessmentConfig,
         newCompetencyMap.put(config.competencySelfAttestedLevel, event.competency.getOrDefault(config.selectedLevelId, ""))
         newCompetencyMap.put(config.competencySelfAttestedLevelName, event.competency.getOrDefault(config.selectedLevelName, ""))
         newCompetencyMap.put(config.competencySelfAttestedLevelDescription, event.competency.getOrDefault(config.selectedLevelDescription, ""))
-        logger.info(s"competencies1${newCompetencyMap} :")
-        if (competencies==null)
-          {
-            competencies = new util.ArrayList[Map[String, String]]()
-            logger.info(s"competencies1${competencies} :")
-          }
+        logger.info(s"New Competency Map ${newCompetencyMap} :")
+        if (competencies == null) {
+          competencies = new util.ArrayList[Map[String, String]]()
+        }
         var count = 0
-        if (event.competency!=null)
-            {
-              for (competency<-competencies)
-                {
-                  if(competency.get(config.name).equalsIgnoreCase(event.competency.get(config.name)) || competency.get(config.id).equalsIgnoreCase(event.competency.get(config.id)))
-                    {
-                      count = count+1
-                    }
-                }
-              if (count == 0) {
-                competencies.add(newCompetencyMap)
-                logger.info(s"competencies2${competencies} :")
-                profileDetailsMapper.put("competencies", competencies.toString)
-                logger.info(s"profileDetailsMapper${profileDetailsMapper} :")
-                updateProfileDetails(profileDetailsMapper, event.userId)
-              }
+        if (event.competency != null) {
+          for (competency <- competencies) {
+            if (competency.get(config.name).equalsIgnoreCase(event.competency.get(config.name)) || competency.get(config.id).equalsIgnoreCase(event.competency.get(config.id))) {
+              count = count + 1
             }
+          }
+          if (count == 0) {
+            competencies.add(newCompetencyMap)
+            logger.info(s"New Competency Map With Added Competency ${competencies} :")
+            profileDetailsMapper.put("competencies", competencies.toString)
+            logger.info(s"Newly Updated Profile Details ${profileDetailsMapper} :")
+            updateProfileDetails(profileDetailsMapper, event.userId)
+          }
+        }
         return true
       }
       else

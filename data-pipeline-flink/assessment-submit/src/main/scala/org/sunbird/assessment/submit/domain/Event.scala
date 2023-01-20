@@ -39,6 +39,10 @@ class Event(eventMap: util.Map[String, Any]) extends Events(eventMap) {
     telemetry.read[Double]("totalScore").get
   }
 
+  def passPercentage: Double = {
+    telemetry.read[Double]("passPercentage").get
+  }
+
   def markFailed(errorMsg: String): Unit = {
     telemetry.addFieldIfAbsent(EventsPath.FLAGS_PATH, new util.HashMap[String, Boolean])
     telemetry.addFieldIfAbsent("metadata", new util.HashMap[String, AnyRef])

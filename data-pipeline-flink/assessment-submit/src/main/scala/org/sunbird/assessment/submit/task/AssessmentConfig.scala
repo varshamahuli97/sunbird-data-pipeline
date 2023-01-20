@@ -52,6 +52,7 @@ class AssessmentConfig (override val config: Config) extends BaseJobConfig(confi
   val description = "description"
   val types = "type"
   val source = "source"
+  val competencies= "competencies"
   val competencySelfAttestedLevelValue = "competencySelfAttestedLevelValue"
   val competencySelfAttestedLevel = "competencySelfAttestedLevel"
   val competencySelfAttestedLevelName = "competencySelfAttestedLevelName"
