@@ -871,9 +871,10 @@ assessment-submit:
           host = "{{ core_cassandra_host }}"
           port = "9042"
         }
-
          redis {
               database {
+                relationCache.id = 10
+                contentCache.id = 0
                 duplicationstore.id = 9
                 key.expiry.seconds = {{ assessment_submit_key_expiry_seconds }}
               }
