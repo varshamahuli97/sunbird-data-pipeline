@@ -63,13 +63,13 @@ class AssessmentSubmitFunction(config: AssessmentConfig,
       logger.info(s"noOfAttempts ${noOfAttempts}")
       // Validating the contentId
 
-      //consider assessment cutoff score??
-      if ((event.primaryCategory.equalsIgnoreCase(config.practiceQuestionSet) && noOfAttempts == 1) || (event.primaryCategory.equalsIgnoreCase(config.courseAssessment) && event.totalScore >= 0.0)) {
+      if (event.totalScore > 0.0) {
         logger.info("Saving to the Assessment Aggregator Table")
         saveAssessment(noOfAttempts, event, event.totalScore)
         metrics.incCounter(config.updateCount)
         context.output(config.updateSuccessEventsOutputTag, event)
       }
+
       if (event.primaryCategory.equalsIgnoreCase(config.competencyAssessment) && event.totalScore >= 0.0) {
         val gson = new Gson()
         logger.info(s"noOfAttempts ${event.competency}")
