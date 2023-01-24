@@ -11,21 +11,22 @@ class AssessmentConfig (override val config: Config) extends BaseJobConfig(confi
   private val serialVersionUID = 2905979434303791379L
 
   implicit val mapTypeInfo: TypeInformation[Event] = TypeExtractor.getForClass(classOf[Event])
-  val lms_base_host: String = config.getString("url.lms_base_host")
-  val user_read: String = config.getString("url.user_read")
-
   // Kafka Topics Configuration
-  val inputTopic: String = config.getString("kafka.input.topic")
+  val assessmentInputTopic: String = config.getString("kafka.assessment.input.topic")
+  val passbookInputTopic: String = config.getString("kafka.passbook.input.topic")
 
   // assessment specific
   val assessmentSubmitParallelism: Int = config.getInt("task.assessmentSubmit.parallelism")
+  val passbookParallelism: Int = config.getInt("task.passbook.parallelism")
   val kafkaIssueTopic: String = config.getString("kafka.output.topic")
   val kafkaSuccessTopic: String = config.getString("kafka.success.topic")
 
   val issueEventSink = "assessment-submit-issue-event-sink"
+  val passbookIssueEventSink = "passbook-issue-event-sink"
   val successIssueEventSink = "success-assessment-issue-event-sink"
   //val issueOutputTagName = "assessment-submit-issue-events"
   val failedEvent: OutputTag[Event] = OutputTag[Event]("failed-assessment-submit-events")
+  val passbookFailedEvent: OutputTag[Event] = OutputTag[Event]("failed-passbook-events")
   val failedEventsOutputTag: OutputTag[Event] = OutputTag[Event]("assess-submit-failed-events")
   val updateSuccessEventsOutputTag: OutputTag[Event] = OutputTag[Event]("update-success-event-count")
   val failedEventCount = "failed-event-count"
@@ -76,9 +77,31 @@ class AssessmentConfig (override val config: Config) extends BaseJobConfig(confi
   val lastAttemptedOnKey = "last_attempted_on"
   val totalScoreKey = "total_score"
   val totalMaxScoreKey = "total_max_score"
+  val CERTIFICATE_GENERATOR="Certificate Generator"
+  val RELATED="related"
+  val COURSE_ID="courseId"
+  val FILTERS = "filters"
+  val FIELDS = "fields"
+  val REQUEST = "request"
+  val IDENTIFIER = "identifier"
+  val STATUS = "status"
+  val CONTENT = "content"
+  val RESULT = "result"
+  val PRIMARY_CATEGORY="primaryCategory"
+  val lastUpdatedOn="lastUpdatedOn"
+  val DESC="desc"
+  val SORT_BY="sortBy"
+
+  //url
+  val KM_BASE_HOST: String = config.getString("url.km_base_host")
+  val content_search: String = config.getString("url.content_search")
+
+
   // Consumers
   val AssessmentConsumer = "assessment-submit-consumer"
+  val PassbookConsumer = "competency-passbook-consumer"
 
   // Functions
   val assessmentFunction = "AssessmentSubmitFunction"
+  val passbookFunction = "PassbookFunction"
 }

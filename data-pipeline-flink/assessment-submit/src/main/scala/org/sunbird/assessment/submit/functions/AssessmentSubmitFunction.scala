@@ -58,6 +58,7 @@ class AssessmentSubmitFunction(config: AssessmentConfig,
                               context: ProcessFunction[Event, Event]#Context,
                               metrics: Metrics): Unit = {
     try {
+      logger.info("Entering to assessmentSubmit: "+event.toString)
       if (!event.primaryCategory.equalsIgnoreCase(config.practiceQuestionSet)) {
         var noOfAttempts: Int = 0
         noOfAttempts = getNoOfAttemptsMadeForThisAssessment(event)
@@ -175,6 +176,4 @@ class AssessmentSubmitFunction(config: AssessmentConfig,
         logger.info(s"Assessment Saving Failed with ${exception.getMessage} :")
     }
   }
-
-
 }

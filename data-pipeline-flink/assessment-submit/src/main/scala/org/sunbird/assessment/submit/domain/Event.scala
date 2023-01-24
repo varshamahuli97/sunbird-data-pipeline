@@ -8,27 +8,27 @@ class Event(eventMap: util.Map[String, Any]) extends Events(eventMap) {
   private val jobName = "assessmentFeatureJob"
 
   def contentId: String = {
-    telemetry.read[String]("contentId").get
+    telemetry.read[String]("contentId").getOrElse("")
   }
 
   def courseId: String = {
-    telemetry.read[String]("courseId").get
+    telemetry.read[String]("courseId").getOrElse("")
   }
 
   def batchId: String = {
-    telemetry.read[String]("batchId").get
+    telemetry.read[String]("batchId").getOrElse("")
   }
 
   def userId: String = {
-    telemetry.read[String]("userId").get
+    telemetry.read[String]("userId").getOrElse("")
   }
 
   def assessmentId: String = {
-    telemetry.read[String]("assessmentId").get
+    telemetry.read[String]("assessmentId").getOrElse("")
   }
 
   def primaryCategory: String = {
-    telemetry.read[String]("primaryCategory").get
+    telemetry.read[String]("primaryCategory").getOrElse("")
   }
 
   def competency: util.Map[String, String] = {
@@ -36,11 +36,19 @@ class Event(eventMap: util.Map[String, Any]) extends Events(eventMap) {
   }
 
   def totalScore: Double = {
-    telemetry.read[Double]("totalScore").get
+    telemetry.read[Double]("totalScore").getOrElse(0.0)
   }
 
   def passPercentage: Double = {
-    telemetry.read[Double]("passPercentage").get
+    telemetry.read[Double]("passPercentage").getOrElse(0.0)
+  }
+
+  def actor: util.Map[String, String] = {
+    telemetry.read[util.Map[String, String]]("actor").orNull
+  }
+
+  def edata: util.Map[String, String] = {
+    telemetry.read[util.Map[String, String]]("edata").orNull
   }
 
   def markFailed(errorMsg: String): Unit = {
