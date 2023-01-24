@@ -1,10 +1,9 @@
 package org.sunbird.assessment.submit.functions
+
 import com.datastax.driver.core.Row
 import com.datastax.driver.core.querybuilder.QueryBuilder
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.configuration.Configuration
 import org.apache.flink.streaming.api.functions.ProcessFunction
@@ -12,19 +11,20 @@ import org.joda.time.{DateTime, DateTimeZone}
 import org.slf4j.LoggerFactory
 import org.sunbird.assessment.submit.domain.Event
 import org.sunbird.assessment.submit.task.AssessmentConfig
+import org.sunbird.assessment.submit.util.RestApiUtil
 import org.sunbird.dp.contentupdater.core.util.RestUtil
 import org.sunbird.dp.core.cache.{DataCache, RedisConnect}
 import org.sunbird.dp.core.job.{BaseProcessFunction, Metrics}
 import org.sunbird.dp.core.util.CassandraUtil
-import com.fasterxml.jackson.databind.ObjectMapper
 
-import scala.collection.JavaConverters._
 import java.util
-import java.util.{HashMap, Map}
+import java.util.Map
+import scala.collection.convert.ImplicitConversions.`collection AsScalaIterable`
+import scala.language.postfixOps
 
 class AssessmentSubmitFunction(config: AssessmentConfig,
-                                   @transient var cassandraUtil: CassandraUtil = null
-                                  )(implicit val mapTypeInfo: TypeInformation[Event])
+                               @transient var cassandraUtil: CassandraUtil = null
+                              )(implicit val mapTypeInfo: TypeInformation[Event])
   extends BaseProcessFunction[Event, Event](config) {
 
   private[this] val logger = LoggerFactory.getLogger(classOf[AssessmentSubmitFunction])
@@ -32,9 +32,7 @@ class AssessmentSubmitFunction(config: AssessmentConfig,
   private var contentCache: DataCache = _
   private var restUtil: RestUtil = _
 
-
   override def metricsList() = List(config.updateCount, config.failedEventCount)
-
 
   override def open(parameters: Configuration): Unit = {
     super.open(parameters)
@@ -60,29 +58,18 @@ class AssessmentSubmitFunction(config: AssessmentConfig,
                               context: ProcessFunction[Event, Event]#Context,
                               metrics: Metrics): Unit = {
     try {
-      var totalScore: Double = 0.0
-      var noOfAttempts: Int = 0
-      if(event.primaryCategory.equalsIgnoreCase("Practice Question Set"))
-        {
-          totalScore = 50.0
-        }
-        else
-        {
-          totalScore = fetchScoreFromDatabase(event.userId, event.assessmentId)(metrics)
-        }
+      if (!event.primaryCategory.equalsIgnoreCase(config.practiceQuestionSet)) {
+        var noOfAttempts: Int = 0
         noOfAttempts = getNoOfAttemptsMadeForThisAssessment(event)
         logger.info(s"noOfAttempts ${noOfAttempts}")
-      // Validating the contentId
-        if((event.primaryCategory.equalsIgnoreCase("Practice Question Set") && noOfAttempts==0) || (event.primaryCategory.equalsIgnoreCase("Course Assessment") && totalScore>=0.0)) {
-          logger.info("Saving to the Assessment Aggregator Table")
-          saveAssessment(noOfAttempts, event, totalScore)
-          metrics.incCounter(config.updateCount)
-          context.output(config.updateSuccessEventsOutputTag, event)
-        }
-        else
-        {
-          logger.info("No Valid scenarios for this flink job")
-        }
+        logger.info("Saving to the Assessment Aggregator Table")
+        saveAssessment(noOfAttempts, event, event.totalScore)
+        metrics.incCounter(config.updateCount)
+        context.output(config.updateSuccessEventsOutputTag, event)
+      }
+      if (event.primaryCategory.equalsIgnoreCase(config.competencyAssessment) && event.totalScore >= event.passPercentage) {
+        getUserCompetencies(event)
+      }
     } catch {
       case ex: Exception =>
         ex.printStackTrace()
@@ -94,24 +81,92 @@ class AssessmentSubmitFunction(config: AssessmentConfig,
   }
 
   def getNoOfAttemptsMadeForThisAssessment(event: Event): Int = {
-    val query = QueryBuilder.select("user_id")
-      .from(config.dbCoursesKeyspace, config.table).
-       where(QueryBuilder.eq("batch_id", event.batchId))
-      .and(QueryBuilder.eq("user_id", event.userId))
-      .and(QueryBuilder.eq("content_id", event.contentId))
-      .and(QueryBuilder.eq("course_id", event.courseId)).allowFiltering().toString
-    val records = cassandraUtil.find(query)
-    if (records.isEmpty) 1 else records.size() + 1
+    if (!event.primaryCategory.equalsIgnoreCase(config.competencyAssessment) && !event.courseId.isEmpty && !event.batchId.isEmpty) {
+      val query = QueryBuilder.select(config.userIdKey)
+        .from(config.dbCoursesKeyspace, config.table).
+        where(QueryBuilder.eq(config.batchIdKey, event.batchId))
+        .and(QueryBuilder.eq(config.userIdKey, event.userId))
+        .and(QueryBuilder.eq(config.contentIdKey, event.contentId))
+        .and(QueryBuilder.eq(config.courseIdKey, event.courseId)).allowFiltering().toString
+      val records = cassandraUtil.find(query)
+      if (records.isEmpty) 1 else records.size() + 1
+    }
+    0
+  }
+
+  def getUserCompetencies(event: Event): Boolean = {
+    if (!event.userId.isEmpty && !event.assessmentId.isEmpty) {
+      val query = QueryBuilder.select(config.profileDetails)
+        .from(config.dbSunbirdKeyspace, config.userTable)
+        .where(QueryBuilder.eq(config.userId, event.userId)).allowFiltering().toString
+      val record = cassandraUtil.findOne(query)
+      val profileDetails = record.getString(config.profileDetails)
+      logger.info(s"profileDetails${profileDetails} :")
+      if (profileDetails.isEmpty || profileDetails != null) {
+        val mapper = new ObjectMapper
+        val profileDetailsMapper = mapper.readValue(profileDetails, classOf[Map[String, String]])
+        logger.info(s"profileDetailsMapper: ${profileDetailsMapper} :")
+        var newCompetencyMap: util.Map[String, String] = new util.HashMap()
+        var competencies: util.List[Map[String, String]] = profileDetailsMapper.getOrDefault(config.competencies, null).asInstanceOf[util.List[Map[String, String]]]
+        logger.info(s"competencies: ${competencies} :")
+        newCompetencyMap.put(config.id, event.competency.getOrDefault(config.id, ""))
+        newCompetencyMap.put(config.name, event.competency.getOrDefault(config.name, ""))
+        newCompetencyMap.put(config.description, event.competency.getOrDefault(config.description, ""))
+        newCompetencyMap.put(config.types, event.competency.getOrDefault(config.competencyType, ""))
+        newCompetencyMap.put(config.source, event.competency.getOrDefault(config.source, ""))
+        newCompetencyMap.put(config.competencySelfAttestedLevelValue, event.competency.getOrDefault(config.selectedLevelLevel, ""))
+        newCompetencyMap.put(config.competencySelfAttestedLevel, event.competency.getOrDefault(config.selectedLevelId, ""))
+        newCompetencyMap.put(config.competencySelfAttestedLevelName, event.competency.getOrDefault(config.selectedLevelName, ""))
+        newCompetencyMap.put(config.competencySelfAttestedLevelDescription, event.competency.getOrDefault(config.selectedLevelDescription, ""))
+        logger.info(s"New Competency Map ${newCompetencyMap} :")
+        if (competencies == null) {
+          competencies = new util.ArrayList[Map[String, String]]()
+        }
+        var count = 0
+        if (event.competency != null) {
+          for (competency <- competencies) {
+            if (competency.get(config.name).equalsIgnoreCase(event.competency.get(config.name)) || competency.get(config.id).equalsIgnoreCase(event.competency.get(config.id))) {
+              count = count + 1
+            }
+          }
+          if (count == 0) {
+            competencies.add(newCompetencyMap)
+            logger.info(s"New Competency Map With Added Competency ${competencies} :")
+            profileDetailsMapper.put("competencies", competencies.toString)
+            logger.info(s"Newly Updated Profile Details ${profileDetailsMapper} :")
+            updateProfileDetails(profileDetailsMapper, event.userId)
+          }
+        }
+        return true
+      }
+      else
+        return false
+    }
+    false
+  }
+
+  def updateProfileDetails(profileDetailsMapper: Map[String, String], userId: String): Unit = {
+    try {
+      val query = QueryBuilder.update(config.dbSunbirdKeyspace, config.userTable)
+        .`with`(QueryBuilder.set(config.profileDetails, profileDetailsMapper))
+        .where(QueryBuilder.eq(config.id, userId)).toString
+      logger.info(s"Query: ${query}")
+      cassandraUtil.upsert(query)
+    } catch {
+      case exception: Exception =>
+        exception.printStackTrace()
+        logger.info(s"Updating Profile Details Failed ${exception.getMessage} :")
+    }
   }
 
   def saveAssessment(attemptId: Int, event: Event, totalScore: Double): Unit = {
     try {
       val query = QueryBuilder.insertInto(config.dbCoursesKeyspace, config.table)
-        .value("course_id", event.courseId).value("batch_id", event.batchId).value("user_id", event.userId)
-        .value("content_id", event.contentId).value("attempt_id", attemptId.toString)
-        .value("updated_on", new DateTime(DateTimeZone.UTC).getMillis).value("created_on", new DateTime(DateTimeZone.UTC).getMillis)
-        .value("last_attempted_on", new DateTime(DateTimeZone.UTC).getMillis).value("total_score", totalScore)
-        .value("total_max_score", 100.0).toString
+        .value(config.courseIdKey, event.courseId).value(config.batchIdKey, event.batchId).value("user_id", event.userId)
+        .value(config.contentIdKey, event.contentId).value(config.attemptIdKey, attemptId.toString)
+        .value(config.updatedOnKey, new DateTime(DateTimeZone.UTC).getMillis).value(config.createdOnKey, new DateTime(DateTimeZone.UTC).getMillis)
+        .value(config.lastAttemptedOnKey, new DateTime(DateTimeZone.UTC).getMillis).value(config.totalScoreKey, totalScore)
+        .value(config.totalMaxScoreKey, 100.0).toString
       logger.info(s"Query: ${query}")
       cassandraUtil.upsert(query)
     } catch {
@@ -121,26 +176,5 @@ class AssessmentSubmitFunction(config: AssessmentConfig,
     }
   }
 
-  def fetchScoreFromDatabase(userId: String, assessmentId: String)(metrics: Metrics) = {
-    val query = QueryBuilder.select("submitassessmentresponse")
-      .from(config.dbSunbirdKeyspace, config.userAssessmentDataTable).
-      where(QueryBuilder.eq("userid", userId))
-      .and(QueryBuilder.eq("assessmentid", assessmentId)).limit(1).allowFiltering().toString
-    val row = cassandraUtil.findOne(query)
-    if (null != row) {
-      val response = row.getString("submitassessmentresponse")
-      logger.info(s"Submit Assessment Result 1${response} :")
-      val mapper = new ObjectMapper
-      val resp = mapper.readValue(response, classOf[Map[String, Any]])
-      logger.info(s"Submit Assessment Result 2${resp} :")
-      logger.info(s"Submit Assessment Result 3${resp.toString} :")
-      val totalScore : Double = resp.getOrDefault("overallResult", 0.0).asInstanceOf[Double]
-      logger.info(s"Total Score ${totalScore} :")
-      totalScore
-  }
-    else {
-      0.0
-    }
-  }
 
 }
