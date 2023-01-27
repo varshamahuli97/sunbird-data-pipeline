@@ -648,6 +648,7 @@ assessment-submit:
     kafka {
        output.topic = {{ env_name }}.assessment.final
        input.topic = {{ env_name }}.assessment.submit
+       passbook.input.topic = {{ env_name }}.generate.certificate.request
        groupId = {{ env_name }}-assessment-submit-group
        success.topic = {{ env_name }}.success.assessment.submit
     }
