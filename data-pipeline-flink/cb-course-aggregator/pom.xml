@@ -14,12 +14,12 @@
     </parent>
 
     <groupId>org.sunbird.dp.jobs</groupId>
-    <artifactId>assessment-submit</artifactId>
+    <artifactId>cb-course-aggregator</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <name>Assessment Submit</name>
+    <name>CB Course Aggregator</name>
     <description>
-        Assessment Submit
+        CB Course aggregator flink job provides tasks which needs to be completed upon course completion and assessment submit actions.
     </description>
 
     <properties>
