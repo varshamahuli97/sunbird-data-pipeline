@@ -663,6 +663,10 @@ assessment-submit:
         }
     skip.events = ["INTERRUPT"]
     permit.eid = ["AUDIT"]
+    url{
+  km_base_host="https://{{ domain_name }}/api/"
+  content_search="content/v1/search"
+       }
     task {
       consumer.parallelism = {{ assessment_submit_consumer_parallelism }}
       passbook.parallelism = 1
