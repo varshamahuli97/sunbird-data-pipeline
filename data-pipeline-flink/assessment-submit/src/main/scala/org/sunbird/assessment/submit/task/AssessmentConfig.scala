@@ -31,10 +31,6 @@ class AssessmentConfig (override val config: Config) extends BaseJobConfig(confi
   val updateSuccessEventsOutputTag: OutputTag[Event] = OutputTag[Event]("update-success-event-count")
   val failedEventCount = "failed-event-count"
   val updateCount = "update-count"
-
-
-  val relationCacheNode: Int = config.getInt("redis.database.relationCache.id")
-  val contentCacheNode: Int = config.getInt("redis.database.contentCache.id")
   //Cassandra
   val table: String = config.getString("ext-cassandra.table")
   val userTable: String = config.getString("ext-cassandra.user_table")
