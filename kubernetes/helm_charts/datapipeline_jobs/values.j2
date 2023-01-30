@@ -675,32 +675,6 @@ assessment-submit:
         parallelism = {{ assessment_submit_parallelism }}
       }
     }
-    redis {
-      database {
-        relationCache.id = 10
-        contentCache.id = 0
-        duplicationstore.id = 9
-        key.expiry.seconds = {{ assessment_submit_key_expiry_seconds }}
-      }
-    }
-    # redis-metadata
-    redis-meta {
-      database {
-        devicestore.id = 2
-        userstore.id = 12
-        contentstore.id = 5
-        dialcodestore.id = 6
-        key.expiry.seconds = {{ assessmentsubmit_key_expiry_seconds }}
-      }
-      content.host = {{ redis_meta_content_host }}
-      device.host = {{ redis_meta_device_host }}
-      user.host = {{ redis_meta_user_host }}
-      dialcode.host = {{ redis_meta_dialcode_host }}
-      content.port = {{ redis_meta_content_port }}
-      device.port = {{ redis_meta_device_port }}
-      user.port = {{ redis_meta_user_port }}
-      dialcode.port = {{ redis_meta_dialcode_port }}
-    }
 
   flink-conf: |+
     jobmanager.memory.flink.size: {{ flink_job_names['assessment-submit'].jobmanager_memory }}
