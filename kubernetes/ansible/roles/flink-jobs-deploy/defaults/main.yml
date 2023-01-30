@@ -119,12 +119,12 @@ rating_operators_parallelism: 1
 rating_key_expiry_seconds: 3600
 rating_parallelism: 1
 
-### cb-course-aggregator related vars
-cb-course-aggregator_consumer_parallelism: 1
-cb-course-aggregator_operators_parallelism: 1
-cb-course-aggregator_key_expiry_seconds: 3600
-cb-course-aggregator_parallelism: 1
-cb-course-aggregator_scoresubmit_parallelism: 1
+### cb_course_aggregator related vars
+cb_course_aggregator_consumer_parallelism: 1
+cb_course_aggregator_operators_parallelism: 1
+cb_course_aggregator_key_expiry_seconds: 3600
+cb_course_aggregator_parallelism: 1
+cb_course_aggregator_scoresubmit_parallelism: 1
 
 ### Druid-validator related vars
 druid_validator_consumer_parallelism: 1

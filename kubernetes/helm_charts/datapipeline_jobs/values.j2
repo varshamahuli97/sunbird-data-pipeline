@@ -668,11 +668,11 @@ cb-course-aggregator:
        content_search = "content/v1/search"
        }
     task {
-      consumer.parallelism = {{ cb-course-aggregator_consumer_parallelism }}
+      consumer.parallelism = {{ cb_course_aggregator_consumer_parallelism }}
       passbook.parallelism = 1
-      downstream.parallelism = {{ cb-course-aggregator_operators_parallelism }}
+      downstream.parallelism = {{ cb_course_aggregator_operators_parallelism }}
       assessmentSubmit {
-        parallelism = {{ cb-course-aggregator_parallelism }}
+        parallelism = {{ cb_course_aggregator_parallelism }}
       }
     }
 
