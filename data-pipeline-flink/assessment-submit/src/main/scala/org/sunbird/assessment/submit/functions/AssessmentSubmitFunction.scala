@@ -28,18 +28,12 @@ class AssessmentSubmitFunction(config: AssessmentConfig,
   extends BaseProcessFunction[Event, Event](config) {
 
   private[this] val logger = LoggerFactory.getLogger(classOf[AssessmentSubmitFunction])
-  private var dataCache: DataCache = _
-  private var contentCache: DataCache = _
   private var restUtil: RestUtil = _
 
   override def metricsList() = List(config.updateCount, config.failedEventCount)
 
   override def open(parameters: Configuration): Unit = {
     super.open(parameters)
-    dataCache = new DataCache(config, new RedisConnect(config.metaRedisHost, config.metaRedisPort, config), config.relationCacheNode, List())
-    dataCache.init()
-    contentCache = new DataCache(config, new RedisConnect(config.metaRedisHost, config.metaRedisPort, config), config.contentCacheNode, List())
-    contentCache.init()
     cassandraUtil = new CassandraUtil(config.dbHost, config.dbPort)
     restUtil = new RestUtil()
   }
