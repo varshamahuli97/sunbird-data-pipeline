@@ -63,4 +63,3 @@ class RestApiUtil extends Serializable {
     text
   }
 }
-
