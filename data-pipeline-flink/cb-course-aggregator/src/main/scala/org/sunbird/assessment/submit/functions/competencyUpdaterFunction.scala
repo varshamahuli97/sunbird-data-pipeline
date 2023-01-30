@@ -60,50 +60,25 @@ class competencyUpdaterFunction(config: AssessmentConfig,
         logger.info ("user id of this user is :"+userId)
         val related = event.edata.get(config.RELATED).asInstanceOf[util.HashMap[String, Any]]
         val courseId = related.get(config.COURSE_ID)
-        logger.info("new one new")
-        val courseCompetenciesList = enrichCompetencyV3(courseId).asInstanceOf[util.List[util.Map[String, Any]]]
-        val courseCompetencies : util.List[util.Map[String, Any]] = courseCompetenciesList.get(0).asInstanceOf[util.List[util.Map[String, Any]]]
-        logger.info("Course competencies"+ courseCompetenciesList)
+        val courseCompetencies = enrichCompetencyV3(courseId).asInstanceOf[util.List[util.Map[String, Any]]]
         logger.info("Course competencies new"+ courseCompetencies)
         val profileDetails = getUserProfileDetails(userId).asInstanceOf[util.Map[String, Any]]
         logger.info("before competency")
         var k: Int = 0
-        val courseCompetenciesMapJava = new java.util.HashMap[String, Object]()
-        courseCompetencies.forEach(content => {
-          //          courseCompetenciesIdList.add()
-          logger.info("inside loop courseCompetencies.forEach" + content.toString)
-          logger.info("inside content" + content.get("id"))
-          logger.info("inside content string new" + content.get("id").toString)
-
-          courseCompetenciesMapJava.put(content.get("id").toString, content)
-          logger.info("inside course competency loop loop")
-
-        })
-        val courseCompetenciesMap: Map[String, Any] = courseCompetenciesMapJava.asInstanceOf[util.Map[String, Any]]
 
         if (profileDetails.containsKey(config.competencies)) {
           k = 1
           var userCompetencies: util.List[Map[String, Any]] = profileDetails.getOrDefault(config.competencies, null).asInstanceOf[util.List[Map[String, Any]]]
           logger.info("after competency" + userCompetencies)
           val userCompetenciesMapJava = new java.util.HashMap[String, Object]()
-          logger.info("java new")
-          //        m.put("Foo", java.lang.Boolean.TRUE)
-          //        m.put("Bar", java.lang.Integer.valueOf(1))
-          //        val m2: Map[String, Any] = m.asInstanceOf[util.Map[String, Any]]
-          //        var courseCompetenciesMap : util.Map[String, Any] = null
-          //        var userCompetenciesMap : util.Map[String, Any] = null
-          //        var userCompetenciesIdList : List[String] = null
-          //        var courseCompetenciesIdList : util.List[String] = null
-          logger.info("before competency mapper")
 
           userCompetencies.forEach(content => {
             logger.info("inside loop userCompetencies.forEach" + content.toString)
             userCompetenciesMapJava.put(content.get(config.id).asInstanceOf[String], content)
             logger.info("inside user competency loop")
-
           })
+
           val userCompetenciesMap: Map[String, Any] = userCompetenciesMapJava.asInstanceOf[util.Map[String, Any]]
-          logger.info("course map" + courseCompetenciesMap + "  usermap" + userCompetenciesMap)
 
           courseCompetencies.forEach(courseContent => {
             logger.info("inside course competency loop int")
@@ -138,7 +113,6 @@ class competencyUpdaterFunction(config: AssessmentConfig,
                 userContent.put(config.competencyCBPCompletionLevelValue, courseLevelValue)
                 userContent.put(config.competencyCBPCompletionLevelName, courseLevelName)
               }
-
             } else {
               var newCompetencyMap: Map[String, Any] = new util.HashMap()
               newCompetencyMap.put(config.id, courseCID)
@@ -157,6 +131,7 @@ class competencyUpdaterFunction(config: AssessmentConfig,
             }
           })
         } else {
+          var userCompetenciesList: util.List[Map[String, Any]] = new util.ArrayList[Map[String, Any]]()
           courseCompetencies.forEach(courseContent => {
             logger.info("inside course competency loop int else part")
             var courseCID: String = courseContent.get(config.id).asInstanceOf[String]
@@ -174,12 +149,9 @@ class competencyUpdaterFunction(config: AssessmentConfig,
             newCompetencyMap.put(config.competencyCBPCompletionLevelValue, courseLevelValue)
             newCompetencyMap.put(config.competencyCBPCompletionLevelName, courseLevelName)
             newCompetencyMap.put(config.osid, java.util.UUID.randomUUID.toString)
-            var userCompetenciesList: util.List[Map[String, Any]] = new util.ArrayList[Map[String, Any]]()
             userCompetenciesList.add(newCompetencyMap)
-            logger.info(" else part New Competency Map With Added Competency old ${userCompetencies} :")
-            profileDetails.put(config.competencies, userCompetenciesList)
-            logger.info(" else part Newly Updated Profile Details ${profileDetails} :")
           })
+          profileDetails.put(config.competencies, userCompetenciesList)
         }
         logger.info("profile details" + profileDetails)
         updateProfileDetails(profileDetails, userId)
@@ -222,7 +194,7 @@ class competencyUpdaterFunction(config: AssessmentConfig,
         if (result.get(config.CONTENT) != null) {
           val contentList: util.List[util.Map[String, Any]] = result.get(config.CONTENT).asInstanceOf[util.List[util.Map[String, Any]]]
           contentList.forEach(content => {
-            competencyV3.add(content.get(config.competencies_v3))
+            competencyV3 = content.get(config.competencies_v3)
           })
         }
       }
