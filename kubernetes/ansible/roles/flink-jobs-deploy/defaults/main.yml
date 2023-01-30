@@ -119,12 +119,12 @@ rating_operators_parallelism: 1
 rating_key_expiry_seconds: 3600
 rating_parallelism: 1
 
-### assessment-submit related vars
-assessment_submit_consumer_parallelism: 1
-assessment_submit_operators_parallelism: 1
-assessment_submit_key_expiry_seconds: 3600
-assessment_submit_parallelism: 1
-assessment_submit_scoresubmit_parallelism: 1
+### cb-course-aggregator related vars
+cb-course-aggregator_consumer_parallelism: 1
+cb-course-aggregator_operators_parallelism: 1
+cb-course-aggregator_key_expiry_seconds: 3600
+cb-course-aggregator_parallelism: 1
+cb-course-aggregator_scoresubmit_parallelism: 1
 
 ### Druid-validator related vars
 druid_validator_consumer_parallelism: 1
@@ -228,7 +228,7 @@ flink_job_names:
     scale_target_value: 500000
     min_replica: 1
     max_replica: 2
-  assessment-submit:
+  cb-course-aggregator:
     job_class_name: 'org.sunbird.assessment.submit.task.AssessmentTask'
     replica: 1
     jobmanager_memory: 1024m
