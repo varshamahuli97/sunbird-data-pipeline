@@ -194,7 +194,7 @@ class competencyUpdaterFunction(config: AssessmentConfig,
         if (result.get(config.CONTENT) != null) {
           val contentList: util.List[util.Map[String, Any]] = result.get(config.CONTENT).asInstanceOf[util.List[util.Map[String, Any]]]
           contentList.forEach(content => {
-            competencyV3 = content.get(config.competencies_v3)
+            competencyV3 = content.get(config.competencies_v3).asInstanceOf[util.ArrayList[Any]]
           })
         }
       }
