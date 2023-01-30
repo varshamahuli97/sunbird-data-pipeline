@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
 import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper}
 import com.fasterxml.jackson.module.scala.ScalaObjectMapper
+import org.apache.commons.io.IOUtils
 import org.apache.http.client.methods.{HttpGet, HttpPost}
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.DefaultHttpClient
@@ -34,7 +35,7 @@ class RestApiUtil extends Serializable {
         val myObjectMapper = new ObjectMapper()
         myObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         myObjectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
-        text = new String(response.getEntity.getContent.readAllBytes(), StandardCharsets.UTF_8);
+        text = new String(IOUtils.toByteArray(response.getEntity.getContent), StandardCharsets.UTF_8)
       }
       text
     } catch {
@@ -58,7 +59,7 @@ class RestApiUtil extends Serializable {
     if (statusCode.equals(200)) {
       logger.info("Rest Call successfully working")
     }
-    val text = new String(response.getEntity.getContent.readAllBytes(), StandardCharsets.UTF_8);
+    val text = new String(IOUtils.toByteArray(response.getEntity.getContent), StandardCharsets.UTF_8);
     text
   }
 }
