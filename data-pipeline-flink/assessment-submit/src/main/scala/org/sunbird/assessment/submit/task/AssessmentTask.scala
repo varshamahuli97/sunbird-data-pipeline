@@ -7,7 +7,7 @@ import org.apache.flink.api.java.typeutils.TypeExtractor
 import org.apache.flink.api.java.utils.ParameterTool
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
 import org.sunbird.assessment.submit.domain.Event
-import org.sunbird.assessment.submit.functions.AssessmentSubmitFunction
+import org.sunbird.assessment.submit.functions.{AssessmentSubmitFunction, competencyUpdaterFunction}
 import org.sunbird.dp.core.job.FlinkKafkaConnector
 import org.sunbird.dp.core.util.FlinkUtil
 
@@ -20,20 +20,32 @@ class AssessmentTask(config: AssessmentConfig, kafkaConnector: FlinkKafkaConnect
     implicit val env: StreamExecutionEnvironment = FlinkUtil.getExecutionContext(config)
     implicit val eventTypeInfo: TypeInformation[Event] = TypeExtractor.getForClass(classOf[Event])
 
-    val source = {
-      kafkaConnector.kafkaEventSource[Event](config.inputTopic)
+    val competencySource = {
+      kafkaConnector.kafkaEventSource[Event](config.assessmentInputTopic)
+    }
+    val passbookSource = {
+      kafkaConnector.kafkaEventSource[Event](config.passbookInputTopic)
     }
 
-    val stream =
-      env.addSource(source, config.AssessmentConsumer).uid(config.AssessmentConsumer).rebalance()
+    val competencyStream =
+      env.addSource(competencySource, config.AssessmentConsumer).uid(config.AssessmentConsumer).rebalance()
         .process(new AssessmentSubmitFunction(config)).setParallelism(config.assessmentSubmitParallelism)
         .name(config.assessmentFunction).uid(config.assessmentFunction)
-    stream.getSideOutput(config.updateSuccessEventsOutputTag).addSink(kafkaConnector.kafkaEventSink[Event](config.kafkaSuccessTopic))
+    competencyStream.getSideOutput(config.updateSuccessEventsOutputTag).addSink(kafkaConnector.kafkaEventSink[Event](config.kafkaSuccessTopic))
       .name(config.successIssueEventSink).uid(config.successIssueEventSink)
       .setParallelism(config.assessmentSubmitParallelism)
-    stream.getSideOutput(config.failedEvent).addSink(kafkaConnector.kafkaEventSink[Event](config.kafkaIssueTopic))
+    competencyStream.getSideOutput(config.failedEvent).addSink(kafkaConnector.kafkaEventSink[Event](config.kafkaIssueTopic))
       .name(config.issueEventSink).uid(config.issueEventSink)
       .setParallelism(config.assessmentSubmitParallelism)
+
+    val passbookStream =
+      env.addSource(passbookSource, config.PassbookConsumer).uid(config.PassbookConsumer).rebalance()
+        .process(new competencyUpdaterFunction(config)).setParallelism(config.passbookParallelism)
+        .name(config.passbookFunction).uid(config.passbookFunction)
+    passbookStream.getSideOutput(config.passbookFailedEvent).addSink(kafkaConnector.kafkaEventSink[Event](config.kafkaIssueTopic))
+      .name(config.passbookIssueEventSink).uid(config.passbookIssueEventSink)
+      .setParallelism(config.passbookParallelism)
+
     env.execute(config.jobName)
   }
 

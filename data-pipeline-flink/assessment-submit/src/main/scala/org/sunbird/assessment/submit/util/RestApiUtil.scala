@@ -35,7 +35,8 @@ class RestApiUtil extends Serializable {
         val myObjectMapper = new ObjectMapper()
         myObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         myObjectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
-        text = new String(IOUtils.toByteArray(response.getEntity.getContent), StandardCharsets.UTF_8)      }
+        text = new String(IOUtils.toByteArray(response.getEntity.getContent), StandardCharsets.UTF_8)
+      }
       text
     } catch {
       case e: Exception => e.printStackTrace()
@@ -44,7 +45,7 @@ class RestApiUtil extends Serializable {
     }
   }
 
-  def postRequestWithContentType(uri: String, params: java.util.Map[String, Any]): Unit = {
+  def postRequestWithContentType(uri: String, params: java.util.Map[String, Any]): String = {
     val post = new HttpPost(uri)
     val mapper = new ObjectMapper() with ScalaObjectMapper
     mapper.setVisibility(PropertyAccessor.ALL, Visibility.ANY)
@@ -58,6 +59,7 @@ class RestApiUtil extends Serializable {
     if (statusCode.equals(200)) {
       logger.info("Rest Call successfully working")
     }
-    val text = new String(IOUtils.toByteArray(response.getEntity.getContent), StandardCharsets.UTF_8)
+    val text = new String(IOUtils.toByteArray(response.getEntity.getContent), StandardCharsets.UTF_8);
+    text
   }
 }
