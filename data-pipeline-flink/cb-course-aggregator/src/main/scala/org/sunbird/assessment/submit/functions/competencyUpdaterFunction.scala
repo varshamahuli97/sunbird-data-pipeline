@@ -126,9 +126,9 @@ class competencyUpdaterFunction(config: AssessmentConfig,
               newCompetencyMap.put(config.osid, java.util.UUID.randomUUID.toString)
               userCompetencies.add(newCompetencyMap)
               logger.info("New Competency Map With Added Competency old ${userCompetencies} :")
-              profileDetails.put(config.competencies, userCompetencies)
               logger.info("Newly Updated Profile Details ${profileDetails} :")
             }
+            profileDetails.put(config.competencies, userCompetencies)
           })
         } else {
           var userCompetenciesList: util.List[Map[String, Any]] = new util.ArrayList[Map[String, Any]]()
