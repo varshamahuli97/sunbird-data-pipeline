@@ -13,7 +13,7 @@ class AssessmentConfig (override val config: Config) extends BaseJobConfig(confi
   implicit val mapTypeInfo: TypeInformation[Event] = TypeExtractor.getForClass(classOf[Event])
   // Kafka Topics Configuration
   val assessmentInputTopic: String = config.getString("kafka.assessment.input.topic")
-  val passbookInputTopic: String = config.getString("kafka.generate.certificate.input.topic")
+  val passbookInputTopic: String = config.getString("kafka.issue.certificate.input.topic")
 
   // assessment specific
   val assessmentSubmitParallelism: Int = config.getInt("task.assessmentSubmit.parallelism")
@@ -79,9 +79,9 @@ class AssessmentConfig (override val config: Config) extends BaseJobConfig(confi
   val lastAttemptedOnKey = "last_attempted_on"
   val totalScoreKey = "total_score"
   val totalMaxScoreKey = "total_max_score"
-  val CERTIFICATE_GENERATOR="Certificate Generator"
+  val CERTIFICATE_GENERATOR="Course Certificate Generator"
   val RELATED="related"
-  val USER_ID="userId"
+  val USER_IDS="userIds"
   val COURSE_ID="courseId"
   val FILTERS = "filters"
   val FIELDS = "fields"

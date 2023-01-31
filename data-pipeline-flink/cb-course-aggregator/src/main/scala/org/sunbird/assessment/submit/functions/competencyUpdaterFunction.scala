@@ -56,10 +56,11 @@ class competencyUpdaterFunction(config: AssessmentConfig,
     try {
       logger.info("Entering PassbookFunction " + event.toString)
       if (event.actor.get("id").equalsIgnoreCase(config.CERTIFICATE_GENERATOR)) {
-        val userId = event.edata.get(config.USER_ID)
+        val userIds = event.edata.get(config.USER_IDS).asInstanceOf[util.List[String]]
+        //TODO -- need to loop through the list of received userIds
+        val userId = userIds.get(0)
         logger.info ("user id of this user is :"+userId)
-        val related = event.edata.get(config.RELATED).asInstanceOf[util.HashMap[String, Any]]
-        val courseId = related.get(config.COURSE_ID)
+        val courseId = event.edata.get(config.COURSE_ID)
         val courseCompetencies = enrichCompetencyV3(courseId).asInstanceOf[util.List[util.Map[String, Any]]]
         logger.info("Course competencies new"+ courseCompetencies)
         val profileDetails = getUserProfileDetails(userId).asInstanceOf[util.Map[String, Any]]
