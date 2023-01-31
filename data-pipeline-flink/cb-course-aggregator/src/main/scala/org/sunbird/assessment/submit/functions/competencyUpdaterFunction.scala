@@ -149,7 +149,10 @@ class competencyUpdaterFunction(config: AssessmentConfig,
             newCompetencyMap.put(config.competencyCBPCompletionLevelValue, courseLevelValue)
             newCompetencyMap.put(config.competencyCBPCompletionLevelName, courseLevelName)
             newCompetencyMap.put(config.osid, java.util.UUID.randomUUID.toString)
+            logger.info("new Course competency map added : " + newCompetencyMap)
+            logger.info("before addition of new competency userCompetenciesList size : " + userCompetenciesList.size())
             userCompetenciesList.add(newCompetencyMap)
+            logger.info("after addition of new competency userCompetenciesList size : " + userCompetenciesList.size())
           })
           profileDetails.put(config.competencies, userCompetenciesList)
         }
