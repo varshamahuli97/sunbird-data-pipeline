@@ -88,7 +88,7 @@
         </dependency>
         <dependency>
             <groupId>org.sunbird.dp.jobs</groupId>
-            <artifactId>assessment-submit</artifactId>
+            <artifactId>cb-course-aggregator</artifactId>
             <version>1.0.0</version>
             <type>jar</type>
         </dependency>
