@@ -648,7 +648,7 @@ cb-course-aggregator:
     kafka {
        output.topic = {{ env_name }}.assessment.final
        assessment.input.topic = {{ env_name }}.assessment.submit
-       generate.certificate.input.topic = {{ env_name }}.generate.certificate.request
+       issue.certificate.input.topic = {{ env_name }}.issue.certificate.request
        groupId = {{ env_name }}-assessment-submit-group
        success.topic = {{ env_name }}.success.assessment.submit
     }
