@@ -14,8 +14,9 @@ class RestApiUtil extends Serializable {
 
   private[this] val logger = LoggerFactory.getLogger(classOf[RestApiUtil])
   logger.info("RestApi Call start")
+
   def post(uri: String, params: java.util.Map[String, Any]): String = {
-    try{
+    try {
       val post = new HttpPost(uri)
       val mapper = new ObjectMapper() with ScalaObjectMapper
       mapper.setVisibility(PropertyAccessor.ALL, Visibility.ANY)
@@ -25,7 +26,7 @@ class RestApiUtil extends Serializable {
       val client = new DefaultHttpClient()
       val response = client.execute(post)
       val statusCode = response.getStatusLine.getStatusCode
-      var text=new String()
+      var text = new String()
       if (statusCode.equals(200)) {
         logger.info("Rest Call successfully working")
         val myObjectMapper = new ObjectMapper()
@@ -34,7 +35,7 @@ class RestApiUtil extends Serializable {
         text = new String(response.getEntity.getContent.readAllBytes(), StandardCharsets.UTF_8);
       }
       text
-    }catch {
+    } catch {
       case e: Exception => e.printStackTrace()
         logger.info(String.format("Failed during performing post mode request %s", e.getMessage()))
         null
