@@ -176,15 +176,12 @@ class IncompleteCourseReminderEmailNotification(courseConfig: NotificationEngine
       for (i <- 0 until userIds.size by limit) {
         val userIdSubList = userIds.subList(i, Math.min(userIds.size(), i + limit))
         var response = new util.ArrayList[util.HashMap[String, Any]]()
-        val query: BoolQueryBuilder = QueryBuilders.boolQuery()
         val finalQuery: BoolQueryBuilder = QueryBuilders.boolQuery()
         finalQuery.must(QueryBuilders.matchQuery(courseConfig.STATUS, 1))
           .must(QueryBuilders.matchQuery(courseConfig.IS_DELETED, false))
           .must(QueryBuilders.termsQuery(courseConfig.userId, userIdSubList))
-          .must(query)
         val sourceBuilder = new SearchSourceBuilder().query(finalQuery)
-        val excludeFields = new Array[String](0)
-        sourceBuilder.fetchSource(courseConfig.fields.split(",", -1), excludeFields)
+        sourceBuilder.fetchSource(courseConfig.fields.split(",", -1), null)
         response = userUtil.getUserRecordsFromES(courseConfig.sb_es_user_profile_index, courseConfig.es_profile_index_type, sourceBuilder)
         if (CollectionUtils.isNotEmpty(response)) {
           response.forEach(userDetailsMap => {

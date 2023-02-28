@@ -41,7 +41,7 @@ class FirstCourseEnrollmentFunction(enrollmentConfig: NotificationEngineConfig)(
         val userDetails = getUserDetails(userId)
         val courseName = getCourseNameById(courseId)
         if (MapUtils.isNotEmpty(userDetails) && StringUtils.isNotEmpty(courseName)) {
-          configureParams(userDetails, courseName)
+          configureParamAndSendMessageToKafka(userDetails, courseName)
         }
       }
     }
@@ -58,14 +58,11 @@ class FirstCourseEnrollmentFunction(enrollmentConfig: NotificationEngineConfig)(
     try {
       var response = new util.ArrayList[util.HashMap[String, Any]]()
       val query: BoolQueryBuilder = QueryBuilders.boolQuery()
-      val finalQuery: BoolQueryBuilder = QueryBuilders.boolQuery()
-      finalQuery.must(QueryBuilders.matchQuery(enrollmentConfig.STATUS, 1))
+      query.must(QueryBuilders.matchQuery(enrollmentConfig.STATUS, 1))
         .must(QueryBuilders.matchQuery(enrollmentConfig.IS_DELETED, false))
         .must(QueryBuilders.matchQuery(enrollmentConfig.userId, userId))
-        .must(query)
-      val sourceBuilder = new SearchSourceBuilder().query(finalQuery)
-      val excludeFields = new Array[String](0)
-      sourceBuilder.fetchSource(enrollmentConfig.fields.split(",", -1), excludeFields)
+      val sourceBuilder = new SearchSourceBuilder().query(query)
+      sourceBuilder.fetchSource(enrollmentConfig.fields.split(",", -1), null)
       response = userUtil.getUserRecordsFromES(enrollmentConfig.sb_es_user_profile_index, enrollmentConfig.es_profile_index_type, sourceBuilder)
       if (CollectionUtils.isNotEmpty(response)) {
         userMap = response.get(0)
@@ -114,7 +111,7 @@ class FirstCourseEnrollmentFunction(enrollmentConfig: NotificationEngineConfig)(
     }
   }
 
-  def configureParams(userDetails: util.HashMap[String, Any], courseName: String): Unit = {
+  def configureParamAndSendMessageToKafka(userDetails: util.HashMap[String, Any], courseName: String): Unit = {
     logger.info("Entering configureParams")
     val param = new util.HashMap[String, Any]()
     param.put(enrollmentConfig.USER_KEYWORD + enrollmentConfig._FIRSTNAME, userDetails.get(enrollmentConfig.FIRST_NAME))
