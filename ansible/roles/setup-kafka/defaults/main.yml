@@ -23,19 +23,10 @@ processing_kafka_overriden_topics:
   - name: dashboards.course
     retention_time: 172800000
     replication_factor: 1
-  - name: dashboards.resource
-    retention_time: 172800000
-    replication_factor: 1
   - name: dashboards.role.count
     retention_time: 172800000
     replication_factor: 1
   - name: dashboards.org.role.count
-    retention_time: 172800000
-    replication_factor: 1
-  - name: dashboards.course.details
-    retention_time: 172800000
-    replication_factor: 1
-  - name: dashboards.user.course.progress
     retention_time: 172800000
     replication_factor: 1
   - name: dashboards.user.course.program.progress
@@ -169,19 +160,10 @@ processing_kafka_topics:
   - name: dashboards.course
     num_of_partitions: 2
     replication_factor: 1
-  - name: dashboards.resource
-    num_of_partitions: 2
-    replication_factor: 1
   - name: dashboards.role.count
     num_of_partitions: 2
     replication_factor: 1
   - name: dashboards.org.role.count
-    num_of_partitions: 2
-    replication_factor: 1
-  - name: dashboards.course.details
-    num_of_partitions: 2
-    replication_factor: 1
-  - name: dashboards.user.course.progress
     num_of_partitions: 2
     replication_factor: 1
   - name: dashboards.user.course.program.progress
