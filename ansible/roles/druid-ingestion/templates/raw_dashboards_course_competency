@@ -15,6 +15,10 @@
             },
             {
               "type": "root",
+              "name": "category"
+            },
+            {
+              "type": "root",
               "name": "courseName"
             },
             {
@@ -23,7 +27,27 @@
             },
             {
               "type": "root",
+              "name": "courseReviewStatus"
+            },
+            {
+              "type": "root",
               "name": "courseOrgID"
+            },
+            {
+              "type": "root",
+              "name": "courseOrgName"
+            },
+            {
+              "type": "root",
+              "name": "courseOrgStatus"
+            },
+            {
+              "type": "root",
+              "name": "courseDuration"
+            },
+            {
+              "type": "root",
+              "name": "courseResourceCount"
             },
             {
               "type": "root",
@@ -43,6 +67,10 @@
             },
             {
               "type": "string",
+              "name": "category"
+            },
+            {
+              "type": "string",
               "name": "courseName"
             },
             {
@@ -51,7 +79,27 @@
             },
             {
               "type": "string",
+              "name": "courseReviewStatus"
+            },
+            {
+              "type": "string",
               "name": "courseOrgID"
+            },
+            {
+              "type": "string",
+              "name": "courseOrgName"
+            },
+            {
+              "type": "long",
+              "name": "courseOrgStatus"
+            },
+            {
+              "type": "float",
+              "name": "courseDuration"
+            },
+            {
+              "type": "long",
+              "name": "courseResourceCount"
             },
             {
               "type": "string",
