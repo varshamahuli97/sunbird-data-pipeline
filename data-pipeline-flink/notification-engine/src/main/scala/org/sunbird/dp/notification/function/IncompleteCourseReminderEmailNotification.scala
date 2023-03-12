@@ -1,8 +1,10 @@
 package org.sunbird.dp.notification.function
 
-import com.datastax.driver.core.Row
-import com.datastax.driver.core.querybuilder.QueryBuilder
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.datastax.driver.core._
+import com.datastax.driver.core.querybuilder.{Clause, QueryBuilder, Select}
+import com.datastax.driver.core.querybuilder.QueryBuilder.{gt, lt}
+import com.datastax.driver.core.querybuilder.Select.Builder
+import com.datastax.driver.core.querybuilder.Select.Where
 import com.google.gson.Gson
 import org.apache.commons.collections.{CollectionUtils, MapUtils}
 import org.apache.commons.lang3.StringUtils
@@ -13,9 +15,10 @@ import org.slf4j.LoggerFactory
 import org.sunbird.dp.core.util.CassandraUtil
 import org.sunbird.dp.notification.domain.Event
 import org.sunbird.dp.notification.task.NotificationEngineConfig
-import org.sunbird.dp.notification.util.{KafkaMessageGenerator, RestApiUtil, UserUtilityService}
+import org.sunbird.dp.notification.util.{CassandraUtility, KafkaMessageGenerator, RestApiUtil, UserUtilityService}
 
 import java.util
+import java.util.concurrent.TimeUnit
 import java.util.{Date, Map}
 
 
@@ -43,6 +46,8 @@ class IncompleteCourseReminderEmailNotification(courseConfig: NotificationEngine
 
   private var cassandraUtil = new CassandraUtil(courseConfig.dbHost, courseConfig.dbPort)
 
+  private var cassandraUtility = new CassandraUtility
+
   private val kafkaMessageGenerator = new KafkaMessageGenerator(courseConfig)
 
   private val userUtil = new UserUtilityService(courseConfig)
@@ -52,38 +57,92 @@ class IncompleteCourseReminderEmailNotification(courseConfig: NotificationEngine
 
   def initiateIncompleteCourseEmailReminder(): Unit = {
     try {
+      logger.info("Started Incomplete course Reminder Function")
+      val startTime = System.currentTimeMillis()
       val date = new Date(new Date().getTime - courseConfig.last_access_time_gap_millis)
-      val query = QueryBuilder.select().all()
-        .from(courseConfig.dbCoursesKeyspace, courseConfig.USER_CONTENT_DB_TABLE).
-        where(QueryBuilder.gt("completionpercentage", 0))
-        .and(QueryBuilder.lt("completionpercentage", 100))
-        .and(QueryBuilder.gt("last_access_time", 0))
-        .and(QueryBuilder.lt("last_access_time", date))
-        .allowFiltering().toString
-      val rows: java.util.List[Row] = cassandraUtil.find(query)
-      if (rows != null) {
-        fetchCourseIdsAndSetCourseNameAndThumbnail(rows)
-        setUserCourseMap(rows, userCourseMap)
-        getAndSetUserEmail(userCourseMap)
-        var userCourseEntrySet = userCourseMap.entrySet()
-        sendIncompleteCourseEmail(userCourseEntrySet)
-      }
+      val objectInfo = new util.ArrayList[util.HashMap[String, Any]]()
+      val batchSize = 100
+      var pageState: PagingState = null
+      val query = getIncompleteCourseQuery("sunbird_courses", "user_content_consumption", date).setFetchSize(batchSize)
+      val select: Statement = query.setFetchSize(100)
+      do {
+        if (pageState != null) {
+          query.setPagingState(pageState)
+        }
+        val resultSet = cassandraUtil.session.execute(select)
+        pageState = resultSet.getExecutionInfo().getPagingState()
+        var remaining: Int = resultSet.getAvailableWithoutFetching
+        val columnsMapping: util.Map[String, String] = cassandraUtility.fetchColumnsMapping(resultSet)
+        import scala.collection.JavaConverters._
+        import scala.util.control.Breaks._
+        var breakLoop = false
+        for (row <- resultSet.asScala if !breakLoop) {
+          val rowMap = new java.util.HashMap[String, Any]
+          columnsMapping.asScala.foreach(entry => rowMap.put(entry._1, row.getObject(entry._2)))
+          objectInfo.add(rowMap)
+
+          remaining -= 1
+          if (remaining == 0) {
+            breakLoop = true
+          }
+
+          breakable {
+            if (breakLoop) {
+              break
+            }
+          }
+        }
+        if (CollectionUtils.isNotEmpty(objectInfo)) {
+          fetchCourseIdsAndSetCourseNameAndThumbnail(objectInfo)
+          setUserCourseMap(objectInfo, userCourseMap)
+          getAndSetUserEmail(userCourseMap)
+          var userCourseEntrySet = userCourseMap.entrySet()
+          sendIncompleteCourseEmail(userCourseEntrySet)
+        }
+      } while (pageState != null)
+
+      val endTime = System.currentTimeMillis()
+      val elapsedSeconds = TimeUnit.MILLISECONDS.toSeconds(endTime - startTime)
+      logger.info(s"Completed Operation in $elapsedSeconds seconds")
     } catch {
       case ex: Exception =>
         logger.error(s"Getting Incomplete Courses Details Failed with exception ${ex.getMessage}:")
     }
   }
 
-  def fetchCourseIdsAndSetCourseNameAndThumbnail(userCourseList: java.util.List[Row]): Unit = {
+  def getIncompleteCourseQuery(keyspace: String,
+                               tableName: String,
+                               date: Date): Select = {
+    logger.info("Entering getIncompleteCourseQuery")
+    var selectBuilder: Builder = null
+    selectBuilder = QueryBuilder.select().all()
+    val selectQuery: Select = selectBuilder.from(keyspace, tableName)
+    val selectWhere: Where = selectQuery.where()
+    val completionPercentageGreaterThanZero: Clause = gt("completionpercentage", 0)
+    selectWhere.and(completionPercentageGreaterThanZero)
+    val completionPercentageLessThanHundred: Clause = lt("completionpercentage", 100)
+    selectWhere.and(completionPercentageLessThanHundred)
+    val lastAccessTimeNotNull: Clause = gt("last_access_time", 0)
+    selectWhere.and(lastAccessTimeNotNull)
+    selectQuery.allowFiltering()
+    val lastAccessTime: Clause = lt("last_access_time", date)
+    selectWhere.and(lastAccessTime)
+    logger.info("query:" + selectQuery)
+    selectQuery
+  }
+
+  def fetchCourseIdsAndSetCourseNameAndThumbnail(userCourseList: java.util.ArrayList[util.HashMap[String,Any]]): Unit = {
+    logger.info("Entering fetchCourseIdsAndSetCourseNameAndThumbnail")
     var courseIds: java.util.Set[String] = new java.util.HashSet[String]()
     userCourseList.forEach(userCourse => {
-      val courseId = userCourse.getString("courseid")
+      val courseId = userCourse.get("courseId").asInstanceOf[String]
       courseIds.add(courseId)
     })
     getAndSetCourseName(courseIds)
   }
 
   def getAndSetCourseName(courseIds: java.util.Set[String]): Unit = {
+    logger.info("Entering getAndSetCourseName")
     try {
       val filters = new util.HashMap[String, Any]()
       filters.put(courseConfig.IDENTIFIER, courseIds)
@@ -127,14 +186,14 @@ class IncompleteCourseReminderEmailNotification(courseConfig: NotificationEngine
     }
   }
 
-  def setUserCourseMap(userCourseList: java.util.List[Row], userCourseMap: java.util.Map[String, UserCourseProgressDetails]): Unit = {
-    logger.info("Entering setUserCourseMap")
+def setUserCourseMap(userCourseList: java.util.ArrayList[util.HashMap[String,Any]], userCourseMap: java.util.Map[String, UserCourseProgressDetails]): Unit = {
+  logger.info("Entering setUserCourseMap")
     userCourseList.forEach(userCourse => {
-      val courseId = userCourse.getString("courseid")
-      val batchId = userCourse.getString("batchid")
-      val userid = userCourse.getString("userid")
-      val per = userCourse.getFloat("completionPercentage")
-      val lastAccessedDate = userCourse.getTimestamp("last_access_time")
+      val courseId = userCourse.get("courseId").asInstanceOf[String]
+      val batchId = userCourse.get("batchId").asInstanceOf[String]
+      val userid = userCourse.get("userId").asInstanceOf[String]
+      val per = userCourse.get("completionPercentage").asInstanceOf[Float]
+      val lastAccessedDate = userCourse.get("last_access_time").asInstanceOf[Date]
       val courseUrl = courseConfig.COURSE_URL + courseId + courseConfig.OVERVIEW_BATCH_ID + batchId
       if (courseId != null && batchId != null && courseIdAndCourseNameMap.get(courseId) != null && courseIdAndCourseNameMap.get(courseId).thumbnail != null) {
         val i = IncompleteCourse(courseId = courseId,
@@ -164,6 +223,7 @@ class IncompleteCourseReminderEmailNotification(courseConfig: NotificationEngine
   }
 
   def getAndSetUserEmail(userCourseMap: java.util.Map[String, UserCourseProgressDetails]): Unit = {
+    logger.info("Entering getAndSetUserEmail")
     try {
       val userIds: java.util.List[String] = new java.util.ArrayList[String]()
       userIds.addAll(userCourseMap.keySet())

@@ -39,6 +39,7 @@ class NotificationPreferenceFunction(preferenceConfig: NotificationPreferenceCon
 
   override def processElement(event: Event, context: ProcessFunction[Event, Event]#Context, metrics: Metrics): Unit = {
     try {
+      logger.info("Validation of Notification Preference Started")
       val message = event.message
       if (message.equalsIgnoreCase(preferenceConfig.CHECK_NOTIFICATION_PREFERENCE_KEY)) {
         val emailWithUserId: util.List[util.HashMap[String, Any]] = event.emailWithUserId

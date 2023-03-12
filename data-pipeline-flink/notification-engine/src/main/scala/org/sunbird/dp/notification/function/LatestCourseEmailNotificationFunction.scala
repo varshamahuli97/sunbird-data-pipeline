@@ -18,6 +18,7 @@ import org.sunbird.dp.notification.util.{KafkaMessageGenerator, RestApiUtil, Use
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util
+import java.util.concurrent.TimeUnit
 import java.util.{Calendar, Collections, Properties}
 
 
@@ -57,6 +58,7 @@ class LatestCourseEmailNotificationFunction(courseConfig: NotificationEngineConf
   def initiateLatestCourseAlertEmail(): Unit = {
     try {
       logger.info("latest course alert function started")
+      val startTime = System.currentTimeMillis()
       val newCourseData: NewCourseData = getLatestAddedCourses()
       if (newCourseData != null && newCourseData.result.content.size() >= courseConfig.latest_courses_alert_content_min_limit) {
         val coursesDataMapList: util.List[CoursesDataMap] = setCourseMap(newCourseData.result.content)
@@ -66,6 +68,9 @@ class LatestCourseEmailNotificationFunction(courseConfig: NotificationEngineConf
       } else {
         logger.info("There are no latest courses or number of latest courses are less than " + courseConfig.latest_courses_alert_content_min_limit)
       }
+      val endTime = System.currentTimeMillis()
+      val elapsedSeconds = TimeUnit.MILLISECONDS.toSeconds(endTime - startTime)
+      logger.info(s"Completed Operation in $elapsedSeconds seconds")
     } catch {
       case e: Exception =>
         logger.error(String.format("Error in get and set user email %s" + e.getMessage()))

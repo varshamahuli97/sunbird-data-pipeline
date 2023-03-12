@@ -16,6 +16,7 @@ import org.sunbird.dp.notification.util.{KafkaMessageGenerator, RestApiUtil, Use
 import java.text.SimpleDateFormat
 import java.util
 import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 class FirstCourseEnrollmentFunction(enrollmentConfig: NotificationEngineConfig)(implicit val mapTypeInfo: TypeInformation[Event]) {
 
@@ -31,6 +32,7 @@ class FirstCourseEnrollmentFunction(enrollmentConfig: NotificationEngineConfig)(
   def initiateFirstCourseEnrolmentNotification(data: util.HashMap[String, Any]): Unit = {
     logger.info("Entering to First Course Enrolment Notification")
     try {
+      val startTime = System.currentTimeMillis()
       val userId = data.get("userId").toString
       val courseId = data.get("courseId").toString
       val query = QueryBuilder.select().countAll().from(enrollmentConfig.dbCoursesKeyspace, enrollmentConfig.courseTable)
@@ -44,6 +46,9 @@ class FirstCourseEnrollmentFunction(enrollmentConfig: NotificationEngineConfig)(
           configureParamAndSendMessageToKafka(userDetails, courseName)
         }
       }
+      val endTime = System.currentTimeMillis()
+      val elapsedSeconds = TimeUnit.MILLISECONDS.toSeconds(endTime - startTime)
+      logger.info(s"Completed Operation in $elapsedSeconds seconds")
     }
     catch {
       case ex: Exception => {
