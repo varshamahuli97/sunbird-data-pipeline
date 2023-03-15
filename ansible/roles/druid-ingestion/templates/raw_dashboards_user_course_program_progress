@@ -43,11 +43,35 @@
             },
             {
               "type": "root",
+              "name": "courseDuration"
+            },
+            {
+              "type": "root",
+              "name": "courseResourceCount"
+            },
+            {
+              "type": "root",
               "name": "courseOrgID"
             },
             {
               "type": "root",
+              "name": "courseOrgName"
+            },
+            {
+              "type": "root",
+              "name": "courseOrgStatus"
+            },
+            {
+              "type": "root",
               "name": "userOrgID"
+            },
+            {
+              "type": "root",
+              "name": "userOrgName"
+            },
+            {
+              "type": "root",
+              "name": "userOrgStatus"
             },
             {
               "type": "root",
@@ -60,6 +84,18 @@
             {
               "type": "root",
               "name": "maskedEmail"
+            },
+            {
+              "type": "root",
+              "name": "userStatus"
+            },
+            {
+              "type": "root",
+              "name": "completionPercentage"
+            },
+            {
+              "type": "root",
+              "name": "completionStatus"
             }
           ]
         },
@@ -98,12 +134,36 @@
               "name": "courseReviewStatus"
             },
             {
+              "type": "float",
+              "name": "courseDuration"
+            },
+            {
+              "type": "long",
+              "name": "courseResourceCount"
+            },
+            {
               "type": "string",
               "name": "courseOrgID"
             },
             {
               "type": "string",
+              "name": "courseOrgName"
+            },
+            {
+              "type": "long",
+              "name": "courseOrgStatus"
+            },
+            {
+              "type": "string",
               "name": "userOrgID"
+            },
+            {
+              "type": "string",
+              "name": "userOrgName"
+            },
+            {
+              "type": "long",
+              "name": "userOrgStatus"
             },
             {
               "type": "string",
@@ -116,6 +176,18 @@
             {
               "type": "string",
               "name": "maskedEmail"
+            },
+            {
+              "type": "long",
+              "name": "userStatus"
+            },
+            {
+              "type": "float",
+              "name": "completionPercentage"
+            },
+            {
+              "type": "string",
+              "name": "completionStatus"
             }
           ],
           "dimensionsExclusions": []

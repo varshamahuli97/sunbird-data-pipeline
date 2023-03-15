@@ -32,6 +32,54 @@
             {
               "type": "root",
               "name": "courseOrgID"
+            },
+            {
+              "type": "root",
+              "name": "courseOrgName"
+            },
+            {
+              "type": "root",
+              "name": "courseOrgStatus"
+            },
+            {
+              "type": "root",
+              "name": "courseDuration"
+            },
+            {
+              "type": "root",
+              "name": "courseResourceCount"
+            },
+            {
+              "type": "root",
+              "name": "ratingSum"
+            },
+            {
+              "type": "root",
+              "name": "ratingCount"
+            },
+            {
+              "type": "root",
+              "name": "ratingAverage"
+            },
+            {
+              "type": "root",
+              "name": "count1Star"
+            },
+            {
+              "type": "root",
+              "name": "count2Star"
+            },
+            {
+              "type": "root",
+              "name": "count3Star"
+            },
+            {
+              "type": "root",
+              "name": "count4Star"
+            },
+            {
+              "type": "root",
+              "name": "count5Star"
             }
           ]
         },
@@ -60,6 +108,54 @@
             {
               "type": "string",
               "name": "courseOrgID"
+            },
+            {
+              "type": "string",
+              "name": "courseOrgName"
+            },
+            {
+              "type": "long",
+              "name": "courseOrgStatus"
+            },
+            {
+              "type": "float",
+              "name": "courseDuration"
+            },
+            {
+              "type": "long",
+              "name": "courseResourceCount"
+            },
+            {
+              "type": "float",
+              "name": "ratingSum"
+            },
+            {
+              "type": "float",
+              "name": "ratingCount"
+            },
+            {
+              "type": "float",
+              "name": "ratingAverage"
+            },
+            {
+              "type": "float",
+              "name": "count1Star"
+            },
+            {
+              "type": "float",
+              "name": "count2Star"
+            },
+            {
+              "type": "float",
+              "name": "count3Star"
+            },
+            {
+              "type": "float",
+              "name": "count4Star"
+            },
+            {
+              "type": "float",
+              "name": "count5Star"
             }
           ],
           "dimensionsExclusions": []
