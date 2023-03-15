@@ -63,8 +63,8 @@ class IncompleteCourseReminderEmailNotification(courseConfig: NotificationEngine
       val objectInfo = new util.ArrayList[util.HashMap[String, Any]]()
       val batchSize = 100
       var pageState: PagingState = null
-      val query = getIncompleteCourseQuery("sunbird_courses", "user_content_consumption", date).setFetchSize(batchSize)
-      val select: Statement = query.setFetchSize(100)
+      val query = getIncompleteCourseQuery(courseConfig.dbCoursesKeyspace, courseConfig.USER_CONTENT_DB_TABLE, date)
+      val select: Statement = query.setFetchSize(batchSize)
       do {
         if (pageState != null) {
           query.setPagingState(pageState)
@@ -99,8 +99,8 @@ class IncompleteCourseReminderEmailNotification(courseConfig: NotificationEngine
           var userCourseEntrySet = userCourseMap.entrySet()
           sendIncompleteCourseEmail(userCourseEntrySet)
         }
+        objectInfo.clear()
       } while (pageState != null)
-
       val endTime = System.currentTimeMillis()
       val elapsedSeconds = TimeUnit.MILLISECONDS.toSeconds(endTime - startTime)
       logger.info(s"Completed Operation in $elapsedSeconds seconds")
