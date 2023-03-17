@@ -693,51 +693,40 @@ cb-course-aggregator:
     heartbeat.interval: 5000
     taskmanager.memory.process.size: {{ flink_job_names['cb-course-aggregator'].taskmanager_process_memory }}
     jobmanager.memory.process.size: {{ flink_job_names['cb-course-aggregator'].jobmanager_process_memory }}
-    
+
 notification-engine:
   notification-engine: |+
     include file("/data/flink/conf/base-config.conf")
     kafka {
-       output.topic = {{ env_name }}.failedNotification
-       notification.input.topic = {{ env_name }}.notification.event 
-       notification_preference_input.topic = {{ env_name }}.notification.preference 
-       groupId = {{ env_name }}_notification_engine 
-       notification_job.topic = {{ env_name }}.notification.job 
+       output.topic = {{ env_name }}.assessment.final
+       assessment.input.topic = {{ env_name }}.assessment.submit
+       issue.certificate.input.topic = {{ env_name }}.issue.certificate.request
+       groupId = {{ env_name }}-assessment-submit-group
+       success.topic = {{ env_name }}.success.assessment.submit
     }
     ext-cassandra {
           keyspace = "sunbird"
-          EMAIL_RECORD_TABLE = "email_record" 
-          user_content_db_table = "user_content_consumption" 
+          user_assessment_data_table = "user_assessment_data"
           courses_keyspace = "sunbird_courses"
-          {{ env_name }}_hierarchy_store_keyspace="{{ env_name }}_hierarchy_store" 
-          content_hierarchy_table="content_hierarchy" 
-          user_table="user" 
-          course_table = "user_enrolments"
-          exclude_user_emails_table="exclude_user_emails" 
+          user_table="user"
+          table = "assessment_aggregator"
           host = "{{ core_cassandra_host }}"
           port = "9042"
         }
+    skip.events = ["INTERRUPT"]
+    permit.eid = ["AUDIT"]
     url{
        km_base_host = "https://{{ domain_name }}/api/"
        content_search = "content/v1/search"
-       course_url="https://{{ domain_name }}/app/toc/" 
-       overview_batch="/overview?batchId"
        }
     task {
-      notification_engine_parallelism = {{notification_engine_parallelism}}
+      consumer.parallelism = {{ cb_course_aggregator_consumer_parallelism }}
+      passbook.parallelism = 1
+      downstream.parallelism = {{ cb_course_aggregator_operators_parallelism }}
+      assessmentSubmit {
+        parallelism = {{ cb_course_aggregator_parallelism }}
       }
-    kafka-key{ 
-      key_serializer="key.serializer" 
-      value_serializer="value.serializer" 
-      bootstrap_servers="bootstrap.servers" 
-      }
-    fields{
-      search_fields="name,appIcon,instructions,description,purpose,mimeType,gradeLevel,identifier,medium,pkgVersion,board,subject,resourceType,primaryCategory,contentType,channel,organisation,trackable,license,posterImage,idealScreenSize,learningMode,creatorLogo,duration,version" 
-     } 	  
-    mailList{ 
-      recipient_new_course_email="{{ recipient_new_course_email }}" 
-     }  
-     
+    }  
   flink-conf: |+
     jobmanager.memory.flink.size: {{ flink_job_names['notification-engine'].jobmanager_memory }}
     taskmanager.memory.flink.size: {{ flink_job_names['notification-engine'].taskmanager_memory }}
