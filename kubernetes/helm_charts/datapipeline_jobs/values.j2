@@ -699,24 +699,46 @@ notification-engine:
     include file("/data/flink/conf/base-config.conf")
     kafka {
        output.topic = {{ env_name }}.failedNotification
-       notification.input.topic = {{ env_name }}.notification.event 
-       notification_preference_input.topic = {{ env_name }}.notification.preference 
-       groupId = {{ env_name }}_notification_engine 
-       notification_job.topic = {{ env_name }}.notification.job 
+       notification.input.topic = {{ env_name }}.notification.event
+       notification_preference_input.topic = {{ env_name }}.notification.preference
+       groupId = {{ env_name }}_notification_engine
+       notification_job.topic = {{ env_name }}.notification.job
     }
     ext-cassandra {
           keyspace = "sunbird"
-          EMAIL_RECORD_TABLE = "email_record" 
-          user_content_db_table = "user_content_consumption" 
+          EMAIL_RECORD_TABLE = "email_record"
+          user_content_db_table = "user_content_consumption"
           courses_keyspace = "sunbird_courses"
-          {{ env_name }}_hierarchy_store_keyspace="{{ env_name }}_hierarchy_store" 
-          content_hierarchy_table="content_hierarchy" 
-          user_table="user" 
+          {{ env_name }}_hierarchy_store_keyspace="{{ env_name }}_hierarchy_store"
+          content_hierarchy_table="content_hierarchy"
+          user_table="user"
           course_table = "user_enrolments"
-          exclude_user_emails_table="exclude_user_emails" 
+          exclude_user_emails_table="exclude_user_emails"
           host = "{{ core_cassandra_host }}"
           port = "9042"
         }
+    url {
+       km_base_host = "https:/{{ domain_name }}/api/"
+       content_search = "content/v1/search"
+       course_url = "https://{{ domain_name }}/app/toc/"
+       overview_batch = "/overview?batchId"
+       }
+    task {
+       notification_engine_parallelism = 1
+       }
+    kafka-key {
+       key_serializer = "key.serializer"
+       value_serializer = "value.serializer"
+       bootstrap_servers = "bootstrap.servers"
+       }
+    mailList {
+       recipient_new_course_email = "juhi.agarwal@tarento.com,manas.swain@tarento.com"
+       }
+    fields {
+       search_fields="name,appIcon,instructions,description,purpose,mimeType,gradeLevel,identifier,medium,pkgVersion,board,subject,resourceType,primaryCategory,contentType,channel,organisation,trackable,license,posterImage,idealScreenSize,learningMode,creatorLogo,duration,version"
+       }
+
+
   flink-conf: |+
     jobmanager.memory.flink.size: {{ flink_job_names['notification-engine'].jobmanager_memory }}
     taskmanager.memory.flink.size: {{ flink_job_names['notification-engine'].taskmanager_memory }}
