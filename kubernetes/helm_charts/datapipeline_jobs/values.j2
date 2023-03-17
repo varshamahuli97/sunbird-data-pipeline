@@ -717,26 +717,26 @@ notification-engine:
           host = "{{ core_cassandra_host }}"
           port = "9042"
         }
-    url{
+    url {
        km_base_host = "https://{{ domain_name }}/api/"
        content_search = "content/v1/search"
-       course_url="https://{{ domain_name }}/app/toc/" 
-       overview_batch="/overview?batchId"
+       course_url = "https://{{ domain_name }}/app/toc/"
+       overview_batch = "/overview?batchId"
        }
     task {
-      notification_engine_parallelism = {{notification_engine_parallelism}}
-      }
-    kafka-key{ 
-      key_serializer="key.serializer" 
-      value_serializer="value.serializer" 
-      bootstrap_servers="bootstrap.servers" 
-      }
-    fields{
-      search_fields="name,appIcon,instructions,description,purpose,mimeType,gradeLevel,identifier,medium,pkgVersion,board,subject,resourceType,primaryCategory,contentType,channel,organisation,trackable,license,posterImage,idealScreenSize,learningMode,creatorLogo,duration,version" 
-     } 	  
-    mailList{ 
-      recipient_new_course_email="{{ recipient_new_course_email }}" 
-     } 
+       notification_engine_parallelism = 1
+       }
+    kafka-key {
+       key_serializer = "key.serializer"
+       value_serializer = "value.serializer"
+       bootstrap_servers = "bootstrap.servers"
+       }
+    mailList {
+       recipient_new_course_email = "{{notification_engine_parallelism}}"
+       }
+    fields {
+       search_fields="name,appIcon,instructions,description,purpose,mimeType,gradeLevel,identifier,medium,pkgVersion,board,subject,resourceType,primaryCategory,contentType,channel,organisation,trackable,license,posterImage,idealScreenSize,learningMode,creatorLogo,duration,version"
+       }
   flink-conf: |+
     jobmanager.memory.flink.size: {{ flink_job_names['notification-engine'].jobmanager_memory }}
     taskmanager.memory.flink.size: {{ flink_job_names['notification-engine'].taskmanager_memory }}
