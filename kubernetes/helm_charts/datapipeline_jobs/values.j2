@@ -732,7 +732,7 @@ notification-engine:
        bootstrap_servers = "bootstrap.servers"
        }
     mailList {
-       recipient_new_course_email = "juhi.agarwal@tarento.com,manas.swain@tarento.com"
+       recipient_new_course_email = "{{ recipient_new_course_email }}"
        }
     fields {
        search_fields="name,appIcon,instructions,description,purpose,mimeType,gradeLevel,identifier,medium,pkgVersion,board,subject,resourceType,primaryCategory,contentType,channel,organisation,trackable,license,posterImage,idealScreenSize,learningMode,creatorLogo,duration,version"
