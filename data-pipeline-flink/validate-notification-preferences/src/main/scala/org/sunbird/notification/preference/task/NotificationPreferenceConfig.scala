@@ -13,10 +13,10 @@ class NotificationPreferenceConfig(override val config: Config) extends BaseJobC
   implicit val mapTypeInfo: TypeInformation[Event] = TypeExtractor.getForClass(classOf[Event])
 
   // Kafka Topics Configuration
-  val inputTopic: String = config.getString("kafka.input.topic")
+  val inputTopic: String = config.getString("kafka.notification_preference_input.topic")
 
   //kafkaOutput topic
-  val NOTIFICATION_JOB_Topic: String = config.getString("kafka.notification_job_topic")
+  val NOTIFICATION_JOB_Topic: String = config.getString("kafka.notification_job.topic")
 
   val notificationPreferenceParallelism: Int = config.getInt("task.notificationPreference.parallelism")
   val kafkaIssueTopic: String = config.getString("kafka.output.topic")
