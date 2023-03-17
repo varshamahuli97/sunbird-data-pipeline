@@ -13,7 +13,7 @@ class NotificationEngineConfig(override val config: Config) extends BaseJobConfi
   implicit val mapTypeInfo: TypeInformation[Event] = TypeExtractor.getForClass(classOf[Event])
 
   // Kafka Topics Configuration
-  val inputTopic: String = config.getString("kafka.input_topic")
+  val inputTopic: String = config.getString("kafka.notification.input.topic")
 
   val notification_Preference_Kafka_input_topic: String = config.getString("kafka.notification_preference_input.topic")
   val key_serializer: String = config.getString("kafka-key.key_serializer")
@@ -21,7 +21,7 @@ class NotificationEngineConfig(override val config: Config) extends BaseJobConfi
   val bootstrap_servers: String = config.getString("kafka-key.bootstrap_servers")
 
   //producer topic
-  val NOTIFICATION_JOB_TOPIC: String = config.getString("kafka.notification_job_topic")
+  val NOTIFICATION_JOB_TOPIC: String = config.getString("kafka.notification_job.topic")
 
   // rating specific
   val notificationEngineParallelism: Int = config.getInt("task.notification_engine_parallelism")
