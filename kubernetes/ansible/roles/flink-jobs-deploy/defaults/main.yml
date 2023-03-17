@@ -248,7 +248,7 @@ flink_job_names:
     scale_target_value: 500000
     min_replica: 1
     max_replica: 2
-  notification_engine:
+  notification-engine:
     job_class_name: 'org.sunbird.dp.notification.task.NotificationEngineTask'
     replica: 1
     jobmanager_memory: 1024m
