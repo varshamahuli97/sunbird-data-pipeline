@@ -720,14 +720,14 @@ notification-engine:
     url{
        km_base_host = "https://{{ domain_name }}/api/"
        content_search = "content/v1/search"
-	   course_url="https://{{ domain_name }}/app/toc/" 
-	   overview_batch="/overview?batchId"
+       course_url="https://{{ domain_name }}/app/toc/" 
+       overview_batch="/overview?batchId"
        }
     task {
       notification_engine_parallelism = {{notification_engine_parallelism}}
       }
 	  
-	  kafka-key{ 
+    kafka-key{ 
       key_serializer="key.serializer" 
       value_serializer="value.serializer" 
       bootstrap_servers="bootstrap.servers" 
