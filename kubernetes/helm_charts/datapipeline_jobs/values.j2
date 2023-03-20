@@ -87,11 +87,11 @@ scale_properties:
     scale_target_value: {{ flink_job_names['notification-engine'].scale_target_value | default(0) }}
     min_replica: {{ flink_job_names['notification-engine'].min_replica | default(1) }}
     max_replica: {{ flink_job_names['notification-engine'].max_replica | default(2) }}
-  validate_notification_preferences:
-    enabled: {{ flink_job_names['validate_notification_preferences'].scale_enabled | lower}}
-    scale_target_value: {{ flink_job_names['validate_notification_preferences'].scale_target_value | default(0) }}
-    min_replica: {{ flink_job_names['validate_notification_preferences'].min_replica | default(1) }}
-    max_replica: {{ flink_job_names['validate_notification_preferences'].max_replica | default(2) }}
+  validate-notification-preferences:
+    enabled: {{ flink_job_names['validate-notification-preferences'].scale_enabled | lower}}
+    scale_target_value: {{ flink_job_names['validate-notification-preferences'].scale_target_value | default(0) }}
+    min_replica: {{ flink_job_names['validate-notification-preferences'].min_replica | default(1) }}
+    max_replica: {{ flink_job_names['validate-notification-preferences'].max_replica | default(2) }}
   ingest-router:
     enabled: {{ flink_job_names['ingest-router'].scale_enabled | lower}}
     scale_target_value: {{ flink_job_names['ingest-router'].scale_target_value }}
