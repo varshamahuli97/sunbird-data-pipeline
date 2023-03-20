@@ -744,6 +744,12 @@ notification-engine:
     senderMail {
        sender_mail = "{{ sunbird_mail_server_from_email }}"
        }
+    ES {
+       sb_es_user_profile_index="user_alias"
+       es_profile_index_type="_doc"
+       host= {{ sunbird_es_host }}
+       port="9300"
+       }
 
   flink-conf: |+
     jobmanager.memory.flink.size: {{ flink_job_names['notification-engine'].jobmanager_memory }}
