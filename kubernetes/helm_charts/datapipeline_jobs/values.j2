@@ -755,7 +755,11 @@ notification-engine:
     const {
        latest_courses_alert_send_to_all_user = true
        }
-
+    consumerKey {
+       incomplete_course_alert_message_key="courseReminder"
+       latest_course_alert_message_key="latestCourse"
+       first_course_enrolment_message_key="firstCourseEnrol"
+       }
   flink-conf: |+
     jobmanager.memory.flink.size: {{ flink_job_names['notification-engine'].jobmanager_memory }}
     taskmanager.memory.flink.size: {{ flink_job_names['notification-engine'].taskmanager_memory }}
