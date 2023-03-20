@@ -793,7 +793,7 @@ validate-notification-preferences:
           port = "9042"
         }
     task {
-       notificationPreference.parallelism = {{ notificationPreference.parallelism }}
+       notificationPreference.parallelism = 1
        }
     kafka-key {
        key_serializer = "key.serializer"
