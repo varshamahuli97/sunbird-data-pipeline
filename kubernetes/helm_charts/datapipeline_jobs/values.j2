@@ -722,6 +722,10 @@ notification-engine:
        content_search = "content/v1/search"
        course_url = "https://{{ domain_name }}/app/toc/"
        overview_batch = "/overview?batchId"
+       notification_event_endpoint = "https:/{{ domain_name }}/dummy"
+       sb_service_url = "http://localhost:9000/"
+       notification_service_host = "http://localhost:9000/"
+       sb_user_search = "private/user/v1/search"
        }
     task {
        notification_engine_parallelism = 1
