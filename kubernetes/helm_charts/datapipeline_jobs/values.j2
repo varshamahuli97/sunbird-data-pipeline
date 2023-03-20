@@ -700,6 +700,7 @@ notification-engine:
     kafka {
        output.topic = {{ env_name }}.failedNotification
        notification.input.topic = {{ env_name }}.notification.event
+       bootstrap_server = "{{ kafka_brokers }}"
        notification_preference_input.topic = {{ env_name }}.notification.preference
        groupId = {{ env_name }}_notification_engine
        notification_job.topic = {{ env_name }}.notification.job
