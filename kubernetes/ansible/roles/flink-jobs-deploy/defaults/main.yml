@@ -133,6 +133,13 @@ notification_engine_key_expiry_seconds: 3600
 notification_engine_parallelism: 1
 notification_engine_scoresubmit_parallelism: 1
 
+### validate_notification_preferences related vars
+validate_notification_preferences_consumer_parallelism: 1
+validate_notification_preferences_operators_parallelism: 1
+validate_notification_preferences_key_expiry_seconds: 3600
+validate_notification_preferences_parallelism: 1
+validate_notification_preferences_scoresubmit_parallelism: 1
+
 ### Druid-validator related vars
 druid_validator_consumer_parallelism: 1
 druid_validator_operators_parallelism: 1
@@ -250,6 +257,19 @@ flink_job_names:
     max_replica: 2
   notification-engine:
     job_class_name: 'org.sunbird.dp.notification.task.NotificationEngineTask'
+    replica: 1
+    jobmanager_memory: 1024m
+    taskmanager_memory: 1024m
+    taskmanager_process_memory: 1700m
+    jobmanager_process_memory: 1600m
+    taskslots: 1
+    cpu_requests: 0.3
+    scale_enabled: true
+    scale_target_value: 500000
+    min_replica: 1
+    max_replica: 2
+  validate-notification-preferences:
+    job_class_name: 'org.sunbird.notification.preference.task.NotificationPreferenceTask'
     replica: 1
     jobmanager_memory: 1024m
     taskmanager_memory: 1024m
