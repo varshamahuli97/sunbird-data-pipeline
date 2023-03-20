@@ -727,6 +727,7 @@ notification-engine:
        notification_service_host = "http://localhost:9000/"
        sb_user_search = "private/user/v1/search"
        }
+      
     task {
        notification_engine_parallelism = 1
        }
@@ -737,6 +738,9 @@ notification-engine:
        }
     mailList {
        recipient_new_course_email = "{{ recipient_new_course_email }}"
+       }
+    senderMail {
+       sender_mail = "{{ sunbird_mail_server_from_email }}"
        }
     fields {
        search_fields="name,appIcon,instructions,description,purpose,mimeType,gradeLevel,identifier,medium,pkgVersion,board,subject,resourceType,primaryCategory,contentType,channel,organisation,trackable,license,posterImage,idealScreenSize,learningMode,creatorLogo,duration,version"
