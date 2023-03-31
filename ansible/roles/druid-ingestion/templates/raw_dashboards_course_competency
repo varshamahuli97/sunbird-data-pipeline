@@ -55,6 +55,14 @@
             },
             {
               "type": "root",
+              "name": "competencyName"
+            },
+            {
+              "type": "root",
+              "name": "competencyType"
+            },
+            {
+              "type": "root",
               "name": "competencyLevel"
             }
           ]
@@ -104,6 +112,14 @@
             {
               "type": "string",
               "name": "competencyID"
+            },
+            {
+              "type": "string",
+              "name": "competencyName"
+            },
+            {
+              "type": "string",
+              "name": "competencyType"
             },
             {
               "type": "long",
