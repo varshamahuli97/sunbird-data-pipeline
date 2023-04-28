@@ -19,6 +19,22 @@
             },
             {
               "type": "root",
+              "name": "batchID"
+            },
+            {
+              "type": "root",
+              "name": "courseCompletedTimestamp"
+            },
+            {
+              "type": "root",
+              "name": "courseEnrolledTimestamp"
+            },
+            {
+              "type": "root",
+              "name": "lastContentAccessTimestamp"
+            },
+            {
+              "type": "root",
               "name": "courseProgress"
             },
             {
@@ -108,6 +124,22 @@
             {
               "type": "string",
               "name": "courseID"
+            },
+            {
+              "type": "string",
+              "name": "batchID"
+            },
+            {
+              "type": "long",
+              "name": "courseCompletedTimestamp"
+            },
+            {
+              "type": "long",
+              "name": "courseEnrolledTimestamp"
+            },
+            {
+              "type": "long",
+              "name": "lastContentAccessTimestamp"
             },
             {
               "type": "long",
