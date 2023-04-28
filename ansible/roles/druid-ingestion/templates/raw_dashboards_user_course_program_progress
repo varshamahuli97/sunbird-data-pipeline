@@ -130,15 +130,15 @@
               "name": "batchID"
             },
             {
-              "type": "long",
+              "type": "timestamp",
               "name": "courseCompletedTimestamp"
             },
             {
-              "type": "long",
+              "type": "timestamp",
               "name": "courseEnrolledTimestamp"
             },
             {
-              "type": "long",
+              "type": "timestamp",
               "name": "lastContentAccessTimestamp"
             },
             {
