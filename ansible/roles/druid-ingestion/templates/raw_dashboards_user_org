@@ -31,6 +31,14 @@
             },
             {
               "type": "root",
+              "name": "userCreatedTimestamp"
+            },
+            {
+              "type": "root",
+              "name": "userUpdatedTimestamp"
+            },
+            {
+              "type": "root",
               "name": "userOrgID"
             },
             {
@@ -64,6 +72,14 @@
             {
               "type": "long",
               "name": "userStatus"
+            },
+            {
+              "type": "long",
+              "name": "userCreatedTimestamp"
+            },
+            {
+              "type": "long",
+              "name": "userUpdatedTimestamp"
             },
             {
               "type": "string",
