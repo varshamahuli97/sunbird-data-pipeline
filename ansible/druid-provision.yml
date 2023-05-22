@@ -16,7 +16,7 @@
 
 # Create postgres databases and users
 
-- hosts: local
+- hosts: "{{ groups['postgres'][0] }}"
   gather_facts: no
   vars_files:
     - "{{inventory_dir}}/secrets.yml"
