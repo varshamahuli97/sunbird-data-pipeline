@@ -71,9 +71,9 @@ class UserCacheUpdaterFunctionV2(config: UserCacheUpdaterConfigV2)(implicit val 
       case ex: Exception => {
         ex.printStackTrace()
         logger.info(s"Processing event for user: ${userId} having mid: ${event.mid()}")
-        logger.info("Event throwing exception: ")
+        logger.info("Event throwing exception: SKIPPING!!!")
         // logger.info("Event throwing exception: ", JSONUtil.serialize(event))
-        throw ex
+        // throw ex
       }
     }
   }
