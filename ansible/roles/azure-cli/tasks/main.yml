@@ -10,7 +10,7 @@
 
 - name: Updating Apt Cache
   become: yes
-  shell: apt update -m
+  shell: apt update -m || echo "Warning - Updating Apt Cache failed"
 
 - name: install azure cli dependency
   apt: name={{ item }} state=present

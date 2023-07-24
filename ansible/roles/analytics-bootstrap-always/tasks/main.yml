@@ -19,7 +19,7 @@
 
 - name: Updating Apt Cache
   become: yes
-  shell: apt update -m
+  shell: apt update -m || echo "Warning - Updating Apt Cache failed"
 
 - name: Installing packages
   become: yes
