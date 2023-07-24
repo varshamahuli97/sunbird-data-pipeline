@@ -50,6 +50,9 @@ processing_kafka_overriden_topics:
   - name: dashboards.user.org
     retention_time: 172800000
     replication_factor: 1
+  - name: dashboards.user.assessment
+    retention_time: 172800000
+    replication_factor: 1
   - name: analytics.job_queue
     retention_time: 172800000
     replication_factor: 1
@@ -187,6 +190,9 @@ processing_kafka_topics:
   - name: dashboards.user.org
     num_of_partitions: 2
     replication_factor: 1
+  - name: dashboards.user.assessment
+    num_of_partitions: 2
+    replication_factor: 1
   - name: analytics.job_queue
     num_of_partitions: 1
     replication_factor: 1
@@ -292,4 +298,3 @@ processing_kafka_topics:
   - name: rating.failedRating
     num_of_partitions: 1
     replication_factor: 1
-
