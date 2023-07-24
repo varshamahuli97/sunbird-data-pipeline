@@ -2,8 +2,8 @@ analytics_user: analytics
 analytics_group: analytics
 spark_output_temp_dir: /mount/data/analytics/tmp/
 
-bucket: "igotdevlogs"
-secor_bucket: "igotdevlogs"
+bucket: "telemetry-data-store"
+secor_bucket: "telemetry-data-store"
 dp_object_store_type: "cephs3"
 dp_raw_telemetry_backup_location: "secor-{{ env }}/unique/raw/"
 dp_storage_key_config: "aws_storage_key"
