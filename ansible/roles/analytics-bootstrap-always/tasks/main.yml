@@ -17,12 +17,15 @@
     createhome: yes
     group: "{{ analytics_group }}"
 
+- name: Updating Apt Cache
+  become: yes
+  shell: apt update -m
+
 - name: Installing packages
   become: yes
   apt:
     name: "{{item}}"
     state: latest
-    update_cache: true
   with_items:
     - rsync
     - zip
