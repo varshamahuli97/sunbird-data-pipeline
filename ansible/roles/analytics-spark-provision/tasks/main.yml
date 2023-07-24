@@ -90,7 +90,9 @@
 - name: Install packages
   become: yes
   apt:
-    name: ["gcc", "autoconf", "curl", "g++", "gnupg", "automake", "bison", "libc6-dev", "libffi-dev", "libgdbm-dev", "libncurses5-dev", "libsqlite3-dev", "pkg-config", "sqlite3", "zlib1g-dev", "libtool", "libyaml-dev", "make", "libgmp-dev", "libreadline-dev", "libssl-dev", "gpgv2", "gem", "ruby", "gnupg2", "virtualenv"]
+    # name: ["gcc", "autoconf", "curl", "g++", "gnupg", "automake", "bison", "libc6-dev", "libffi-dev", "libgdbm-dev", "libncurses5-dev", "libsqlite3-dev", "pkg-config", "sqlite3", "zlib1g-dev", "libtool", "libyaml-dev", "make", "libgmp-dev", "libreadline-dev", "libssl-dev", "gpgv2", "gem", "ruby", "gnupg2", "virtualenv"]
+    # name: ["libc6-dev", "gpgv2", "virtualenv"] - excluded because of error on NIC servers
+    name: ["gcc", "autoconf", "curl", "g++", "gnupg", "automake", "bison", "libffi-dev", "libgdbm-dev", "libncurses5-dev", "libsqlite3-dev", "pkg-config", "sqlite3", "zlib1g-dev", "libtool", "libyaml-dev", "make", "libgmp-dev", "libreadline-dev", "libssl-dev", "gem", "ruby", "gnupg2"]
     state: installed
 
 - name: Import rvm keys
