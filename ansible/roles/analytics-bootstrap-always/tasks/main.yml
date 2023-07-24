@@ -27,7 +27,7 @@
     name: "{{item}}"
     state: latest
   with_items:
-    - rsync
+    # - rsync
     - zip
     - python-pip
 
