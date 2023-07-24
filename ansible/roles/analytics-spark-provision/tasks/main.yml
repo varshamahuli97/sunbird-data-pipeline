@@ -83,13 +83,15 @@
   template: src=jets3t.j2 dest={{ analytics.home }}/spark-{{ spark_version }}-bin-hadoop2.7/conf/jets3t.properties mode=755 owner={{ analytics_user }} group={{ analytics_group }}
 
 ## Provision DS ##
+- name: Updating Apt Cache
+  become: yes
+  shell: apt update -m || echo "Warning - Updating Apt Cache failed"
+
 - name: Install packages
   become: yes
   apt:
     name: ["gcc", "autoconf", "curl", "g++", "gnupg", "automake", "bison", "libc6-dev", "libffi-dev", "libgdbm-dev", "libncurses5-dev", "libsqlite3-dev", "pkg-config", "sqlite3", "zlib1g-dev", "libtool", "libyaml-dev", "make", "libgmp-dev", "libreadline-dev", "libssl-dev", "gpgv2", "gem", "ruby", "gnupg2", "virtualenv"]
     state: installed
-    update_cache: true
-    cache_valid_time: 3600
 
 - name: Import rvm keys
   become: yes
@@ -132,8 +134,6 @@
   apt:
     name: "ruby2.6-dev"
     state: installed
-    update_cache: true
-    cache_valid_time: 3600
 
 - name: Install ruby-kafka
   become: yes
@@ -164,5 +164,4 @@
   apt:
     name: python3.6
     state: present
-    update_cache: true
-    cache_valid_time: 3600
+
