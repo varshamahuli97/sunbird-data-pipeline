@@ -17,6 +17,10 @@
     createhome: yes
     group: "{{ analytics_group }}"
 
+- name: Add missing keys
+  become: yes
+  shell: apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D8FF8E1F7DF8B07E
+
 - name: Updating Apt Cache
   become: yes
   shell: apt update -m || echo "Warning - Updating Apt Cache failed"
