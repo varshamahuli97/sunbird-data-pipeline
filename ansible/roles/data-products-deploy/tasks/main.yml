@@ -168,18 +168,34 @@
   with_dict: "{{ run_wfs_job }}"
   tags:
     - spark1-jobs
+    - default-jobs
+
+- name: Create daily cron jobs for competency-metrics
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh competency-metrics"
+  with_dict: "{{ run_competency_metrics_job }}"
+  tags:
+    - spark1-jobs
+    - default-jobs
+
+- name: Create daily cron jobs for assessment-metrics
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh assessment-metrics"
+  with_dict: "{{ run_assessment_metrics_job }}"
+  tags:
+    - spark1-jobs
+    - default-jobs
 
 - name: Create daily cron jobs for monitor job
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh monitor-job-summ"
   with_dict: "{{ run_monitor_job }}"
   tags:
     - spark1-jobs
+    - default-jobs
 
 - name: Create daily cron jobs using submit-all-jobs
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job='/bin/bash -lc "ruby {{ analytics.home }}/scripts/submit-all-jobs.rb"'
   with_dict: "{{ submit_jobs }}"
   tags:
-    - default-jobs
+    # - default-jobs
     - spark-jobs
     - cronjobs
 
@@ -187,7 +203,7 @@
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/start-jobmanager.sh"
   with_dict: "{{ start_jobmanager }}"
   tags:
-    - default-jobs
+    # - default-jobs
     - spark-jobs
     - cronjobs
 
@@ -195,7 +211,7 @@
   cron: name="{{env}}-course-batch-status-updater" minute=*/{{ course_batch_status_updater_job_schedule }} job="{{ analytics.home }}/scripts/run-job.sh course-batch-status-updater"
   tags:
     - cronjobs
-    - default-jobs
+    # - default-jobs
     - spark1-jobs
 
 - name: Create admin-user-reports cron job
@@ -203,14 +219,14 @@
   with_dict: "{{ run_admin_user_reports_job }}"
   tags:
     - cronjobs 
-    - default-jobs
+    # - default-jobs
     - spark-jobs
 - name: Create admin-geo-reports cron job
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh admin-geo-reports"
   with_dict: "{{ run_admin_geo_reports_job }}"
   tags:
     - cronjobs
-    - default-jobs
+    # - default-jobs
     - spark-jobs 
 
 - name: Create assessment-aggregator reports cron job
@@ -218,7 +234,7 @@
   with_dict: "{{ run_assessment_aggregator_report_job }}"
   tags:
     - cronjobs
-    - default-jobs
+    # - default-jobs
     - spark-jobs  
 
 - name: Create etb metrics cron job
@@ -226,7 +242,7 @@
   with_dict: "{{ run_etb_metrics_weekly_job }}"
   tags:
     - cronjobs
-    - default-jobs
+    # - default-jobs
     - spark-jobs
 
 - name: Create progress-exhaust cron job
@@ -234,7 +250,7 @@
   with_dict: "{{ run_progress_exhaust }}"
   tags:
     - cronjobs
-    - default-jobs
+    # - default-jobs
     - spark1-jobs
 
 - name: Create response-exhaust cron job
@@ -242,7 +258,7 @@
   with_dict: "{{ run_response_exhaust }}"
   tags:
     - cronjobs
-    - default-jobs
+    # - default-jobs
     - spark-jobs
 
 - name: Create cassandra-migration cron job
@@ -250,7 +266,7 @@
   with_dict: "{{ run_cassandra_migration }}"
   tags:
     - cronjobs
-    - default-jobs
+    # - default-jobs
     - spark-jobs
     
 
@@ -259,7 +275,7 @@
   with_dict: "{{ run_userinfo_exhaust }}"
   tags:
     - cronjobs
-    - default-jobs
+    # - default-jobs
     - spark-jobs
 
 - name: Create collection-summary cron job
@@ -267,7 +283,7 @@
   with_dict: "{{ run_collection_summary }}"
   tags:
     - cronjobs
-    - default-jobs
+    # - default-jobs
     - spark-jobs
 
 - name: Copy collection-summary ingestion spec
@@ -280,7 +296,7 @@
   with_dict: "{{ run_sourcing_summary }}"
   tags:
     - cronjobs
-    - default-jobs
+    # - default-jobs
     - spark-jobs
 
 - name: Create uci-private-exhaust cron job
@@ -288,7 +304,7 @@
   with_dict: "{{ run_uci_private_exhaust_job }}"
   tags:
     - cronjobs
-    - default-jobs
+    # - default-jobs
     - spark-jobs
 
 - name: Create uci-response-exhaust cron job
@@ -296,7 +312,7 @@
   with_dict: "{{ run_uci_response_exhaust_job }}"
   tags:
     - cronjobs
-    - default-jobs
+    # - default-jobs
     - spark-jobs 
 
 - name: Copy sourcing-summary ingestion spec
