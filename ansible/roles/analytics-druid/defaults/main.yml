@@ -2,7 +2,7 @@
 # Druid Template variables
 druid_monitoring: true
 cluster: "{{ remote }}"
-zookeeper_group: "groups[{{ remote }}-zookeeper]"
+zookeeper_group: "groups[{{ cluster }}-zookeeper]"
 
 druid_user: druid
 druid_directory: "/data"

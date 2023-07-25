@@ -8,8 +8,6 @@
     line: 'export {{item.var}}={{item.value}}'
     regexp: "export {{ item.var }}.*"
   with_items:
-    - {var: 'aws_storage_key', value: '{{ sunbird_private_s3_storage_key }}' }
-    - {var: 'aws_storage_secret', value: '{{ sunbird_private_s3_storage_secret }}' }
     - {var: 'azure_storage_key', value: '{{ sunbird_private_storage_account_name }}'}
     - {var: 'azure_storage_secret', value: '{{ sunbird_private_storage_account_key }}'}
 
@@ -20,8 +18,6 @@
     line: '{{item.var}}={{item.value}}'
     regexp: "{{ item.var }}.*"
   with_items:
-    - {var: 'aws_storage_key', value: '{{ sunbird_private_s3_storage_key }}'}
-    - {var: 'aws_storage_secret', value: '{{ sunbird_private_s3_storage_secret }}'}
     - {var: 'azure_storage_key', value: '{{ sunbird_private_storage_account_name }}'}
     - {var: 'azure_storage_secret', value: '{{ sunbird_private_storage_account_key }}'}
     - {var: 'AZURE_STORAGE_ACCOUNT', value: '{{ sunbird_private_storage_account_name }}'}
