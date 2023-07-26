@@ -1,7 +1,7 @@
 {
   "type": "kafka",
   "dataSchema": {
-    "dataSource": "dashboards-user-assessment",
+    "dataSource": "dashboards-assessment",
     "parser": {
       "type": "string",
       "parseSpec": {
