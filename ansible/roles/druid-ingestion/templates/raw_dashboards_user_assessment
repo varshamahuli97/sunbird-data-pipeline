@@ -19,7 +19,7 @@
             },
             {
               "type": "root",
-              "name": "assessID"
+              "name": "assessChildID"
             },
             {
               "type": "root",
@@ -104,6 +104,38 @@
             {
               "type": "root",
               "name": "assessPassPercentage"
+            },
+            {
+              "type": "root",
+              "name": "assessID"
+            },
+            {
+              "type": "root",
+              "name": "assessChildName"
+            },
+            {
+              "type": "root",
+              "name": "assessChildDuration"
+            },
+            {
+              "type": "root",
+              "name": "assessChildPrimaryCategory"
+            },
+            {
+              "type": "root",
+              "name": "assessChildContentType"
+            },
+            {
+              "type": "root",
+              "name": "assessChildObjectType"
+            },
+            {
+              "type": "root",
+              "name": "assessChildShowTimer"
+            },
+            {
+              "type": "root",
+              "name": "assessChildAllowSkip"
             },
             {
               "type": "root",
@@ -279,7 +311,7 @@
             },
             {
               "type": "string",
-              "name": "assessID"
+              "name": "assessChildID"
             },
             {
               "type": "long",
@@ -364,6 +396,38 @@
             {
               "type": "float",
               "name": "assessPassPercentage"
+            },
+            {
+              "type": "string",
+              "name": "assessID"
+            },
+            {
+              "type": "string",
+              "name": "assessChildName"
+            },
+            {
+              "type": "float",
+              "name": "assessChildDuration"
+            },
+            {
+              "type": "string",
+              "name": "assessChildPrimaryCategory"
+            },
+            {
+              "type": "string",
+              "name": "assessChildContentType"
+            },
+            {
+              "type": "string",
+              "name": "assessChildObjectType"
+            },
+            {
+              "type": "string",
+              "name": "assessChildShowTimer"
+            },
+            {
+              "type": "string",
+              "name": "assessChildAllowSkip"
             },
             {
               "type": "string",
