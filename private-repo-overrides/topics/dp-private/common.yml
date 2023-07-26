@@ -49,6 +49,9 @@ processing_kafka_overriden_topics:
   - name: dashboards.user.org
     retention_time: 172800000
     replication_factor: 2
+  - name: dashboards.assessment
+    retention_time: 172800000
+    replication_factor: 2
   - name: dashboards.user.assessment
     retention_time: 172800000
     replication_factor: 2
@@ -181,6 +184,9 @@ processing_kafka_topics:
     num_of_partitions: 4
     replication_factor: 2
   - name: dashboards.user.org
+    num_of_partitions: 4
+    replication_factor: 2
+  - name: dashboards.assessment
     num_of_partitions: 4
     replication_factor: 2
   - name: dashboards.user.assessment
