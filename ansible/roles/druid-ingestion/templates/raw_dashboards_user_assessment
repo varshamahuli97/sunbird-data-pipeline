@@ -310,14 +310,6 @@
               "name": "assessVersion"
             },
             {
-              "type": "string",
-              "name": "assessObjectType"
-            },
-            {
-              "type": "string",
-              "name": "assessName"
-            },
-            {
               "type": "long",
               "name": "assessMaxRetakeAttempts"
             },
