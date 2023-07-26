@@ -478,6 +478,18 @@
               "name": "courseOrgStatus"
             },
             {
+              "type": "float",
+              "name": "ratingSum"
+            },
+            {
+              "type": "float",
+              "name": "ratingCount"
+            },
+            {
+              "type": "float",
+              "name": "ratingAverage"
+            },
+            {
               "type": "string",
               "name": "userOrgID"
             },
