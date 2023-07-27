@@ -1,6 +1,7 @@
 ---
 # Druid Template variables
 druid_monitoring: true
+cluster: "{{ remote }}"
 zookeeper_group: "groups[{{ cluster }}-zookeeper]"
 
 druid_user: druid

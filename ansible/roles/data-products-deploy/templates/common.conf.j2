@@ -24,6 +24,11 @@ aws_storage_key="{{ s3_storage_key }}"
 aws_storage_secret="{{ s3_storage_secret }}"
 {% endif %}
 
+# NIC quirks
+es.index.auto.create=false
+es.nodes.wan.only=true
+es.nodes.discovery=false
+
 lp.contentmodel.versionkey="jd5ECm/o0BXwQCe8PfZY1NoUkB9HN41QjA80p22MKyRIcP5RW4qHw8sZztCzv87M"
 
 # Joblog Kafka appender config for cluster execution

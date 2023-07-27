@@ -38,6 +38,7 @@ dashboards_declared_competency_topic: "{{ env }}.dashboards.competency.declared"
 dashboards_competency_gap_topic: "{{ env }}.dashboards.competency.gap"
 dashboards_user_org_topic: "{{ env }}.dashboards.user.org"
 dashboards_user_assessment_topic: "{{ env }}.dashboards.user.assessment"
+dashboards_assessment_topic: "{{ env }}.dashboards.assessment"
 dashboards_cassandra_user_table: "user"
 dashboards_cassandra_user_roles_table: "user_roles"
 dashboards_cassandra_org_table: "organisation"
@@ -72,7 +73,7 @@ dataset_metadata_table: "{{ env }}_dataset_metadata"
 report_user_table_keyspace: "sunbird_courses"
 report_user_enrolment_table: "report_user_enrolments"
 
-analytics_job_list: '"wfs", "competency-metrics", "user-org-redis-update", "monitor-job-summ"'
+analytics_job_list: '"wfs", "competency-metrics", "assessment-metrics", "monitor-job-summ"'
 analytics_jobs_count: 4
 
 cassandra_keyspace_prefix: '{{ env }}_'
@@ -115,10 +116,18 @@ have_weekly_jobs: false
 
 course_batch_status_updater_job_schedule: 60
 
+run_competency_metrics_job:
+  competency-metrics:
+    hour: 00
+    minute: 05
+run_assessment_metrics_job:
+  assessment-metrics:
+    hour: 00
+    minute: 25
 run_wfs_job:
   wfs:
     hour: 00
-    minute: 30
+    minute: 45
 run_monitor_job:    
   monitor-job-summ:
     hour: 03
