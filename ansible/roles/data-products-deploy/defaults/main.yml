@@ -124,6 +124,10 @@ run_assessment_metrics_job:
   assessment-metrics:
     hour: 00
     minute: 25
+run_user_report_job:
+  user-report-job:
+    hour: 01
+    minute: 10
 run_wfs_job:
   wfs:
     hour: 00
