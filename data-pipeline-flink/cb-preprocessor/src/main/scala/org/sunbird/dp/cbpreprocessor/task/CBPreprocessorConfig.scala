@@ -9,7 +9,7 @@ import org.sunbird.dp.cbpreprocessor.domain.Event
 
 import scala.collection.JavaConverters._
 
-class CBPreprocessorConfig(override val config: Config) extends BaseJobConfig(config, "CBPreprocessorJob") {
+class CBPreprocessorConfig(override val config: Config) extends BaseJobConfig[Event](config, "CBPreprocessorJob") {
 
   private val serialVersionUID = 2905979434303791379L  // TODO: change this?
 

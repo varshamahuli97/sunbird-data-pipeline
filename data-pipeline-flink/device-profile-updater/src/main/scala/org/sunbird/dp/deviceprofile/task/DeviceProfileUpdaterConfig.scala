@@ -8,7 +8,7 @@ import org.apache.flink.api.java.typeutils.TypeExtractor
 import org.apache.flink.streaming.api.scala.OutputTag
 import org.sunbird.dp.core.job.BaseJobConfig
 
-class DeviceProfileUpdaterConfig(override val config: Config) extends BaseJobConfig(config, jobName = "DeviceProfileUpdaterJob") {
+class DeviceProfileUpdaterConfig(override val config: Config) extends BaseJobConfig[util.Map[String, AnyRef]](config, jobName = "DeviceProfileUpdaterJob") {
 
   private val serialVersionUID = 2905979434303791379L
 

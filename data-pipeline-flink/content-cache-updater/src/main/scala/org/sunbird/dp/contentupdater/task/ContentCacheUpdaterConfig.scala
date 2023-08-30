@@ -7,7 +7,7 @@ import org.apache.flink.streaming.api.scala.OutputTag
 import org.sunbird.dp.contentupdater.domain.Event
 import org.sunbird.dp.core.job.BaseJobConfig
 
-class ContentCacheUpdaterConfig(override val config: Config) extends BaseJobConfig(config, "ContentCacheUpdaterJob") {
+class ContentCacheUpdaterConfig(override val config: Config) extends BaseJobConfig[Event](config, "ContentCacheUpdaterJob") {
 
   private val serialVersionUID = 2905979434303791379L
 

@@ -2,14 +2,15 @@ package org.sunbird.dp.core.job
 
 import java.util.Properties
 import java.io.Serializable
-
 import com.typesafe.config.Config
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.api.java.typeutils.TypeExtractor
+import org.apache.flink.streaming.api.scala.{OutputTag, createTypeInformation}
 import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.sunbird.dp.core.domain.Events
 
-class BaseJobConfig(val config: Config, val jobName: String) extends Serializable {
+class BaseJobConfig[T](val config: Config, val jobName: String) extends Serializable {
 
   private val serialVersionUID = - 4515020556926788923L
 
@@ -45,6 +46,11 @@ class BaseJobConfig(val config: Config, val jobName: String) extends Serializabl
   val enableDistributedCheckpointing: Option[Boolean] = if (config.hasPath("job")) Option(config.getBoolean("job.enable.distributed.checkpointing")) else None
   val checkpointingBaseUrl: Option[String] = if (config.hasPath("job")) Option(config.getString("job.statebackend.base.url")) else None
 
+  // config for uncaught error handling
+  val uncaughtErrorEventCountMetric = "uncaught-error-event-count"
+  val uncaughtErrorEventsOutputTag: OutputTag[T] = OutputTag[T]("uncaught-error-events")
+  val kafkaUncaughtErrorRouteTopic: String = config.getString("kafka.output.uncaught.error.topic")
+  val uncaughtErrorRouteProducer = "output-uncaught-error-route-sink"
 
   def kafkaConsumerProperties: Properties = {
     val properties = new Properties()

@@ -73,8 +73,8 @@ dataset_metadata_table: "{{ env }}_dataset_metadata"
 report_user_table_keyspace: "sunbird_courses"
 report_user_enrolment_table: "report_user_enrolments"
 
-analytics_job_list: '"wfs", "competency-metrics", "assessment-metrics", "monitor-job-summ"'
-analytics_jobs_count: 4
+analytics_job_list: '"wfs", "competency-metrics", "assessment-metrics", "monitor-job-summ", "user-report-job"'
+analytics_jobs_count: 5
 
 cassandra_keyspace_prefix: '{{ env }}_'
 report_cassandra_cluster_host: "{{ report_cassandra_host | default(core_cassandra_host) }}"

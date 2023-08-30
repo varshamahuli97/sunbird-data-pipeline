@@ -9,7 +9,7 @@ import org.sunbird.dp.preprocessor.domain.Event
 
 import scala.collection.JavaConverters._
 
-class PipelinePreprocessorConfig(override val config: Config) extends BaseJobConfig(config, "PipelinePreprocessorJob") {
+class PipelinePreprocessorConfig(override val config: Config) extends BaseJobConfig[Event](config, "PipelinePreprocessorJob") {
 
   private val serialVersionUID = 2905979434303791379L
 
