@@ -1,6 +1,6 @@
 application.env="{{ env }}"
 telemetry.version="2.1"
-default.parallelization="10"
+default.parallelization="48"
 spark_output_temp_dir="/mount/data/analytics/tmp/"
 lp.url="{{lp_url}}"
 service.search.url="{{ service.search.url }}"
@@ -42,11 +42,11 @@ kafka.consumer.topic="{{ env }}.analytics.job_queue"
 no_of_jobs=42
 
 # Spark Driver
-spark.driver.memory=6g
+spark.driver.memory={{ spark.driver.memory }}
 
 spark.memory_fraction={{ spark.memory_fraction }}
 spark.storage_fraction={{ spark.storage_fraction }}
-spark.driver_memory="{{ spark.driver_memory }}" 
+spark.driver_memory="{{ spark.driver_memory }}"
 
 #Monitor Jobs
 
