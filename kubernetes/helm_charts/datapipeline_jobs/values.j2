@@ -106,7 +106,7 @@ taskmanager:
   heap_memory: {{ taskmanager_heap_memory }}
   replicas: {{taskmanager_replicacount|default(1)}}
   cpu_requests: {{ cpu_requests|default(1)}}
-  mem_requests: {{ mem_requests|default(2Gi)}}
+  mem_requests: {{ mem_requests|default(2)}}
 
 job_classname: {{ job_classname }}
 {{ taskmanager_liveness | to_nice_yaml }}
