@@ -184,22 +184,22 @@
     - spark1-jobs
     - default-jobs
 
-- name: Create daily cron jobs for user-report-job
-  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh user-report-job"
+- name: Create daily cron jobs for user-report
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh user-report"
   with_dict: "{{ run_user_report_job }}"
   tags:
     - spark1-jobs
     - default-jobs
 
-- name: Create daily cron jobs for course-report-job
-  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh user-report-job"
+- name: Create daily cron jobs for course-report
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh course-report"
   with_dict: "{{ run_course_report_job }}"
   tags:
     - spark1-jobs
     - default-jobs
 
-- name: Create daily cron jobs for user-enrolment-report-job
-  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh user-report-job"
+- name: Create daily cron jobs for user-enrolment-report
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh user-enrolment-report"
   with_dict: "{{ run_user_enrolment_report_job }}"
   tags:
     - spark1-jobs
