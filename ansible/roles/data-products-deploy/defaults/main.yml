@@ -45,7 +45,11 @@ dashboards_cassandra_org_table: "organisation"
 dashboards_cassandra_user_enrolments_table: "user_enrolments"
 dashboards_cassandra_content_hierarchy_table: "content_hierarchy"
 dashboards_cassandra_rating_summary_table: "ratings_summary"
+dashboards_cassandra_ratings_table: "ratings"
 dashboards_cassandra_user_assessment_table: "user_assessment_data"
+dashboards_cassandra_org_hierarchy_table: "org_hierarchy"
+dashboards_cassandra_course_batch_table: "course_batch"
+
 dashboards_frac_backend_host: "frac-dictionary-backend.igot-{{ env }}.in"
 dashboards_broker_compression: "none"
 dashboards_redis_host: "{{ redis_host }}"
@@ -57,13 +61,12 @@ dashboards_redis_org_name_key: "mdo_name_by_org"
 dashboards_redis_total_registered_officer_count_key: "mdo_total_registered_officer_count"
 dashboards_redis_total_org_count_key: "mdo_total_org_count"
 
-user_report_temp_path: "/tmp/standalone-reports/user-report"
-user_enrolment_report_temp_path: "/tmp/standalone-reports/user-enrollment-report"
-course_report_temp_path: "/tmp/standalone-reports/course-report"
-
 user_report_path: "standalone-reports/user-report"
-user_enrolment_report_path: "standalone-reports/user-enrollment-report"
+user_enrolment_report_path: "standalone-reports/user-enrolment-report"
 course_report_path: "standalone-reports/course-report"
+cba_report_path: "standalone-reports/cba-report"
+user_assessment_report_path: "standalone-reports/user-assessment-report-cbp"
+tagged_users_path: "tagged-users/"
 
 report_mdo_ids: "0133783095823810560,0133782666818437120"
 
@@ -151,11 +154,24 @@ run_course_report_job:
   course-report:
     hour: 02
     minute: 40
-
+run_cba_report_job:
+  course-based-assessment-report:
+    hour: 03
+    minute: 20
 run_wfs_job:
   wfs:
     hour: 4
     minute: 15
+run_rozgar_user_report_job:
+  rozgar-user-report:
+    hour: 05
+    minute: 00
+run_rozgar_enrolment_report_job:
+  rozgar-enrolment-report:
+    hour: 05
+    minute: 40
+
+
 
 run_monitor_job:    
   monitor-job-summ:

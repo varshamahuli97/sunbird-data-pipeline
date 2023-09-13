@@ -191,6 +191,13 @@
     - spark1-jobs
     - default-jobs
 
+- name: Create daily cron jobs for user-enrolment-report
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh user-enrolment-report"
+  with_dict: "{{ run_user_enrolment_report_job }}"
+  tags:
+    - spark1-jobs
+    - default-jobs
+
 - name: Create daily cron jobs for course-report
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh course-report"
   with_dict: "{{ run_course_report_job }}"
@@ -198,9 +205,23 @@
     - spark1-jobs
     - default-jobs
 
-- name: Create daily cron jobs for user-enrolment-report
-  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh user-enrolment-report"
-  with_dict: "{{ run_user_enrolment_report_job }}"
+- name: Create daily cron jobs for course-based-assessment-report
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh course-based-assessment-report"
+  with_dict: "{{ run_cba_report_job }}"
+  tags:
+    - spark1-jobs
+    - default-jobs
+
+- name: Create daily cron jobs for rozgar-user-report
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh rozgar-user-report"
+  with_dict: "{{ run_rozgar_user_report_job }}"
+  tags:
+    - spark1-jobs
+    - default-jobs
+
+- name: Create daily cron jobs for rozgar-enrolment-report
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh rozgar-enrolment-report"
+  with_dict: "{{ run_rozgar_enrolment_report_job }}"
   tags:
     - spark1-jobs
     - default-jobs
