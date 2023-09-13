@@ -105,20 +105,20 @@ spark:
   worker:
     instances: 1
     cores: 12
-    memory: 40g
+    memory: 36g
   driver:
-    memory: 16g
+    memory: 22g
     cores: 2
-    memoryOverhead: 3g
+    memoryOverhead: 4g
   executor:
     instances: 1
     cores: 12
-    memory: 30g
-    memoryOverhead: 6g
-  driver_memory: 16g
+    memory: 28g
+    memoryOverhead: 5g
+  driver_memory: 22g
   memory_fraction: 0.3
   storage_fraction: 0.5
-  executor_memory: 30g
+  executor_memory: 28g
   heap_conf_str: '"-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -Xms250m {{ heap_memory }} -XX:+UseStringDeduplication"'
 
 submit_jobs:
@@ -162,14 +162,14 @@ run_wfs_job:
   wfs:
     hour: 4
     minute: 15
-run_rozgar_user_report_job:
-  rozgar-user-report:
-    hour: 05
-    minute: 00
-run_rozgar_enrolment_report_job:
-  rozgar-enrolment-report:
-    hour: 05
-    minute: 40
+#run_rozgar_user_report_job:
+#  rozgar-user-report:
+#    hour: 05
+#    minute: 00
+#run_rozgar_enrolment_report_job:
+#  rozgar-enrolment-report:
+#    hour: 05
+#    minute: 40
 
 
 
