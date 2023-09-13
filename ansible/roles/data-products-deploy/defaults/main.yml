@@ -111,14 +111,14 @@ spark:
     cores: 2
     memoryOverhead: 3g
   executor:
-    instances: 6
-    cores: 2
-    memory: 5g
-    memoryOverhead: 1g
+    instances: 1
+    cores: 12
+    memory: 30g
+    memoryOverhead: 6g
   driver_memory: 16g
   memory_fraction: 0.3
   storage_fraction: 0.5
-  executor_memory: 5g
+  executor_memory: 30g
   heap_conf_str: '"-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -Xms250m {{ heap_memory }} -XX:+UseStringDeduplication"'
 
 submit_jobs:
