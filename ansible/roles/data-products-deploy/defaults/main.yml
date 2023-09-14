@@ -68,7 +68,7 @@ cba_report_path: "standalone-reports/cba-report"
 user_assessment_report_path: "standalone-reports/user-assessment-report-cbp"
 tagged_users_path: "tagged-users/"
 
-report_mdo_ids: "0133783095823810560,0133782666818437120"
+report_mdo_ids: "01384948907599462455,0134199050418831360"
 
 job_manager_tmp_dir: "transient-data"
 channel: dev-test
