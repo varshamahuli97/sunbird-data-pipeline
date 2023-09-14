@@ -62,7 +62,7 @@ dashboards_redis_total_registered_officer_count_key: "mdo_total_registered_offic
 dashboards_redis_total_org_count_key: "mdo_total_org_count"
 
 user_report_path: "standalone-reports/user-report"
-user_enrolment_report_path: "standalone-reports/user-enrolment-report"
+user_enrolment_report_path: "standalone-reports/user-enrollment-report"
 course_report_path: "standalone-reports/course-report"
 cba_report_path: "standalone-reports/cba-report"
 user_assessment_report_path: "standalone-reports/user-assessment-report-cbp"
