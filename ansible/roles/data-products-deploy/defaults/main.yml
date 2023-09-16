@@ -155,26 +155,10 @@ run_course_report_job:
     hour: 02
     minute: 40
 
-#run_cba_report_job:
-#  course-based-assessment-report:
-#    hour: 03
-#    minute: 20
-
 run_wfs_job:
   wfs:
     hour: 4
     minute: 15
-
-#run_rozgar_user_report_job:
-#  rozgar-user-report:
-#    hour: 05
-#    minute: 00
-#run_rozgar_enrolment_report_job:
-#  rozgar-enrolment-report:
-#    hour: 05
-#    minute: 40
-
-
 
 run_monitor_job:    
   monitor-job-summ:
