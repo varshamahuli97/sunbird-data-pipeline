@@ -154,10 +154,12 @@ run_course_report_job:
   course-report:
     hour: 02
     minute: 40
-run_cba_report_job:
-  course-based-assessment-report:
-    hour: 03
-    minute: 20
+
+#run_cba_report_job:
+#  course-based-assessment-report:
+#    hour: 03
+#    minute: 20
+
 run_wfs_job:
   wfs:
     hour: 4
