@@ -138,23 +138,22 @@ run_competency_metrics_job:
   competency-metrics:
     hour: 00
     minute: 00
-run_assessment_metrics_job:
-  assessment-metrics:
-    hour: 00
-    minute: 40
 run_user_report_job:
   user-report:
+    hour: 00
+    minute: 40
+run_course_report_job:
+  course-report:
     hour: 01
     minute: 20
+run_assessment_metrics_job:
+  assessment-metrics:
+    hour: 02
+    minute: 00
 run_user_enrolment_report_job:
   user-enrolment-report:
     hour: 02
-    minute: 00
-run_course_report_job:
-  course-report:
-    hour: 02
     minute: 40
-
 run_wfs_job:
   wfs:
     hour: 4
