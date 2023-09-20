@@ -178,11 +178,11 @@ default_druid_configs:
   druid_historical_enable_cache: true
   druid_historical_cache_size: 3221225472
   druid_historical_cache_expiry: 3600000
-  druid_historical_segmentcache_size: 10737418240
+  druid_historical_segmentcache_size: 40000000000
   druid_historical_segmentcache_locations__count: 10  # deliberate double underscore to indicate that this does not map to a druid config
   druid_historical_segmentcache_numloadingthreads: 4
   druid_historical_segmentcache_path: "/var/segmentstore"
-  druid_historical_server_maxsize: 118111600640  # (10 + 1) * 10737418240
+  druid_historical_server_maxsize: 420000000000  # > 10 * 40000000000
   druid_query_ondiskstorage_enabled: true
   druid_historical_maxOnDiskStorage: 21474836480
   druid_historical_maxMergingDictionarySize: 100000000
