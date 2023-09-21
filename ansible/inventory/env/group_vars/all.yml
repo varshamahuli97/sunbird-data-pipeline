@@ -36,7 +36,6 @@ schema_repo_url: https://github.com/project-sunbird/sunbird-data-pipeline.git
 # Create learningall group with LP ips
 cassandra_host:  "{{ groups['cassandra'][0] }}"
 core_cassandra_host: "{{ groups['core-cassandra'][0] }}"
-core_mongo_host: ""
 lp_cassandra_host: "{{ groups['lp-cassandra'][0] }}"
 
 report_cassandra_host: "{{ groups['report-cassandra'][0] }}"
