@@ -210,7 +210,7 @@
   with_dict: "{{ run_monitor_job }}"
   tags:
     - spark1-jobs
-    - default-jobs
+    # - default-jobs
 
 - name: Create daily cron jobs using submit-all-jobs
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job='/bin/bash -lc "ruby {{ analytics.home }}/scripts/submit-all-jobs.rb"'
