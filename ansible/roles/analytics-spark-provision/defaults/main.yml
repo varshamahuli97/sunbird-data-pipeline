@@ -13,21 +13,21 @@ spark:
     host: 172.31.11.117
   worker:
     instances: 1
-    cores: 12
-    memory: 36g
+    cores: 6
+    memory: 18g
   driver:
-    memory: 22g
+    memory: 12g
     cores: 2
-    memoryOverhead: 4g
+    memoryOverhead: 2g
   executor:
     instances: 1
-    cores: 12
-    memory: 28g
-    memoryOverhead: 5g
-  driver_memory: 22g
+    cores: 6
+    memory: 14g
+    memoryOverhead: 2g
+  driver_memory: 12g
   executor_extraJavaOptions: -Dconfig.file=/mount/data/analytics/models-{{ model_version }}/{{ env }}.conf -Dlog4j.configurationFile=file:////mount/data/analytics/models-{{ model_version }}/log4j2.xml
   driver_extraJavaOptions: -Dconfig.file=/mount/data/analytics/models-{{ model_version }}/{{ env }}.conf -Dlog4j.configurationFile=file:////mount/data/analytics/models-{{ model_version }}/log4j2.xml
-  executor_memory: 28g
+  executor_memory: 14g
   heap_conf_str: -Xmx5120m
 
 spark_url: https://archive.apache.org/dist/spark/spark-{{ spark_version }}/spark-{{ spark_version }}-bin-hadoop2.7.tgz
