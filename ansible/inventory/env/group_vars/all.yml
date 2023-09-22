@@ -37,6 +37,7 @@ schema_repo_url: https://github.com/project-sunbird/sunbird-data-pipeline.git
 cassandra_host:  "{{ groups['cassandra'][0] }}"
 core_cassandra_host: "{{ groups['core-cassandra'][0] }}"
 lp_cassandra_host: "{{ groups['lp-cassandra'][0] }}"
+
 report_cassandra_host: "{{ groups['report-cassandra'][0] }}"
 
 analytics_user: analytics
