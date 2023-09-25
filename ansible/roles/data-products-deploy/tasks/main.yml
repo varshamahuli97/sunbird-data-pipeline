@@ -177,12 +177,12 @@
     - spark1-jobs
     - default-jobs
 
-- name: Create daily cron jobs for survey-nps
-  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh survey-nps"
-  with_dict: "{{ run_survey_nps_job }}"
-  tags:
-    - spark1-jobs
-    - default-jobs
+#- name: Create daily cron jobs for survey-nps
+#  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh survey-nps"
+#  with_dict: "{{ run_survey_nps_job }}"
+#  tags:
+#    - spark1-jobs
+#    - default-jobs
 
 - name: Create daily cron jobs for assessment-metrics
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh assessment-metrics"
@@ -208,6 +208,13 @@
 - name: Create daily cron jobs for course-report
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh course-report"
   with_dict: "{{ run_course_report_job }}"
+  tags:
+    - spark1-jobs
+    - default-jobs
+
+- name: Create daily cron jobs for course-based-assessment-report
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh course-based-assessment-report"
+  with_dict: "{{ run_cba_report_job }}"
   tags:
     - spark1-jobs
     - default-jobs
