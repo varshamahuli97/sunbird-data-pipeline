@@ -6,7 +6,7 @@ import org.apache.flink.streaming.api.scala.OutputTag
 import org.sunbird.dp.core.job.BaseJobConfig
 import org.sunbird.dp.rating.domain.Event
 
-class RatingConfig (override val config: Config) extends BaseJobConfig[Event](config, "RatingJob") {
+class RatingConfig (override val config: Config) extends BaseJobConfig(config, "RatingJob") {
   private val serialVersionUID = 2905979434303791379L
 
   implicit val mapTypeInfo: TypeInformation[Event] = TypeExtractor.getForClass(classOf[Event])

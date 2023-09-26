@@ -135,14 +135,6 @@ class PipelinePreprocessorStreamTask(config: PipelinePreprocessorConfig, kafkaCo
       .name(config.cbAuditRouterProducer).uid(config.cbAuditRouterProducer)
       .setParallelism(config.downstreamOperatorsParallelism)
 
-    /**
-     * pushing uncaught errors to uncaught errors topic
-     */
-    eventStream.getSideOutput(config.uncaughtErrorEventsOutputTag)
-      .addSink(kafkaConnector.kafkaEventSink[Event](config.kafkaUncaughtErrorRouteTopic))
-      .name(config.uncaughtErrorRouteProducer).uid(config.uncaughtErrorRouteProducer)
-      .setParallelism(config.downstreamOperatorsParallelism)
-
     env.execute(config.jobName)
   }
 }

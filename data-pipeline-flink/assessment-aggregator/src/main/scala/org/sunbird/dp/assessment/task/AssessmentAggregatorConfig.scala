@@ -7,7 +7,7 @@ import org.apache.flink.streaming.api.scala.OutputTag
 import org.sunbird.dp.assessment.domain.Event
 import org.sunbird.dp.core.job.BaseJobConfig
 
-class AssessmentAggregatorConfig(override val config: Config) extends BaseJobConfig[Event](config, jobName = "AssessmentAggregatorJob") {
+class AssessmentAggregatorConfig(override val config: Config) extends BaseJobConfig(config, jobName = "AssessmentAggregatorJob") {
 
   private val serialVersionUID = 2905979434303791379L
 
