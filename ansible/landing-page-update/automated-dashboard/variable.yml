@@ -4,6 +4,8 @@ live_course_api_body: "{\"from\":0,\"size\":10000,\"_source\":[\"identifier\",\"
 
 domain: "https://portal.igotkarmayogi.gov.in"
 
+mail_to: "igot_team@fosteringlinux.com, nandakishor.sudarshan@tarento.com"
+
 root_path: "/home/admin/prod_static"
 es_host: "http://192.168.3.90:9200"
 redis_host: "192.168.3.82"

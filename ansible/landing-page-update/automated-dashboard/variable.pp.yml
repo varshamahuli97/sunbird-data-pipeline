@@ -4,6 +4,8 @@ live_course_api_body: "{\"from\":0,\"size\":10000,\"_source\":[\"identifier\",\"
 
 domain: "https://portal.karmayogi.nic.in"
 
+mail_to: "shobhit.vashistha@tarento.com"
+
 root_path: "/home/admin/PreProd_static"
 es_host: "http://192.168.3.211:9200"
 redis_host: "192.168.3.249"

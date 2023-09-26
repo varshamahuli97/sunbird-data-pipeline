@@ -4,6 +4,8 @@ live_course_api_body: "{\"from\":0,\"size\":10000,\"_source\":[\"identifier\",\"
 
 domain: "https://portal.karmayogibm.nic.in"
 
+mail_to: "shobhit.vashistha@tarento.com"
+
 root_path: "/home/admin/prod_static"
 es_host: "http://192.168.3.79:9200"
 redis_host: "192.168.3.225"
@@ -18,4 +20,3 @@ redis_key_lp_es_agg_course_duration: "lp_es_agg_course_duration"
 redis_key_dashboard_update_time: "dashboard_update_time"
 redis_key_dashboard_courses_enrolled_in_at_least_once: "dashboard_courses_enrolled_in_at_least_once"
 redis_key_dashboard_courses_completed_at_least_once: "dashboard_courses_completed_at_least_once"
-

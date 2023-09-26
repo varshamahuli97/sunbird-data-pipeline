@@ -5,13 +5,6 @@
     - variable.yml
   tasks:
 
-    - name: Processing Time
-      set_fact:
-        processing_time: "{{ ansible_date_time.iso8601 }}"
-
-    - name: Redis Update Processing time
-      command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_update_time }} {{ processing_time }}"
-
     - name: User Count API call
       uri:
         url: "{{ es_host }}/user_v2/_search"
@@ -34,9 +27,6 @@
 
     - debug:
         var: user_count
-
-    - name: Redis Update User Count
-      command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_es_user_count }} {{ user_count }}"
 
     - name: Total no. of Organizations API call
       uri:
@@ -61,9 +51,6 @@
     - debug:
         var: organization_count
 
-    - name: Redis Update Org Count
-      command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_es_org_count }} {{ organization_count }}"
-
     - name: Live Course Query Elasticsearch and Process Response
       uri:
         url: "{{ es_host }}/compositesearch/_search"
@@ -83,9 +70,6 @@
         live_course_count: "{{ live_course_output.json.hits.total }}"
       failed_when:
         -  live_course_count == "0"
-
-    - name: Redis Update Live Course Count
-      command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_es_live_course_count }} {{ live_course_count }}"
 
     - name: course list
       set_fact:
@@ -107,9 +91,6 @@
     - debug:
         var: aggregated_course_duration
 
-    - name: Redis Update Live Course Duration
-      command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_es_agg_course_duration }} {{ aggregated_course_duration }}"
-
     - name: Display Results
       debug:
         msg:
@@ -118,6 +99,25 @@
 
     - debug:
         msg: "{{ user_count }}, {{ organization_count }}, {{ aggregated_course_duration }}, {{ live_course_count }}"
+
+    - name: Processing Time
+      set_fact:
+        processing_time: "{{ ansible_date_time.iso8601 }}"
+
+    - name: Redis Update Processing time
+      command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_update_time }} {{ processing_time }}"
+
+    - name: Redis Update User Count
+      command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_es_user_count }} {{ user_count }}"
+
+    - name: Redis Update Org Count
+      command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_es_org_count }} {{ organization_count }}"
+
+    - name: Redis Update Live Course Count
+      command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_es_live_course_count }} {{ live_course_count }}"
+
+    - name: Redis Update Live Course Duration
+      command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_es_agg_course_duration }} {{ aggregated_course_duration }}"
 
     - name: copy file
       copy:
@@ -135,8 +135,7 @@
         host: relay.nic.in
         port: 25
         from: mission.karmayogi@gov.in
-        to: "igot_team@fosteringlinux.com, nandakishor.sudarshan@tarento.com"
-        #    to: "amandeep.singh@fosteringlinux.com"
+        to: "{{ mail_to }}"
         subject: "Dashboard data status Production dated {{ ansible_date_time.date }}"
         body: "{{ lookup('template','dashboard.html.j2') }}"
         subtype: html
