@@ -1,0 +1,21 @@
+usercount_body: "{\"from\":0,\"size\":0,\"query\":{\"bool\":{\"must\":[{\"match\":{\"status\":1}}]}}}"
+orgcount_body: "{\"from\":0,\"size\":0,\"query\":{\"bool\":{\"must\":[{\"match\":{\"status\":1}}]}}}"
+live_course_api_body: "{\"from\":0,\"size\":10000,\"_source\":[\"identifier\",\"duration\"],\"query\":{\"bool\":{\"must\":[{\"match\":{\"status.raw\":\"Live\"}},{\"match\":{\"primaryCategory.raw\":\"Course\"}}]}}}"
+
+domain: "https://portal.karmayogi.nic.in"
+
+root_path: "/home/admin/PreProd_static"
+es_host: "http://192.168.3.211:9200"
+redis_host: "192.168.3.249"
+redis_port: "6379"
+redis_db: "12"
+redis_key_lp_update_time: "lp_update_time"
+redis_key_lp_es_user_count: "lp_es_user_count"
+redis_key_lp_es_org_count: "lp_es_org_count"
+redis_key_lp_es_live_course_count: "lp_es_live_course_count"
+redis_key_lp_es_agg_course_duration: "lp_es_agg_course_duration"
+
+redis_key_dashboard_update_time: "dashboard_update_time"
+redis_key_dashboard_courses_enrolled_in_at_least_once: "dashboard_courses_enrolled_in_at_least_once"
+redis_key_dashboard_courses_completed_at_least_once: "dashboard_courses_completed_at_least_once"
+

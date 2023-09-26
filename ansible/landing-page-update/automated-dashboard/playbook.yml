@@ -1,0 +1,142 @@
+---
+- hosts: localhost
+  connection: local
+  vars_files:
+    - variable.yml
+  tasks:
+
+    - name: Processing Time
+      set_fact:
+        processing_time: "{{ ansible_date_time.iso8601 }}"
+
+    - name: Redis Update Processing time
+      command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_update_time }} {{ processing_time }}"
+
+    - name: User Count API call
+      uri:
+        url: "{{ es_host }}/user_v2/_search"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+        body_format: json
+        body: "{{ usercount_body }}"
+        status_code: 200
+      register: user_out
+      until: user_out is not failed
+      retries: 10
+      delay: 2
+
+    - name: Count Output
+      set_fact:
+        user_count: "{{ user_out.json.hits.total }}"
+      failed_when:
+        -  user_count == "0"
+
+    - debug:
+        var: user_count
+
+    - name: Redis Update User Count
+      command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_es_user_count }} {{ user_count }}"
+
+    - name: Total no. of Organizations API call
+      uri:
+        url: "{{ es_host }}/org_v2/_search"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+        body_format: json
+        body: "{{ orgcount_body }}"
+        status_code: [201,200,302,308]
+      register: org_out
+      until: org_out is not failed
+      retries: 10
+      delay: 2
+
+    - name: Organization Count
+      set_fact:
+        organization_count: "{{ org_out.json.hits.total }}"
+      failed_when:
+        -  organization_count == "0"
+
+    - debug:
+        var: organization_count
+
+    - name: Redis Update Org Count
+      command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_es_org_count }} {{ organization_count }}"
+
+    - name: Live Course Query Elasticsearch and Process Response
+      uri:
+        url: "{{ es_host }}/compositesearch/_search"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+        body_format: json
+        body: "{{ live_course_api_body }}"
+        status_code: [201,200,302,308]
+      register: live_course_output
+      until: live_course_output is not failed
+      retries: 10
+      delay: 2
+
+    - name: Extract Document Count and Aggregate Duration
+      set_fact:
+        live_course_count: "{{ live_course_output.json.hits.total }}"
+      failed_when:
+        -  live_course_count == "0"
+
+    - name: Redis Update Live Course Count
+      command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_es_live_course_count }} {{ live_course_count }}"
+
+    - name: course list
+      set_fact:
+        course_list: "{{ live_course_output.json.hits.hits | map(attribute='_source.duration') | list }}"
+
+    - debug:
+        var: course_list
+
+    - name: Total Sum of Duration
+      set_fact:
+        aggregated_course_duration_float: "{{ course_list | map('int') | sum / 3600 | float  }}"
+
+    - name: Total Sum of Round Off value
+      set_fact:
+        aggregated_course_duration: "{{ aggregated_course_duration_float | float | round | int }}"
+      failed_when:
+        - aggregated_course_duration == "0"
+
+    - debug:
+        var: aggregated_course_duration
+
+    - name: Redis Update Live Course Duration
+      command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_es_agg_course_duration }} {{ aggregated_course_duration }}"
+
+    - name: Display Results
+      debug:
+        msg:
+          - "Total Live Course Count: {{ live_course_count }}"
+          - "Aggregated Duration: {{ aggregated_course_duration }}"
+
+    - debug:
+        msg: "{{ user_count }}, {{ organization_count }}, {{ aggregated_course_duration }}, {{ live_course_count }}"
+
+    - name: copy file
+      copy:
+        dest: "{{ root_path }}/automated-dashboard/dashbord_history/configurations.json_{{ ansible_date_time.date }}"
+        src: "{{ root_path }}/html/configurations.json"
+        backup: yes
+      register: copy_file
+
+    - name: Apply Page Template
+      template:
+        src: configurations.json.j2
+        dest: "{{ root_path }}/html/configurations.json"
+
+    - mail:
+        host: relay.nic.in
+        port: 25
+        from: mission.karmayogi@gov.in
+        to: "igot_team@fosteringlinux.com, nandakishor.sudarshan@tarento.com"
+        #    to: "amandeep.singh@fosteringlinux.com"
+        subject: "Dashboard data status Production dated {{ ansible_date_time.date }}"
+        body: "{{ lookup('template','dashboard.html.j2') }}"
+        subtype: html
