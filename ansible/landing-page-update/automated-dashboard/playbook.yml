@@ -100,9 +100,21 @@
     - debug:
         msg: "{{ user_count }}, {{ organization_count }}, {{ aggregated_course_duration }}, {{ live_course_count }}"
 
+    - name: Get IST Date
+      command: "date '+%Y-%m-%d %H:%M:%S'"
+      register: date_ist
+
+    - name: Get IST Date ISO format
+      command: "date '+%Y-%m-%dT%H:%M:%SZ'"
+      register: date_ist_iso
+
     - name: Processing Time
       set_fact:
-        processing_time: "{{ ansible_date_time.iso8601 }}"
+        processing_time: "{{ date_ist_iso.stdout }}"
+
+    - name: Processing Time Human Format
+      set_fact:
+        processing_time_human: "{{ date_ist.stdout }}"
 
     - name: Redis Update Processing time
       command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_update_time }} {{ processing_time }}"
