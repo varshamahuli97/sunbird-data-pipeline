@@ -71,16 +71,23 @@
       failed_when:
         -  live_course_count == "0"
 
-    - name: course list
+    - name: course duration list
       set_fact:
-        course_list: "{{ live_course_output.json.hits.hits | map(attribute='_source.duration') | list }}"
+        course_duration_list: "{{ live_course_output.json.hits.hits | map(attribute='_source.duration') | list }}"
+
+    - name: course id list
+      set_fact:
+        course_id_list: "{{ live_course_output.json.hits.hits | map(attribute='_source.identifier') | list | join(',') }}"
 
     - debug:
-        var: course_list
+        var: course_duration_list
+
+    - debug:
+        var: course_id_list
 
     - name: Total Sum of Duration
       set_fact:
-        aggregated_course_duration_float: "{{ course_list | map('int') | sum / 3600 | float  }}"
+        aggregated_course_duration_float: "{{ course_duration_list | map('int') | sum / 3600 | float  }}"
 
     - name: Total Sum of Round Off value
       set_fact:
@@ -130,6 +137,9 @@
 
     - name: Redis Update Live Course Duration
       command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_es_agg_course_duration }} {{ aggregated_course_duration }}"
+
+    - name: Redis Update Live Course ID List
+      command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_es_live_course_id_list }} {{ course_id_list }}"
 
     - name: copy file
       copy:
