@@ -75,6 +75,20 @@
       set_fact:
         course_duration_list: "{{ live_course_output.json.hits.hits | map(attribute='_source.duration') | list }}"
 
+    - name: unique course publisher id list
+      set_fact:
+        unique_course_publisher_id_list: "{{ live_course_output.json.hits.hits | map(attribute='_source.createdFor') | select() | sum(start=[]) | unique | select() | list }}"
+
+    - debug:
+        var: unique_course_publisher_id_list
+
+    - name: unique course publisher count
+        set_fact:
+          unique_course_publisher_count: "{{ unique_course_publisher_id_list | length }}"
+
+    - debug:
+        var: unique_course_publisher_count
+
     - name: course id list
       set_fact:
         course_id_list: "{{ live_course_output.json.hits.hits | map(attribute='_source.identifier') | list | join(',') }}"
@@ -123,6 +137,18 @@
       set_fact:
         processing_time_human: "{{ date_ist.stdout }}"
 
+    - name: copy file
+      copy:
+        dest: "{{ root_path }}/automated-dashboard/dashbord_history/configurations.json_{{ ansible_date_time.date }}"
+        src: "{{ root_path }}/html/configurations.json"
+        backup: yes
+      register: copy_file
+
+    - name: Apply Page Template
+      template:
+        src: configurations.json.j2
+        dest: "{{ root_path }}/html/configurations.json"
+
     - name: Redis Update Processing time
       command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_update_time }} {{ processing_time }}"
 
@@ -141,17 +167,8 @@
     - name: Redis Update Live Course ID List
       command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_es_live_course_id_list }} {{ course_id_list }}"
 
-    - name: copy file
-      copy:
-        dest: "{{ root_path }}/automated-dashboard/dashbord_history/configurations.json_{{ ansible_date_time.date }}"
-        src: "{{ root_path }}/html/configurations.json"
-        backup: yes
-      register: copy_file
-
-    - name: Apply Page Template
-      template:
-        src: configurations.json.j2
-        dest: "{{ root_path }}/html/configurations.json"
+    - name: Redis Update Live Course Publisher Count
+      command: "redis-cli -h {{ redis_host }} -p {{ redis_port }} -n {{ redis_db }} SET {{ redis_key_lp_es_live_course_publisher_count }} {{ unique_course_publisher_count }}"
 
     - mail:
         host: relay.nic.in

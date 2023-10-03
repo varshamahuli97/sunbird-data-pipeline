@@ -19,6 +19,7 @@ redis_key_lp_es_org_count: "lp_es_org_count"
 redis_key_lp_es_live_course_count: "lp_es_live_course_count"
 redis_key_lp_es_agg_course_duration: "lp_es_agg_course_duration"
 redis_key_lp_es_live_course_id_list: "lp_es_live_course_id_list"
+redis_key_lp_es_live_course_publisher_count: "lp_es_live_course_publisher_count"
 
 # redis keys not updated by LP script, here for reference
 redis_key_dashboard_update_time: "dashboard_update_time"
@@ -32,3 +33,5 @@ redis_key_dashboard_completed_count: "dashboard_completed_count"
 
 redis_key_dashboard_unique_users_enrolled_count: "dashboard_unique_users_enrolled_count"
 redis_key_dashboard_unique_users_completed_count: "dashboard_unique_users_completed_count"
+
+redis_key_dashboard_new_users_registered_yesterday: "dashboard_new_users_registered_yesterday"
