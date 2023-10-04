@@ -83,8 +83,8 @@
         var: unique_course_publisher_id_list
 
     - name: unique course publisher count
-        set_fact:
-          unique_course_publisher_count: "{{ unique_course_publisher_id_list | length }}"
+      set_fact:
+        unique_course_publisher_count: "{{ unique_course_publisher_id_list | length }}"
 
     - debug:
         var: unique_course_publisher_count
