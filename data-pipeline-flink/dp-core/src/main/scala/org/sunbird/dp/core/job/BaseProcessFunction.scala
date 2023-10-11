@@ -30,9 +30,9 @@ trait JobMetrics {
   }
 }
 
-abstract class BaseProcessFunction[T, R](config: BaseJobConfig[T]) extends ProcessFunction[T, R] with BaseDeduplication with JobMetrics {
+abstract class BaseProcessFunction[T, R](config: BaseJobConfig) extends ProcessFunction[T, R] with BaseDeduplication with JobMetrics {
 
-  private val metrics: Metrics = registerMetrics(List(config.uncaughtErrorEventCountMetric) ::: metricsList())
+  private val metrics: Metrics = registerMetrics(metricsList())
   private[this] val logger = LoggerFactory.getLogger(classOf[BaseProcessFunction[T, R]])
 
   override def open(parameters: Configuration): Unit = {
@@ -45,37 +45,14 @@ abstract class BaseProcessFunction[T, R](config: BaseJobConfig[T]) extends Proce
   def processElement(event: T, context: ProcessFunction[T, R]#Context, metrics: Metrics): Unit
   def metricsList(): List[String]
 
-  def handleUncaughtException(ex: Exception, event: T, context: ProcessFunction[T, R]#Context): Unit = {
-    try {
-      // log and recover
-      ex.printStackTrace()
-      logger.info("Uncaught exception: ", ex.getMessage)
-      logger.info("Recovering: Sending event to uncaught error output")
-      context.output(config.uncaughtErrorEventsOutputTag, event)
-      metrics.incCounter(metric = config.uncaughtErrorEventCountMetric)
-    } catch {
-      case exRec: Exception => {
-        // this should never happen!! only here till recovery code is tested to be perfect
-        exRec.printStackTrace()
-        logger.info("Exception encountered while recovering from exception: ", exRec.getMessage)
-        // throw the exception in this case so that the we can debug for now
-        throw exRec
-      }
-    }
-  }
-
   override def processElement(event: T, context: ProcessFunction[T, R]#Context, out: Collector[R]): Unit = {
-    try {
-      processElement(event, context, metrics)
-    } catch {
-      case ex: Exception => handleUncaughtException(ex, event, context)
-    }
+    processElement(event, context, metrics)
   }
 }
 
-abstract class WindowBaseProcessFunction[I, O, K](config: BaseJobConfig[I]) extends ProcessWindowFunction[I, O, K, GlobalWindow] with BaseDeduplication with JobMetrics {
+abstract class WindowBaseProcessFunction[I, O, K](config: BaseJobConfig) extends ProcessWindowFunction[I, O, K, GlobalWindow] with BaseDeduplication with JobMetrics {
 
-  private val metrics: Metrics = registerMetrics(List(config.uncaughtErrorEventCountMetric) ::: metricsList())
+  private val metrics: Metrics = registerMetrics(metricsList())
   private[this] val logger = LoggerFactory.getLogger(classOf[WindowBaseProcessFunction[I, O, K]])
 
   override def open(parameters: Configuration): Unit = {
@@ -87,37 +64,12 @@ abstract class WindowBaseProcessFunction[I, O, K](config: BaseJobConfig[I]) exte
 
   def metricsList(): List[String]
 
-  def handleUncaughtException(ex: Exception, elements: lang.Iterable[I], context: ProcessWindowFunction[I, O, K, GlobalWindow]#Context): Unit = {
-    try {
-      // log and recover
-      ex.printStackTrace()
-      logger.info("Uncaught exception: ", ex.getMessage)
-      logger.info("Recovering: Sending event to uncaught error output")
-      elements.forEach(event => {
-        context.output(config.uncaughtErrorEventsOutputTag, event)
-        metrics.incCounter(metric = config.uncaughtErrorEventCountMetric)
-      })
-    } catch {
-      case exRec: Exception => {
-        // this should never happen!! only here till recovery code is tested to be perfect
-        exRec.printStackTrace()
-        logger.info("Exception encountered while recovering from exception: ", exRec.getMessage)
-        // throw the exception in this case so that the we can debug for now
-        throw exRec
-      }
-    }
-  }
-
   def process(key: K,
               context: ProcessWindowFunction[I, O, K, GlobalWindow]#Context,
               elements: lang.Iterable[I],
               metrics: Metrics): Unit
 
   override def process(key: K, context: ProcessWindowFunction[I, O, K, GlobalWindow]#Context, elements: lang.Iterable[I], out: Collector[O]): Unit = {
-    try {
-      process(key, context, elements, metrics)
-    } catch {
-      case ex: Exception => handleUncaughtException(ex, elements, context)
-    }
+    process(key, context, elements, metrics)
   }
 }

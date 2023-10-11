@@ -8,7 +8,7 @@ import org.apache.flink.api.java.typeutils.TypeExtractor
 import org.apache.flink.streaming.api.scala.OutputTag
 import org.sunbird.dp.core.job.BaseJobConfig
 
-class BaseProcessTestConfig(override val config: Config) extends BaseJobConfig[util.Map[String, AnyRef]](config, "Test-job") {
+class BaseProcessTestConfig(override val config: Config) extends BaseJobConfig(config, "Test-job") {
   private val serialVersionUID = -2349318979085017498L
   implicit val mapTypeInfo: TypeInformation[util.Map[String, AnyRef]] = TypeExtractor.getForClass(classOf[util.Map[String, AnyRef]])
   implicit val eventTypeInfo: TypeInformation[Event] = TypeExtractor.getForClass(classOf[Event])

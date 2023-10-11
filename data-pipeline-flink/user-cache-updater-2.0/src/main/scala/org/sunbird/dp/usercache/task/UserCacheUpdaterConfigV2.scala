@@ -8,7 +8,7 @@ import org.sunbird.dp.usercache.domain.Event
 
 import java.util.{List => JList}
 
-class UserCacheUpdaterConfigV2(override val config: Config) extends BaseJobConfig[Event](config, "UserCacheUpdaterJobV2") {
+class UserCacheUpdaterConfigV2(override val config: Config) extends BaseJobConfig(config, "UserCacheUpdaterJobV2") {
 
   private val serialVersionUID = 2905979434303791379L
 

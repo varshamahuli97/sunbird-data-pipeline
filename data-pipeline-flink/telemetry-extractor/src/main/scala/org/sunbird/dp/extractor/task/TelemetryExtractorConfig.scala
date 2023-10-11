@@ -9,7 +9,7 @@ import org.apache.flink.streaming.api.scala.OutputTag
 import org.sunbird.dp.core.job.BaseJobConfig
 import scala.collection.JavaConverters._
 
-class TelemetryExtractorConfig(override val config: Config) extends BaseJobConfig[util.Map[String, AnyRef]](config, "TelemetryExtractorJob") {
+class TelemetryExtractorConfig(override val config: Config) extends BaseJobConfig(config, "TelemetryExtractorJob") {
 
   private val serialVersionUID = 2905979434303791379L
 
