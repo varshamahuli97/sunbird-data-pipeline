@@ -54,7 +54,7 @@ dashboards_cassandra_course_batch_table: "course_batch"
 dashboards_cassandra_user_feed_table: "notification_feed"
 dashboards_cassandra_user_feed_keyspace: "sunbird_notifications"
 
-mongo_node_bb_host: "192.168.3.138"
+mongo_node_bb_host: "192.168.3.178"
 dashboards_mongo_discussions_db: "nodebb"
 dashboards_mongo_discussions_db_collection: "objects"
 dashboards_platform_rating_survey_id: "1696404440829"
