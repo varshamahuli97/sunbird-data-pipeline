@@ -7,6 +7,7 @@ config() {
 	brokerIngestionList={{ ingestion_kafka_brokers }}
 	job_topic={{ analytics_job_queue_topic }}
 	topic={{ topic }}
+	topic={{ topic2 }}
 	analyticsMetricsTopic={{ analytics_metrics_topic }}
 	sinkTopic={{ sink_topic }}
 	metricsTopic={{ metrics_topic }}
@@ -95,6 +96,9 @@ config() {
 		;;
 		"wfs")
 		echo '{"search":{"type":"{{ dp_object_store_type }}","queries":[{"bucket":"'$bucket'","prefix":"{{ dp_raw_telemetry_backup_location }}","endDate":"'$endDate'","delta":0}]},"model":"org.ekstep.analytics.model.WorkflowSummary","modelParams":{"storageKeyConfig":"{{ dp_storage_key_config }}", "storageSecretConfig":"{{ dp_storage_secret_config }}", "apiVersion":"v2", "parallelization":200},"output":[{"to":"kafka","params":{"brokerList":"'$brokerList'","topic":"'$topic'","compression":"{{ dashboards_broker_compression }}"} }],"parallelization":200,"appName":"Workflow Summarizer","deviceMapping":true}'
+	   	;;
+		"wfs2")
+		echo '{"search":{"type":"{{ dp_object_store_type }}","queries":[{"bucket":"'$bucket'","prefix":"{{ dp_raw_telemetry_backup_location }}","endDate":"'$endDate'","delta":0}]},"model":"org.ekstep.analytics.model.WorkflowSummary2","modelParams":{"storageKeyConfig":"{{ dp_storage_key_config }}", "storageSecretConfig":"{{ dp_storage_secret_config }}", "apiVersion":"v2", "parallelization":200},"output":[{"to":"kafka","params":{"brokerList":"'$brokerList'","topic":"'$topic2'","compression":"{{ dashboards_broker_compression }}"} }],"parallelization":200,"appName":"Workflow Summarizer 2","deviceMapping":true}'
 	   	;;
         "competency-metrics")
         echo '{"search":{"type":"none"},"model":"org.ekstep.analytics.dashboard.CompetencyMetricsJob","modelParams":{"debug":"false","validation":"false","redisHost":"{{ dashboards_redis_host }}","redisPort":"{{ dashboards_redis_port }}","redisDB":"{{ dashboards_redis_db }}","sparkCassandraConnectionHost":"{{ core_cassandra_host }}","sparkDruidRouterHost":"{{ druid_router_host }}","sparkElasticsearchConnectionHost":"{{ single_node_es_host }}","fracBackendHost":"{{ dashboards_frac_backend_host }}","cassandraUserKeyspace":"{{ user_table_keyspace }}","cassandraCourseKeyspace":"{{ course_keyspace }}","cassandraHierarchyStoreKeyspace":"{{ hierarchy_store_keyspace }}","cassandraUserTable":"{{ dashboards_cassandra_user_table }}","cassandraUserRolesTable":"{{ dashboards_cassandra_user_roles_table }}","cassandraOrgTable":"{{ dashboards_cassandra_org_table }}","cassandraUserEnrolmentsTable":"{{ dashboards_cassandra_user_enrolments_table }}","cassandraContentHierarchyTable":"{{ dashboards_cassandra_content_hierarchy_table }}","cassandraRatingSummaryTable":"{{ dashboards_cassandra_rating_summary_table }}","sideOutput":{"brokerList":"'$brokerList'","compression":"{{ dashboards_broker_compression }}","topics":{"roleUserCount":"{{ dashboards_role_count_topic }}","orgRoleUserCount":"{{ dashboards_org_role_count_topic }}","allCourses":"{{ dashboards_courses_topic }}","userCourseProgramProgress":"{{ dashboards_user_course_program_progress_topic }}","fracCompetency":"{{ dashboards_frac_competency_topic }}","courseCompetency":"{{ dashboards_course_competency_topic }}","expectedCompetency":"{{ dashboards_expected_competency_topic }}","declaredCompetency":"{{ dashboards_declared_competency_topic }}","competencyGap":"{{ dashboards_competency_gap_topic }}","userOrg":"{{ dashboards_user_org_topic }}","org":"{{ dashboards_org_topic }}"}}},"output":[],"parallelization":16,"appName":"Competency Metrics","deviceMapping":false}'

@@ -1,6 +1,6 @@
 usercount_body: "{\"from\":0,\"size\":0,\"query\":{\"bool\":{\"must\":[{\"match\":{\"status\":1}}]}}}"
 orgcount_body: "{\"from\":0,\"size\":0,\"query\":{\"bool\":{\"must\":[{\"match\":{\"status\":1}}]}}}"
-live_course_api_body: "{\"from\":0,\"size\":10000,\"_source\":[\"identifier\",\"duration\"],\"query\":{\"bool\":{\"must\":[{\"match\":{\"status.raw\":\"Live\"}},{\"match\":{\"primaryCategory.raw\":\"Course\"}}]}}}"
+live_course_api_body: "{\"from\":0,\"size\":10000,\"_source\":[\"identifier\",\"duration\",\"createdFor\"],\"query\":{\"bool\":{\"must\":[{\"match\":{\"status.raw\":\"Live\"}},{\"match\":{\"primaryCategory.raw\":\"Course\"}}]}}}"
 
 draft_course_count_api_body: "{\"from\":0,\"size\":0,\"query\":{\"bool\":{\"must\":[{\"match\":{\"status.raw\":\"Draft\"}},{\"match\":{\"primaryCategory.raw\":\"Course\"}}]}}}"
 review_course_count_api_body: "{\"from\":0,\"size\":0,\"query\":{\"bool\":{\"must\":[{\"match\":{\"status.raw\":\"Review\"}},{\"match\":{\"primaryCategory.raw\":\"Course\"}}]}}}"
@@ -8,6 +8,7 @@ retired_course_count_api_body: "{\"from\":0,\"size\":0,\"query\":{\"bool\":{\"mu
 pending_publish_course_count_api_body: "{\"from\":0,\"size\":0,\"query\":{\"bool\":{\"must\":[{\"match\":{\"status.raw\":\"Review\"}},{\"match\":{\"reviewStatus.raw\":\"Reviewed\"}},{\"match\":{\"primaryCategory.raw\":\"Course\"}}]}}}"
 
 domain: "https://portal.karmayogi.nic.in"
+static_domain_name: "portal.karmayogi.nic.in"
 
 mail_to: "shobhit.vashistha@tarento.com"
 

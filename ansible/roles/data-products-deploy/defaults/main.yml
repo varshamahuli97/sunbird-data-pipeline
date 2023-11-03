@@ -22,6 +22,7 @@ zookeeper: "{{groups['processing-cluster-zookeepers']|join(':2181,')}}:2181"
 dp_username: dp-monitor
 analytics_job_queue_topic: "{{ env }}.analytics.job_queue"
 topic: "{{ env }}.telemetry.derived"
+topic2: "{{ env }}.telemetry.derived2"
 analytics_metrics_topic: "{{ env }}.analytics_metrics"
 sink_topic: "{{ env }}.telemetry.sink"
 assess_topic: "{{ env }}.telemetry.assess"
