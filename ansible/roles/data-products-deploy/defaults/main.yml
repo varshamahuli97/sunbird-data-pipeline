@@ -51,9 +51,14 @@ dashboards_cassandra_ratings_table: "ratings"
 dashboards_cassandra_user_assessment_table: "user_assessment_data"
 dashboards_cassandra_org_hierarchy_table: "org_hierarchy"
 dashboards_cassandra_course_batch_table: "course_batch"
+dashboards_cassandra_learner_stats_table: "learner_stats"
 # dashboards_cassandra_user_feed_table: "user_feed"
 dashboards_cassandra_user_feed_table: "notification_feed"
 dashboards_cassandra_user_feed_keyspace: "sunbird_notifications"
+
+app_postgres_host: "192.168.3.178:5432"
+dw_postgres_host: "192.168.3.211:5432"
+dw_postgres_credential: "Password@12345678"
 
 mongo_node_bb_host: "192.168.3.138"
 dashboards_mongo_discussions_db: "nodebb"
@@ -77,6 +82,7 @@ course_report_path: "standalone-reports/course-report"
 cba_report_path: "standalone-reports/cba-report"
 standalone_assessment_report_path: "standalone-reports/user-assessment-report-cbp"
 tagged_users_path: "tagged-users/"
+blended_report_path: "standalone-reports/blended-program-report"
 
 report_mdo_ids: ""
 job_manager_tmp_dir: "transient-data"
@@ -171,9 +177,17 @@ run_cba_report_job:
   course-based-assessment-report:
     hour: 06
     minute: 00
-run_survey_nps_job:
+run_blended_program_report_job:
   nps_survey:
     hour: 06
+    minute: 30
+run_survey_nps_job:
+  nps_survey:
+    hour: 07
+    minute: 00
+run_data_warehouse_job:
+  nps_survey:
+    hour: 07
     minute: 30
 
 run_monitor_job:
