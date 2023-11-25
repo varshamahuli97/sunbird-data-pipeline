@@ -178,15 +178,15 @@ run_cba_report_job:
     hour: 06
     minute: 00
 run_blended_program_report_job:
-  nps_survey:
+  blended-program-report:
     hour: 06
     minute: 30
 run_survey_nps_job:
-  nps_survey:
+  survey-nps:
     hour: 07
     minute: 00
 run_data_warehouse_job:
-  nps_survey:
+  data-warehouse-sync:
     hour: 07
     minute: 30
 
