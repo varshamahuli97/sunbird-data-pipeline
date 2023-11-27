@@ -56,14 +56,14 @@ dashboards_cassandra_learner_stats_table: "learner_stats"
 dashboards_cassandra_user_feed_table: "notification_feed"
 dashboards_cassandra_user_feed_keyspace: "sunbird_notifications"
 
-app_postgres_host: "192.168.3.178:5432"
-dw_postgres_host: "192.168.3.211:5432"
+app_postgres_host: "{{groups['app-postgres'][0]}}:5432"
+dw_postgres_host: "{{groups['dw-postgres'][0]}}:5432"
 dw_postgres_credential: "Password@12345678"
 
-mongo_node_bb_host: "192.168.3.138"
+mongo_node_bb_host: "{{groups['mongodb-nodebb'][0]}}"
 dashboards_mongo_discussions_db: "nodebb"
 dashboards_mongo_discussions_db_collection: "objects"
-dashboards_platform_rating_survey_id: "1697521678752"
+dashboards_platform_rating_survey_id: "{{ platform_rating_survey_id }}"
 
 dashboards_frac_backend_host: "frac-dictionary-backend.igot-{{ env }}.in"
 dashboards_broker_compression: "none"
