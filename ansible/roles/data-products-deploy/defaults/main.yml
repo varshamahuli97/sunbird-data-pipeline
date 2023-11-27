@@ -107,8 +107,9 @@ analytics_jobs_count: 6
 cassandra_keyspace_prefix: '{{ env }}_'
 report_cassandra_cluster_host: "{{ report_cassandra_host | default(core_cassandra_host) }}"
 cassandra_hierarchy_store_keyspace: "{{ env_name}}_hierarchy_store"
-spark_version: 2.4.4
 
+spark_version: 2.4.4
+model_version: "2.0"
 heap_memory: "-Xmx5120m"
 
 spark:
@@ -131,6 +132,8 @@ spark:
     memory: 28g
     memoryOverhead: 5g
   driver_memory: 22g
+  executor_extraJavaOptions: -Dconfig.file=/mount/data/analytics/models-{{ model_version }}/{{ env }}.conf -Dlog4j.configurationFile=file:////mount/data/analytics/models-{{ model_version }}/log4j2.xml
+  driver_extraJavaOptions: -Dconfig.file=/mount/data/analytics/models-{{ model_version }}/{{ env }}.conf -Dlog4j.configurationFile=file:////mount/data/analytics/models-{{ model_version }}/log4j2.xml
   memory_fraction: 0.3
   storage_fraction: 0.5
   executor_memory: 28g
@@ -298,7 +301,6 @@ analytics_core_artifact: "analytics-framework-{{ analytics_core_artifact_ver }}.
 scruid_artifact: "scruid_2.11-{{ scruid_artifact_ver }}.jar"
 analytics_batch_module_artifact: "batch-models-{{ analytics_core_artifact_ver }}.jar"
 analytics_ed_dataporducts_artifact: "data-products-{{ analytics_ed_dataporducts_artifact_ver }}-distribution.tar.gz"
-model_version: "2.0" 
 
 submit_jobs_auth_token: "{{ sunbird_api_auth_token }}"
 report_list_jobs_url: "{{ druid_report_url }}"

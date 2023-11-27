@@ -3,8 +3,11 @@ analytics:
    soft_path: /mount/data/analytics
    base_path: /home/analytics 
 scala_version: 2.11.8
+
 spark_version: 2.4.4
-model_version: "2.0" 
+model_version: "2.0"
+heap_memory: "-Xmx5120m"
+
 spark:
   home: "{{ analytics.home }}/spark-{{ spark_version }}-bin-hadoop2.7"
   public_dns: 54.255.154.146
@@ -27,8 +30,10 @@ spark:
   driver_memory: 22g
   executor_extraJavaOptions: -Dconfig.file=/mount/data/analytics/models-{{ model_version }}/{{ env }}.conf -Dlog4j.configurationFile=file:////mount/data/analytics/models-{{ model_version }}/log4j2.xml
   driver_extraJavaOptions: -Dconfig.file=/mount/data/analytics/models-{{ model_version }}/{{ env }}.conf -Dlog4j.configurationFile=file:////mount/data/analytics/models-{{ model_version }}/log4j2.xml
+  memory_fraction: 0.3
+  storage_fraction: 0.5
   executor_memory: 28g
-  heap_conf_str: -Xmx5120m
+  heap_conf_str: '"-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -Xms250m {{ heap_memory }} -XX:+UseStringDeduplication"'
 
 spark_url: https://archive.apache.org/dist/spark/spark-{{ spark_version }}/spark-{{ spark_version }}-bin-hadoop2.7.tgz
 guava_url: https://repo1.maven.org/maven2/com/google/guava/guava/19.0/guava-19.0.jar
