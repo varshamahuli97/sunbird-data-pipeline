@@ -192,6 +192,10 @@ run_data_warehouse_job:
   data-warehouse-sync:
     hour: 07
     minute: 30
+run_weekly_claps_job:
+  weekly-claps:
+    hour: 08
+    minute: 30
 
 run_monitor_job:
   monitor-job-summ:
