@@ -190,12 +190,12 @@ run_data_warehouse_job:
     minute: 00
 run_weekly_claps_job:
   weekly-claps:
-    hour: 08
-    minute: 00
+    hour: 07
+    minute: 30
 run_survey_nps_job:
   survey-nps:
     hour: 08
-    minute: 30
+    minute: 00
 
 run_monitor_job:
   monitor-job-summ:
