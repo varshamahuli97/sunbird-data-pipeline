@@ -219,13 +219,6 @@
     - spark1-jobs
     - default-jobs
 
-- name: Create daily cron jobs for survey-nps
-  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh survey-nps"
-  with_dict: "{{ run_survey_nps_job }}"
-  tags:
-    - spark1-jobs
-    - default-jobs
-
 - name: Create daily cron jobs for data-warehouse-sync
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh data-warehouse-sync"
   with_dict: "{{ run_data_warehouse_job }}"
@@ -236,6 +229,13 @@
 - name: Create daily cron jobs for weekly-claps
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh weekly-claps"
   with_dict: "{{ run_weekly_claps_job }}"
+  tags:
+    - spark1-jobs
+    - default-jobs
+
+- name: Create daily cron jobs for survey-nps
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh survey-nps"
+  with_dict: "{{ run_survey_nps_job }}"
   tags:
     - spark1-jobs
     - default-jobs
