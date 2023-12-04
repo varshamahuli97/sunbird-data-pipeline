@@ -184,16 +184,16 @@ run_blended_program_report_job:
   blended-program-report:
     hour: 06
     minute: 30
-run_survey_nps_job:
-  survey-nps:
-    hour: 07
-    minute: 00
 run_data_warehouse_job:
   data-warehouse-sync:
     hour: 07
-    minute: 30
+    minute: 00
 run_weekly_claps_job:
   weekly-claps:
+    hour: 08
+    minute: 00
+run_survey_nps_job:
+  survey-nps:
     hour: 08
     minute: 30
 
