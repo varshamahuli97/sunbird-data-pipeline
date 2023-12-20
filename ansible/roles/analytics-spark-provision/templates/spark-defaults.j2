@@ -6,15 +6,16 @@ spark.executor.extraJavaOptions  {{ spark.executor_extraJavaOptions }}
 spark.driver.extraJavaOptions    {{ spark.driver_extraJavaOptions }}
 spark.local.dir                  {{ analytics.home }}/tmp
 
-spark.worker.instances          {{ spark.worker.instances }}
-spark.worker.cores              {{ spark.worker.cores }}
-spark.worker.memory             {{ spark.worker.memory }}
+# spark.worker.instances          {{ spark.worker.instances }}
+# spark.worker.cores              {{ spark.worker.cores }}
+# spark.worker.memory             {{ spark.worker.memory }}
 
-spark.executor.instances        {{ spark.executor.instances }}
-spark.executor.cores            {{ spark.executor.cores }}
-spark.executor.memory           {{ spark.executor.memory }}
-spark.executor.memoryOverhead   {{ spark.executor.memoryOverhead }}
+# these settings are not applicable in mode=local
+# spark.executor.instances        {{ spark.executor.instances }}
+# spark.executor.cores            {{ spark.executor.cores }}
+# spark.executor.memory           {{ spark.executor.memory }}
+# spark.executor.memoryOverhead   {{ spark.executor.memoryOverhead }}
 
 spark.driver.cores              {{ spark.driver.cores }}
 spark.driver.memory             {{ spark.driver.memory }}
-spark.driver.memoryOverhead     {{ spark.driver.memoryOverhead }}
+# spark.driver.memoryOverhead     {{ spark.driver.memoryOverhead }}
