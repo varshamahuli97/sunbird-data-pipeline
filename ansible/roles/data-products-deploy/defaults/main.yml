@@ -85,12 +85,12 @@ tagged_users_path: "tagged-users/"
 blended_report_path: "standalone-reports/blended-program-report"
 comms_console_report_path: "standalone-reports/comms-console"
 
-comms_console_prarambh_email_suffix: ".kb@karmayogi.in",
-comms_console_num_days_to_consider: "15",
-comms_console_num_top_learners_to_consider: "60",
-comms_console_prarambh_tags: "rojgaar,rozgaar,rozgar",
-comms_console_prarambh_cbp_ids": "do_113882965067743232154,do_1137468666262241281756,do_1139032976499261441156",
-comms_console_prarambh_n_count": "2",
+comms_console_prarambh_email_suffix: ".kb@karmayogi.in"
+comms_console_num_days_to_consider: "15"
+comms_console_num_top_learners_to_consider: "60"
+comms_console_prarambh_tags: "rojgaar,rozgaar,rozgar"
+comms_console_prarambh_cbp_ids": "do_113882965067743232154,do_1137468666262241281756,do_1139032976499261441156"
+comms_console_prarambh_n_count": "2"
 
 report_mdo_ids: ""
 job_manager_tmp_dir: "transient-data"
