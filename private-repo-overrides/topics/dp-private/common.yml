@@ -55,6 +55,9 @@ processing_kafka_overriden_topics:
   - name: dashboards.user.assessment
     retention_time: 172800000
     replication_factor: 2
+  - name: dashboards.acbp.enrolment
+    retention_time: 172800000
+    replication_factor: 2
   - name: analytics.job_queue
     retention_time: 172800000
     replication_factor: 2
@@ -190,6 +193,9 @@ processing_kafka_topics:
     num_of_partitions: 4
     replication_factor: 2
   - name: dashboards.user.assessment
+    num_of_partitions: 4
+    replication_factor: 2
+  - name: dashboards.acbp.enrolment
     num_of_partitions: 4
     replication_factor: 2
   - name: analytics.job_queue

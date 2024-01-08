@@ -205,6 +205,13 @@
     - spark1-jobs
     - default-jobs
 
+- name: Create daily cron jobs for summary-redis-sync
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh summary-redis-sync"
+  with_dict: "{{ run_summary_redis_sync_job }}"
+  tags:
+    - spark1-jobs
+    - default-jobs
+
 - name: Create daily cron jobs for course-based-assessment-report
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh course-based-assessment-report"
   with_dict: "{{ run_cba_report_job }}"
@@ -233,9 +240,30 @@
     - spark1-jobs
     - default-jobs
 
+- name: Create daily cron jobs for acbp-report
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh acbp-report"
+  with_dict: "{{ run_acbp_report_job }}"
+  tags:
+    - spark1-jobs
+    - default-jobs
+
+- name: Create daily cron jobs for comms-console
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh comms-console"
+  with_dict: "{{ run_comms_console_job }}"
+  tags:
+    - spark1-jobs
+    - default-jobs
+
 - name: Create daily cron jobs for survey-nps
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh survey-nps"
   with_dict: "{{ run_survey_nps_job }}"
+  tags:
+    - spark1-jobs
+    - default-jobs
+
+- name: Create monthly cron jobs for hall-of-fame
+  cron: name="{{env}}-{{ item.key }}" day={{ item.value.day }} minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh hall-of-fame"
+  with_dict: "{{ run_hall_of_fame_job }}"
   tags:
     - spark1-jobs
     - default-jobs

@@ -41,6 +41,7 @@ dashboards_user_org_topic: "{{ env }}.dashboards.user.org"
 dashboards_org_topic: "{{ env }}.dashboards.org"
 dashboards_user_assessment_topic: "{{ env }}.dashboards.user.assessment"
 dashboards_assessment_topic: "{{ env }}.dashboards.assessment"
+dashboards_acbp_enrolment_topic: "{{ env }}.dashboards.acbp.enrolment"
 dashboards_cassandra_user_table: "user"
 dashboards_cassandra_user_roles_table: "user_roles"
 dashboards_cassandra_org_table: "organisation"
@@ -52,7 +53,10 @@ dashboards_cassandra_user_assessment_table: "user_assessment_data"
 dashboards_cassandra_org_hierarchy_table: "org_hierarchy"
 dashboards_cassandra_course_batch_table: "course_batch"
 dashboards_cassandra_learner_stats_table: "learner_stats"
-# dashboards_cassandra_user_feed_table: "user_feed"
+dashboards_cassandra_acbp_table: "cb_plan"
+dashboards_cassandra_karma_points_table: "user_karma_points"
+dashboards_cassandra_karma_points_lookup_table: "user_karma_points_credit_lookup"
+dashboards_cassandra_mdo_karma_points_table: "mdo_karma_points"
 dashboards_cassandra_user_feed_table: "notification_feed"
 dashboards_cassandra_user_feed_keyspace: "sunbird_notifications"
 
@@ -85,6 +89,8 @@ tagged_users_path: "tagged-users/"
 blended_report_path: "standalone-reports/blended-program-report"
 comms_console_report_path: "standalone-reports/comms-console"
 org_hierarchy_report_path: "standalone-reports/org-hierarchy-report"
+acbp_enrolment_report_path: "standalone-reports/acbp-enrollment-report"
+acbp_user_summary_report_path: "standalone-reports/acbp-user-summary-report"
 
 comms_console_prarambh_email_suffix: ".kb@karmayogi.in"
 comms_console_num_days_to_consider: "15"
@@ -185,25 +191,42 @@ run_wfs_job:
   wfs:
     hour: 5
     minute: 30
+run_summary_redis_sync_job:
+  summary-redis-sync:
+    hour: 6
+    minute: 00
 run_cba_report_job:
   course-based-assessment-report:
     hour: 06
-    minute: 00
+    minute: 30
 run_blended_program_report_job:
   blended-program-report:
-    hour: 06
-    minute: 30
+    hour: 07
+    minute: 00
 run_data_warehouse_job:
   data-warehouse-sync:
     hour: 07
-    minute: 00
+    minute: 30
 run_weekly_claps_job:
   weekly-claps:
-    hour: 07
+    hour: 08
+    minute: 00
+run_acbp_report_job:
+  acbp-report:
+    hour: 08
     minute: 30
+run_comms_console_job:
+  comms-console:
+    hour: 09
+    minute: 00
 run_survey_nps_job:
   survey-nps:
-    hour: 08
+    hour: 09
+    minute: 30
+run_hall_of_fame_job:
+  hall-of-fame:
+    day: 01
+    hour: 10
     minute: 00
 
 run_monitor_job:
