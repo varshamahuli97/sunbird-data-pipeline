@@ -98,7 +98,7 @@ comms_console_num_days_to_consider: "15"
 comms_console_num_top_learners_to_consider: "100000"
 comms_console_prarambh_tags: "rojgaar,rozgaar,rozgar"
 # comms_console_prarambh_cbp_ids: "{{ comms_console_prarambh_cbp_ids_for_envs }}"
-comms_console_prarambh_cbp_ids: "do_113961438341070848139,do_113959889204092928120,do_1139479648369295361274,do_1139402643905003521145"
+comms_console_prarambh_cbp_ids: "do_11395784521085747211,do_113948972532981760196,do_113927312740917248195,do_113923110174654464113,do_113849495730765824128,do_113917550118518784163"
 comms_console_prarambh_n_count: "2"
 
 report_mdo_ids: ""
