@@ -65,11 +65,11 @@
             },
             {
               "type": "root",
-              "name": "completionDueDate"
+              "name": "allocatedOn"
             },
             {
               "type": "root",
-              "name": "allocatedOn"
+              "name": "completionDueDate"
             },
             {
               "type": "root",
@@ -137,11 +137,11 @@
             },
             {
               "type": "root",
-              "name": "courseCompletedTimestamp"
+              "name": "courseEnrolledTimestamp"
             },
             {
               "type": "root",
-              "name": "courseEnrolledTimestamp"
+              "name": "courseCompletedTimestamp"
             },
             {
               "type": "root",
@@ -169,27 +169,59 @@
             },
             {
               "type": "string",
-              "name": "batchID"
+              "name": "fullName"
+            },
+            {
+              "type": "string",
+              "name": "userPrimaryEmail"
+            },
+            {
+              "type": "string",
+              "name": "userMobile"
+            },
+            {
+              "type": "string",
+              "name": "designation"
+            },
+            {
+              "type": "string",
+              "name": "group"
+            },
+            {
+              "type": "string",
+              "name": "userOrgID"
+            },
+            {
+              "type": "string",
+              "name": "ministryName"
+            },
+            {
+              "type": "string",
+              "name": "deptName"
+            },
+            {
+              "type": "string",
+              "name": "userOrgName"
+            },
+            {
+              "type": "string",
+              "name": "acbpID"
+            },
+            {
+              "type": "string",
+              "name": "assignmentType"
             },
             {
               "type": "long",
-              "name": "courseCompletedTimestamp"
+              "name": "allocatedOn"
             },
             {
               "type": "long",
-              "name": "courseEnrolledTimestamp"
+              "name": "completionDueDate"
             },
             {
-              "type": "long",
-              "name": "lastContentAccessTimestamp"
-            },
-            {
-              "type": "long",
-              "name": "courseProgress"
-            },
-            {
-              "type": "long",
-              "name": "dbCompletionStatus"
+              "type": "string",
+              "name": "courseOrgID"
             },
             {
               "type": "string",
@@ -224,8 +256,12 @@
               "name": "courseResourceCount"
             },
             {
+              "type": "long",
+              "name": "lastStatusChangedOn"
+            },
+            {
               "type": "string",
-              "name": "courseOrgID"
+              "name": "identifier"
             },
             {
               "type": "string",
@@ -236,64 +272,28 @@
               "name": "courseOrgStatus"
             },
             {
-              "type": "long",
-              "name": "lastStatusChangedOn"
-            },
-            {
               "type": "string",
-              "name": "identifier"
-            },
-            {
-              "type": "string",
-              "name": "ministryName"
-            },
-            {
-              "type": "string",
-              "name": "deptName"
-            },
-            {
-              "type": "string",
-              "name": "acbpID"
-            },
-            {
-              "type": "string",
-              "name": "assignmentType"
+              "name": "batchID"
             },
             {
               "type": "long",
-              "name": "completionDueDate"
+              "name": "courseProgress"
+            },
+            {
+              "type": "root",
+              "name": "dbCompletionStatus"
             },
             {
               "type": "long",
-              "name": "allocatedOn"
+              "name": "courseEnrolledTimestamp"
             },
             {
-              "type": "string",
-              "name": "userOrgID"
+              "type": "long",
+              "name": "courseCompletedTimestamp"
             },
             {
-              "type": "string",
-              "name": "userOrgName"
-            },
-            {
-              "type": "string",
-              "name": "fullName"
-            },
-            {
-              "type": "string",
-              "name": "userPrimaryEmail"
-            },
-            {
-              "type": "string",
-              "name": "userMobile"
-            },
-            {
-              "type": "string",
-              "name": "designation"
-            },
-            {
-              "type": "string",
-              "name": "group"
+              "type": "long",
+              "name": "lastContentAccessTimestamp"
             },
             {
               "type": "long",
