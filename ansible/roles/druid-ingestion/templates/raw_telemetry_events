@@ -151,6 +151,11 @@
             },
             {
               "type": "path",
+              "name": "edata_query",
+              "expr": "$.edata.query"
+            },
+            {
+              "type": "path",
               "name": "edata_subtype",
               "expr": "$.edata.subtype"
             },
