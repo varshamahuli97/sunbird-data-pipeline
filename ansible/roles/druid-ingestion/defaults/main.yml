@@ -22,6 +22,7 @@ raw_dashboards_user_course_program_progress_taskcount: 1
 raw_dashboards_user_assessment_taskcount: 1
 raw_dashboards_assessment_taskcount: 1
 raw_dashboards_user_org_taskcount: 1
+raw_dashboards_org_taskcount: 1
 raw_dashboards_course_taskcount: 1
 raw_dashboards_role_count_taskcount: 1
 raw_dashboards_org_role_count_taskcount: 1
