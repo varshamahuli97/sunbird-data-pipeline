@@ -78,7 +78,7 @@
         }
     },
     "ioConfig": {
-        "topic": "{{ env }}.nps_submission",
+        "topic": "nps_submission",
         "consumerProperties": {
             "bootstrap.servers": "{{kafka_brokers}}"
         },
