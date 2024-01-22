@@ -117,7 +117,7 @@ dataset_metadata_table: "{{ env }}_dataset_metadata"
 report_user_table_keyspace: "sunbird_courses"
 report_user_enrolment_table: "report_user_enrolments"
 
-analytics_job_list: '"wfs", "competency-metrics", "assessment-metrics", "monitor-job-summ", "user-report-job", "survey-nps"'
+analytics_job_list: '"wfs", "dashboard-sync", "assessment-metrics", "monitor-job-summ", "user-report-job", "survey-nps"'
 analytics_jobs_count: 6
 
 cassandra_keyspace_prefix: '{{ env }}_'
@@ -168,8 +168,8 @@ have_weekly_jobs: false
 
 course_batch_status_updater_job_schedule: 60
 
-run_competency_metrics_job:
-  competency-metrics:
+run_dashboard_sync_job:
+  dashboard-sync:
     hour: 00
     minute: 10
 run_assessment_metrics_job:

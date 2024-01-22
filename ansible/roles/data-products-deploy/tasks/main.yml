@@ -163,9 +163,9 @@
     - spark1-jobs
     - clean-cronjobs
 
-- name: Create daily cron jobs for competency-metrics
-  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh competency-metrics"
-  with_dict: "{{ run_competency_metrics_job }}"
+- name: Create daily cron jobs for dashboard-sync
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh dashboard-sync"
+  with_dict: "{{ run_dashboard_sync_job }}"
   tags:
     - spark1-jobs
     - default-jobs
