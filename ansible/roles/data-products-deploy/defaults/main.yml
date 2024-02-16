@@ -192,17 +192,17 @@ run_wfs_job:
   wfs:
     hour: 5
     minute: 30
-run_summary_redis_sync_job:
-  summary-redis-sync:
-    hour: 6
-    minute: 00
 run_cba_report_job:
   course-based-assessment-report:
     hour: 06
-    minute: 30
+    minute: 00
 run_blended_program_report_job:
   blended-program-report:
-    hour: 07
+    hour: 06
+    minute: 30
+run_summary_redis_sync_job:
+  summary-redis-sync:
+    hour: 7
     minute: 00
 run_data_warehouse_job:
   data-warehouse-sync:
