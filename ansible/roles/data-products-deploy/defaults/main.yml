@@ -92,6 +92,7 @@ org_hierarchy_report_path: "standalone-reports/org-hierarchy-report"
 acbp_report_path: "standalone-reports/cbp-report"
 acbp_mdo_enrolment_report_path: "standalone-reports/cbp-report-mdo-enrolment"
 acbp_mdo_summary_report_path: "standalone-reports/cbp-report-mdo-summary"
+kcm_report_path: "standalone-reports/kcm-report"
 
 comms_console_prarambh_email_suffix: ".kb@karmayogi.in"
 comms_console_num_days_to_consider: "15"
@@ -233,6 +234,10 @@ run_hall_of_fame_job:
     day: 01
     hour: 11
     minute: 00
+run_kcm_report_job:
+  kcm-report:
+    hour: 11
+    minute: 30
 
 run_monitor_job:
   monitor-job-summ:

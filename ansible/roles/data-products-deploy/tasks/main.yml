@@ -275,6 +275,13 @@
     - spark1-jobs
     - default-jobs
 
+- name: Create daily cron jobs for kcm-report
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh kcm-report"
+  with_dict: "{{ run_kcm_report_job }}"
+  tags:
+    - spark1-jobs
+    - default-jobs
+
 - name: Create daily cron jobs for monitor job
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh monitor-job-summ"
   with_dict: "{{ run_monitor_job }}"
