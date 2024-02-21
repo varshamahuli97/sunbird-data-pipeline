@@ -268,16 +268,16 @@
     - spark1-jobs
     - default-jobs
 
-- name: Create monthly cron jobs for hall-of-fame
-  cron: name="{{env}}-{{ item.key }}" day={{ item.value.day }} minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh hall-of-fame"
-  with_dict: "{{ run_hall_of_fame_job }}"
+- name: Create daily cron jobs for kcm-report
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh kcm-report"
+  with_dict: "{{ run_kcm_report_job }}"
   tags:
     - spark1-jobs
     - default-jobs
 
-- name: Create daily cron jobs for kcm-report
-  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh kcm-report"
-  with_dict: "{{ run_kcm_report_job }}"
+- name: Create monthly cron jobs for hall-of-fame
+  cron: name="{{env}}-{{ item.key }}" day={{ item.value.day }} minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh hall-of-fame"
+  with_dict: "{{ run_hall_of_fame_job }}"
   tags:
     - spark1-jobs
     - default-jobs
