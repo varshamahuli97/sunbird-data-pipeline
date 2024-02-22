@@ -38,10 +38,9 @@ Motivation behind data-pipeline architecture - what are we trying to achieve and
 
 Telemetry enables automatic collection of data from real-world, real-time use.
 
-- Event driven architecture
-- Instead of having to query application data-sources for data, we have the services emmit data in real-time
+- Event driven architecture - Instead of having to query application data-sources for data, we have the services emmit data in real-time
 - Front end telemetry events are emitted by frontend services when a user action is performed
-- Back end telemetry events are emitted by frontend services when a particular event occurs during backend processing
+- Back end telemetry events are emitted by backend services when a particular event occurs during backend processing
 - Sunbird provides a Standalone JS Library as well as an HTML Interface Library to simplify telemetry generation
 - Both of the above call Telemetry Service APIs which can also be called directly
 
