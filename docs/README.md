@@ -15,7 +15,7 @@ Why are we using Sunbird for iGoT project?
 - Employs Cutting edge open-source technologies
 - Proven and battle-tested
 
-## Use-case and Motivation
+## Motivation Behind data-pipeline architecture
 Motivation behind data-pipeline architecture - what are we trying to achieve and how does this architecture enable it?
 
 - Need for real-time usage data is enabled by stream processing, enabling real-time data to be displayed on dashboards
