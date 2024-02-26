@@ -163,12 +163,12 @@
     - spark1-jobs
     - clean-cronjobs
 
-- name: Create daily cron jobs for data-exhaust
-  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh data-exhaust"
-  with_dict: "{{ run_data_exhaust_job }}"
-  tags:
-    - spark1-jobs
-    - default-jobs
+#- name: Create daily cron jobs for data-exhaust
+#  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh data-exhaust"
+#  with_dict: "{{ run_data_exhaust_job }}"
+#  tags:
+#    - spark1-jobs
+#    - default-jobs
 
 - name: Create daily cron jobs for dashboard-sync
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh dashboard-sync"
