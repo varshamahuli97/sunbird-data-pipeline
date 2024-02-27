@@ -252,3 +252,179 @@ bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic <topic>
 /opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group <group> --describe
 
 ```
+
+# Flink
+
+## Stream Processing
+
+Stream processing is a computing paradigm used to process and analyze continuous streams of data in real-time or near-real-time.
+Instead of storing data and processing it later, stream processing systems handle data as it arrives, making them suitable
+for applications that require immediate insights or actions based on incoming data.
+
+- Real-time Data Processing
+- Parallel Processing
+- Event-Driven Architecture
+- Low Latency
+- Scalability (horizontal)
+
+### Use Cases
+Anything that requires real-time Analytics on data streams from various sources, such as sensors, social media feeds, click-stream data, logs, and financial transactions
+- Fraud Detection: to analyze transactions, identify suspicious activities, and trigger alerts or actions in real-time
+- Internet of Things (IoT) Applications: real-time analysis of sensor data for applications like predictive maintenance, smart cities, and environmental monitoring.
+- Real-time Monitoring and Alerting: real-time monitoring of system performance, network traffic, application logs, and security events.
+- Recommendation Systems: (Netflix, Youtube, Amazon)
+
+### Why Flink?
+
+- Exactly-Once Semantics
+  - Flink ensures each event is processed and results are computed reliably, without duplication or loss.
+  - This level of reliability is critical for many real-time applications, such as financial transactions and fraud detection.
+
+- Stateful Stream Processing
+  - Flink natively supports stateful stream processing, allowing applications to maintain and update state across event streams.
+  - This is essential for complex computations and analytics that require contextual information or aggregation over time windows.
+
+- Advanced Windowing and Time Handling
+  - Flink provides various types of time windows, such as tumbling, sliding, and session windows to aggregate data over time intervals
+  - Beneficial for time-based analysis and aggregation tasks.
+
+- High Performance and Scalability
+  - Support for parallel processing and distributed execution
+  - Can efficiently handle large volumes of data and scale horizontally to accommodate growing workloads by leveraging features like task parallelism and data partitioning.
+
+
+## Flink Intro
+Basic concepts, checkpointing, only once, stream tasks, process functions, windows, watermarking etc.
+
+- DataStream and DataSet
+  - DataStream represents a stream of data elements that are continuously processed in real-time
+  - DataSet represents a static, bounded collection of data elements that are processed in batch mode
+
+- Transformation
+  - Transformations are operations applied to DataStreams or DataSets to modify, filter, aggregate, or analyze data
+  - map, filter, reduce, join, and window, enabling developers to manipulate data streams and datasets efficiently.
+
+- Windowing
+  - partition data streams into finite, non-overlapping or overlapping time-based segments called windows
+  - Flink supports various types of windows, including tumbling windows, sliding windows, and session windows
+
+- Stateful Processing
+  - Allows applications to maintain and update state across event streams.
+  - State can be used to store intermediate results, maintain session information, or perform aggregations over time windows
+  - Flink provides built-in mechanisms for managing state, including keyed state and operator state.
+  
+- Checkpointing and Fault Tolerance
+  - Checkpointing is a mechanism in Flink for ensuring fault tolerance and exactly-once processing semantics
+  - Flink periodically takes snapshots of the application state and metadata, which can be used to restore the application's state in case of failures
+  - Checkpointing is essential for maintaining data consistency and reliability in distributed stream processing applications
+
+- Event Time and Processing Time
+  - Event time refers to the time at which events occur in the real world
+  - Processing time refers to the time at which events are processed by the system
+  - Flink supports event time processing for accurate and consistent results, even in the presence of delayed or out-of-order events.
+
+- Watermarks
+  - Watermarks are markers emitted by Flink to indicate progress in event time
+  - They are used to track the completeness of event streams and to trigger window computations
+  - Watermarks help Flink handle out-of-order events and late data by providing a notion of progress in event time.
+
+- Execution Environment
+  - Local execution for development and testing
+  - Standalone clusters
+  - Apache YARN
+  - Apache Mesos
+  - Kubernetes
+
+## Hello World
+
+Installation and local run:
+
+https://nightlies.apache.org/flink/flink-docs-release-1.13/docs/try-flink/local_installation/
+
+
+## iGoT data-pipeline Flink jobs
+
+![iGoT Stream processing architecture](images/Stream%20processing%20architecture.drawio.svg)
+
+## Understanding iGoT Flink jobs
+- [Intro to dp-core](flink-dp-3.6.md)
+- Example code Walkthrough - How a Flink project is structured/coded in iGoT Data-pipeline
+- Local Build -
+  - `cd data-pipeline-flink`
+  - `mvn3.6 clean install -DskipTests`
+  - `cd sunbird-dp-distribution`
+  - `mvn3.6 package -Pbuild-docker-image -Drelease-version=<version>`
+- to only build one of the modules
+  - `mvn3.6 clean install -pl <specific-project> -am -DskipTests`
+
+## DevOps
+- Configurations - [values.j2](../kubernetes/helm_charts/datapipeline_jobs/values.j2)
+- Build - [check file - kubernetes/pipelines/build/Jenkinsfile](../kubernetes/pipelines/build/Jenkinsfile)
+- Deployment - [check file - kubernetes/pipelines/deploy/flink-jobs/Jenkinsfile](../kubernetes/pipelines/deploy/flink-jobs/Jenkinsfile)
+
+## Common Operations
+```sh
+# ssh to kubernetes server, for pre-prod
+# ssh admin-192.168.3.215@10.194.181.118
+
+# list pods flink-dev namespace
+kubectl get po -n flink-dev  # flink-prod for prod and BM
+
+# get logs for a pod
+kubectl logs <pod> -n flink-dev  # add -f to follow the logs
+
+# get configurations
+kubectl get cm -n flink-dev 
+
+# view/edit configurations
+kubectl edit cm <config-name> -n flink-dev
+
+# to restart a pod
+kubectl delete po <pod-name> -n flink-dev
+
+# restart all pods in the namespace
+kubectl delete po --all -n flink-dev
+
+# to remove a deployment completely
+kubectl delete deploy <deployment-name> -n flink-dev
+
+# to remove a job completely
+kubectl delete jobs <job-name> -n flink-dev
+```
+
+### Check lag, reset offset
+
+First obtain the consumer group id and kafka cluster ip from config, then
+
+```sh
+# ssh to kafka cluster
+# get offsets for a consumer-group
+/opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group <group> --describe
+
+# reset offset
+/opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group <group> --reset-offsets --to-earliest --topic <topic> -execute
+/opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group <group> --reset-offsets --to-latest --topic <topic> -execute
+
+/opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group <group> --reset-offsets --to-datetime 2020-12-20T00:00:00.000 --topic <topic> --execute
+
+# other options
+# --shift-by <positive_or_negative_integer>
+# --to-current
+# --to-latest
+# --to-offset <offset_integer>
+# --to-datetime <datetime_string>
+# --by-duration <duration_string>
+```
+
+
+
+### Common issues
+- One or more pods are not present
+  - maybe an intermittent error due to some service shutting down for a small period (redis, cassandra, kafka etc.)
+    - re-deploy the last image
+  - if pod is getting repeatedly restarted
+    - check logs to see what the error is
+    - kafka error - broker not available, wrong cluster is configured, topic missing, kafka VM disk space is full
+    - validation error - faulty message is present (or some service is still producing them), reset offset shift by
+    - snappy error - a snappy compressed message is in some topic
+    - checkpointing error - ceph could be down
