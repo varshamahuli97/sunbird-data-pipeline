@@ -416,8 +416,6 @@ First obtain the consumer group id and kafka cluster ip from config, then
 # --by-duration <duration_string>
 ```
 
-
-
 ### Common issues
 - One or more pods are not present
   - maybe an intermittent error due to some service shutting down for a small period (redis, cassandra, kafka etc.)
@@ -428,3 +426,291 @@ First obtain the consumer group id and kafka cluster ip from config, then
     - validation error - faulty message is present (or some service is still producing them), reset offset shift by
     - snappy error - a snappy compressed message is in some topic
     - checkpointing error - ceph could be down
+
+
+# Secor
+
+Secor is an efficient kafka backup utility developed by Pinterest
+- Secor process runs continuously and creates back-up files on local disk
+- Secor uploads these local backups to blob storage after a configured amount of time has passed
+
+
+```shell
+# check logs on blob storage
+# ssh to jenkins server (251 for prod)
+
+# all backups
+s3cmd ls s3://igotlogs/secor-prod/
+
+# unique backups
+s3cmd ls s3://igot/secor-prod/unique/raw/
+```
+
+```shell
+# ssh to secor server
+sudo su analytics
+
+# start and stop the secor process
+/home/analytics/sbin/secor unique-telemetry-backup stop
+/home/analytics/sbin/secor unique-telemetry-backup start
+
+# check logs
+cd /mount/secor/logs
+ls -ltrh
+```
+
+#### Repos:
+https://github.com/sunbird-cb/secor/tree/secor-0.25 - secor-0.25 ====> to build and generate the artifacts.
+https://github.com/sunbird-cb/sunbird-data-pipeline - release-3.7.0 ===> for deployment
+
+https://github.com/project-sunbird/sunbird-devops - release-3.7.0 =====> for jenkins job.
+
+### Secor Deploy
+- Deploy - [Jenkinsfile.flink](../pipelines/deploy/secor/Jenkinsfile.flink)
+
+
+# Spark, Data-products
+
+## Spark Intro
+Apache Spark is an open-source distributed computing system that is designed for big data processing and analytics.
+It provides an interface for programming entire clusters with implicit data parallelism and fault tolerance.
+
+- Performance: Spark's in-memory computation and optimization techniques often lead to faster processing times compared to other batch processing frameworks, especially for iterative algorithms or jobs requiring multiple passes over the data.
+- Ease of Use: Spark provides high-level APIs in multiple languages like Java, Scala, Python, and R, which makes it easier for developers to write and maintain code. Additionally, Spark's rich ecosystem includes libraries for SQL, machine learning, graph processing, and streaming data, reducing the need for developers to reinvent the wheel.
+- Unified Platform: Spark is a unified analytics engine, meaning it supports multiple workloads such as batch processing, interactive queries, streaming analytics, and machine learning within a single framework. This simplifies the architecture and reduces the need for managing multiple systems.
+- Fault Tolerance: Spark's resilient distributed datasets (RDDs) provide built-in fault tolerance, allowing it to recover from failures gracefully without manual intervention. This is crucial for large-scale data processing where failures are common.
+- Scalability: Spark is designed to scale from a single server to thousands of machines, making it suitable for processing large datasets. It can leverage distributed computing resources efficiently, providing linear scalability with the size of the cluster.
+- Flexibility: Spark can run on various cluster managers like Apache Mesos, Hadoop YARN, and Kubernetes, giving users the flexibility to deploy it in different environments and integrate with existing infrastructure seamlessly.
+- Community and Ecosystem: Spark has a vibrant open-source community and a rich ecosystem of tools and libraries built around it. This includes integration with popular data sources, connectors to databases, visualization tools, and third-party extensions, making it easier to solve complex data processing tasks.
+
+## Spark Architecture
+
+![Spark architecture](images/spark-architecture.png)
+
+- Driver: The driver is the main entry point of a Spark application. It runs the user's main function and coordinates the execution of the Spark jobs. The driver communicates with the cluster manager to acquire resources and schedule tasks.
+- Cluster Manager: Spark supports multiple cluster managers such as Apache Mesos, Hadoop YARN, and Kubernetes. The cluster manager allocates resources (CPU, memory) across the worker nodes in the cluster and manages their lifecycles. It's responsible for launching and monitoring the executors.
+- Executors: Executors are worker nodes in the Spark cluster responsible for executing tasks and storing data in memory or disk. Each executor runs multiple tasks concurrently and communicates with the driver program. Executors cache data in memory to improve performance and provide fault tolerance through replication.
+- Worker Nodes: Worker nodes host one or more executors and are responsible for executing tasks and storing data. They are managed by the cluster manager and can be added or removed dynamically based on the workload.
+- RDD (Resilient Distributed Dataset): RDD is the fundamental data abstraction in Spark. It represents an immutable, distributed collection of objects partitioned across the worker nodes. RDDs support fault tolerance through lineage and can be rebuilt if a partition is lost.
+- Data Partitioning: RDDs are divided into partitions, which are the basic units of parallelism in Spark. Partitions are distributed across the worker nodes, and tasks are executed in parallel on these partitions.
+- Scheduler: Spark's scheduler determines how tasks are scheduled and executed across the worker nodes. It divides the job into stages and tasks and optimizes the execution plan based on data locality and task dependencies.
+- DAG (Directed Acyclic Graph) Scheduler: The DAG scheduler breaks down the job into stages of tasks and constructs a DAG representing the data flow dependencies. It optimizes the execution plan by pipelining transformations and minimizing data shuffling.
+- Task Execution: Tasks are the smallest units of work in Spark and are executed on the worker nodes. Tasks process data partitions and perform transformations or actions defined by the user. Spark supports pipelining tasks to minimize data movement and maximize parallelism.
+- Caching and Persistence: Spark allows data to be cached in memory or disk across multiple operations, improving performance by avoiding recomputation. Caching can be controlled using RDD.persist() or DataFrame.cache().
+
+### Other basic concepts
+
+- Transformations: Transformations are operations that are applied to RDDs to create a new RDD. Examples include map, filter, reduceByKey, join, etc. Transformations are lazy, meaning they are not executed immediately but build up a computation plan (DAG) that is executed only when an action is called.
+- Actions: Actions are operations that trigger the execution of the computation plan built by transformations and return results to the driver program or write data to an external storage system. Examples include collect, count, saveAsTextFile, etc.
+- Spark Context: Spark Context is the main entry point for interacting with Spark. It represents the connection to a Spark cluster and is used to create RDDs, broadcast variables, and accumulators, as well as to set configuration parameters.
+- SparkSession: SparkSession is the entry point for Spark SQL functionality. It allows you to interact with structured data using DataFrames and SQL queries. SparkSession encapsulates SparkContext, SQLContext, and HiveContext.
+- DataFrames and Datasets: DataFrames and Datasets are higher-level abstractions introduced in Spark for working with structured data. They provide a more user-friendly API compared to RDDs and offer optimizations through the Catalyst query optimizer.
+- Broadcast Variables and Accumulators: Broadcast variables allow efficient distribution of read-only data to all worker nodes, while accumulators are variables that can be added to by tasks and are typically used for aggregating results or collecting statistics.
+
+## Hello World
+https://spark.apache.org/docs/2.4.0/
+
+## iGoT data-pipeline Spark jobs
+
+![iGoT Batch processing architecture](images/batch-processing-architecture.drawio.svg)
+
+### Configuration
+![Model config](../ansible/roles/data-products-deploy/templates/model-config.j2)
+
+WFS
+```json
+{
+  "search": {
+    "type": "{{ dp_object_store_type }}",
+    "queries": [
+      {
+        "bucket": "'$bucket'",
+        "prefix": "{{ dp_raw_telemetry_backup_location }}",
+        "endDate": "'$endDate'",
+        "delta": 0
+      }
+    ]
+  },
+  "model": "org.ekstep.analytics.model.WorkflowSummary",
+  "modelParams": {
+    "storageKeyConfig": "{{ dp_storage_key_config }}",
+    "storageSecretConfig": "{{ dp_storage_secret_config }}",
+    "apiVersion": "v2",
+    "parallelization": 200
+  },
+  "output": [
+    {
+      "to": "kafka",
+      "params": {
+        "brokerList": "'$brokerList'",
+        "topic": "'$topic'",
+        "compression": "{{ dashboards_broker_compression }}"
+      }
+    }
+  ],
+  "parallelization": 200,
+  "appName": "Workflow Summarizer",
+  "deviceMapping": true
+}
+```
+
+Dashboard Jobs
+```json
+{
+  "search": {
+    "type": "none"
+  },
+  "model": "org.ekstep.analytics.dashboard.report.acbp.UserACBPReportJob",
+  "modelParams": {
+    "debug": "false",
+    "validation": "false",
+    "redisHost": "{{ dashboards_redis_host }}",
+    "redisPort": "{{ dashboards_redis_port }}",
+    "redisDB": "{{ dashboards_redis_db }}",
+    "sparkCassandraConnectionHost": "{{ core_cassandra_host }}",
+    "sparkDruidRouterHost": "{{ druid_router_host }}",
+    "sparkElasticsearchConnectionHost": "{{ single_node_es_host }}",
+    "fracBackendHost": "{{ dashboards_frac_backend_host }}",
+    "cassandraUserKeyspace": "{{ user_table_keyspace }}",
+    "cassandraCourseKeyspace": "{{ course_keyspace }}",
+    "cassandraHierarchyStoreKeyspace": "{{ hierarchy_store_keyspace }}",
+    "cassandraUserTable": "{{ dashboards_cassandra_user_table }}",
+    "cassandraUserRolesTable": "{{ dashboards_cassandra_user_roles_table }}",
+    "cassandraOrgTable": "{{ dashboards_cassandra_org_table }}",
+    "cassandraUserEnrolmentsTable": "{{ dashboards_cassandra_user_enrolments_table }}",
+    "cassandraContentHierarchyTable": "{{ dashboards_cassandra_content_hierarchy_table }}",
+    "cassandraRatingSummaryTable": "{{ dashboards_cassandra_rating_summary_table }}",
+    "cassandraRatingsTable": "{{ dashboards_cassandra_ratings_table }}",
+    "cassandraUserAssessmentTable": "{{ dashboards_cassandra_user_assessment_table }}",
+    "cassandraOrgHierarchyTable": "{{ dashboards_cassandra_org_hierarchy_table }}",
+    "cassandraCourseBatchTable": "{{ dashboards_cassandra_course_batch_table }}",
+    "cassandraLearnerStatsTable": "{{ dashboards_cassandra_learner_stats_table }}",
+    "cassandraAcbpTable": "{{ dashboards_cassandra_acbp_table }}",
+    "cassandraKarmaPointsLookupTable": "{{ dashboards_cassandra_karma_points_lookup_table }}",
+    "cassandraKarmaPointsTable": "{{ dashboards_cassandra_karma_points_table }}",
+    "cassandraHallOfFameTable": "{{ dashboards_cassandra_mdo_karma_points_table }}",
+    "appPostgresHost": "{{ app_postgres_host }}",
+    "appPostgresSchema": "sunbird",
+    "appPostgresUsername": "sunbird",
+    "appPostgresCredential": "sunbird",
+    "appOrgHierarchyTable": "org_hierarchy_v4",
+    "dwPostgresHost": "{{ dw_postgres_host }}",
+    "dwPostgresSchema": "warehouse",
+    "dwPostgresUsername": "postgres",
+    "dwPostgresCredential": "{{ dw_postgres_credential }}",
+    "dwUserTable": "user_detail",
+    "dwCourseTable": "content",
+    "dwEnrollmentsTable": "user_enrolments",
+    "dwOrgTable": "org_hierarchy",
+    "dwAssessmentTable": "assessment_detail",
+    "dwBPEnrollmentsTable": "bp_enrolments",
+    "key": "{{ dp_storage_key_config }}",
+    "secret": "{{ dp_storage_secret_config }}",
+    "store": "{{ report_storage_type }}",
+    "container": "{{ s3_storage_container }}",
+    "mdoIDs": "'$reportMDOIDs'",
+    "cutoffTime": "60.0",
+    "userReportPath": "{{ user_report_path }}",
+    "userEnrolmentReportPath": "{{ user_enrolment_report_path }}",
+    "courseReportPath": "{{ course_report_path }}",
+    "cbaReportPath": "{{ cba_report_path }}",
+    "standaloneAssessmentReportPath": "{{ standalone_assessment_report_path }}",
+    "taggedUsersPath": "{{ tagged_users_path }}",
+    "blendedReportPath": "{{ blended_report_path }}",
+    "orgHierarchyReportPath": "{{ org_hierarchy_report_path }}",
+    "commsConsoleReportPath": "{{ comms_console_report_path }}",
+    "acbpReportPath": "{{ acbp_report_path }}",
+    "acbpMdoEnrolmentReportPath": "{{ acbp_mdo_enrolment_report_path }}",
+    "acbpMdoSummaryReportPath": "{{ acbp_mdo_summary_report_path }}",
+    "commsConsolePrarambhEmailSuffix": "{{ comms_console_prarambh_email_suffix }}",
+    "commsConsoleNumDaysToConsider": "{{ comms_console_num_days_to_consider }}",
+    "commsConsoleNumTopLearnersToConsider": "{{ comms_console_num_top_learners_to_consider }}",
+    "commsConsolePrarambhTags": "{{ comms_console_prarambh_tags }}",
+    "commsConsolePrarambhCbpIds": "{{ comms_console_prarambh_cbp_ids }}",
+    "commsConsolePrarambhNCount": "{{ comms_console_prarambh_n_count }}",
+    "sideOutput": {
+      "brokerList": "'$brokerList'",
+      "compression": "{{ dashboards_broker_compression }}",
+      "topics": {
+        "roleUserCount": "{{ dashboards_role_count_topic }}",
+        "orgRoleUserCount": "{{ dashboards_org_role_count_topic }}",
+        "allCourses": "{{ dashboards_courses_topic }}",
+        "userCourseProgramProgress": "{{ dashboards_user_course_program_progress_topic }}",
+        "fracCompetency": "{{ dashboards_frac_competency_topic }}",
+        "courseCompetency": "{{ dashboards_course_competency_topic }}",
+        "expectedCompetency": "{{ dashboards_expected_competency_topic }}",
+        "declaredCompetency": "{{ dashboards_declared_competency_topic }}",
+        "competencyGap": "{{ dashboards_competency_gap_topic }}",
+        "userOrg": "{{ dashboards_user_org_topic }}",
+        "org": "{{ dashboards_org_topic }}",
+        "userAssessment": "{{ dashboards_user_assessment_topic }}",
+        "assessment": "{{ dashboards_assessment_topic }}",
+        "acbpEnrolment": "{{ dashboards_acbp_enrolment_topic }}"
+      }
+    }
+  },
+  "output": [],
+  "parallelization": 16,
+  "appName": "ACBP Report Job",
+  "deviceMapping": false
+}
+```
+
+### How are the jobs being run?
+Data products jobs are scheduled in crontab, (Walk-through with WFS as an example)
+
+[run job script](../ansible/roles/data-products-deploy/templates/run-job.j2)
+
+### Dashboard Jobs
+
+https://github.com/sunbird-cb/sunbird-core-dataproducts/tree/cbrelease-4.8.11/batch-models/src/main/scala/org/ekstep/analytics/dashboard
+
+- DashboardUtil
+- DataUtil
+- TestUtil
+
+## DevOps
+Analytics Core
+- build - https://github.com/sunbird-cb/sunbird-analytics-core/blob/release-4.8.0-nic/Jenkinsfile
+- deploy - [Jenkinsfile](../pipelines/deploy/data-products/Jenkinsfile)
+
+Data Products
+- build - https://github.com/sunbird-cb/sunbird-core-dataproducts/blob/cbrelease-4.8.11/Jenkinsfile
+- deploy - [Jenkinsfile](../pipelines/deploy/data-products/Jenkinsfile)
+
+## Debugging
+
+```shell
+
+# ssh to spark server
+sudo su analytics
+
+# check crontab
+crontab -l
+
+# running spark shell
+cd /mount/data/analytics/spark-2.4.4-bin-hadoop2.7/
+bin/spark-shell --master local[*] --packages redis.clients:jedis:4.2.3,com.datastax.spark:spark-cassandra-connector_2.11:2.5.0,org.mongodb.spark:mongo-spark-connector_2.11:2.4.2,org.apache.spark:spark-avro_2.11:2.4.0 --conf spark.cassandra.connection.host=192.168.3.246 --conf spark.sql.caseSensitive=true --jars /mount/data/analytics/models-2.0/analytics-framework-2.0.jar,/mount/data/analytics/models-2.0/scruid_2.11-2.4.0.jar
+# :load /home/analytics/spark-scripts/DashboardUtil.scala
+# :load /home/analytics/spark-scripts/DataUtil.scala
+# :load /home/analytics/spark-scripts/TestUtil.scala
+# :load /home/analytics/spark-scripts/DataExhaustModel.scala
+# TestUtil.main(DataExhaustModel)
+
+# convert avro files to json
+cd /mount/data/analytics/cache
+wget https://repo1.maven.org/maven2/org/apache/avro/avro-tools/1.9.1/avro-tools-1.9.1.jar  # may already be present
+java -jar avro-tools-1.9.1.jar tojson some.avro > some.json
+# we have multiple partitions of these files so we extract in a loop
+ls orgHierarchy/*.avro | while read LINE; do java -jar avro-tools-1.9.1.jar tojson "$LINE" >> orgHierarchy.json; done
+
+# check logs
+cd /mount/data/analytics/scripts/logs
+tail -f joblog.log
+
+# detailed spark logs
+cd /mount/data/analytics/logs/data-products
+ls -ltrh
+
+```
+
