@@ -1,3 +1,14 @@
+#### TOC
+1. [Architecture](#architecture-overview)
+2. [Telemetry](#telemetry)
+3. [Kafka](#kafka)
+4. [Flink](#flink)
+5. [Secor](#secor)
+6. [Spark, Data-products](#spark-data-products)
+7. [Druid](#druid)
+8. [Monitoring](#monitoring)
+9. [DevOps](#devops)
+
 # Architecture Overview
 
 ## Sunbird Architecture
@@ -45,7 +56,7 @@ Telemetry enables automatic collection of data from real-world, real-time use.
 - Both of the above call Telemetry Service APIs which can also be called directly
 
 ## Sunbird Telemetry Event Structure
-```javascript
+```js
 
 {
   // About the event
@@ -515,7 +526,7 @@ https://spark.apache.org/docs/2.4.0/
 ![iGoT Batch processing architecture](images/batch-processing-architecture.drawio.svg)
 
 ### Configuration
-![Model config](../ansible/roles/data-products-deploy/templates/model-config.j2)
+[Model config](../ansible/roles/data-products-deploy/templates/model-config.j2)
 
 WFS
 ```json
@@ -714,3 +725,71 @@ ls -ltrh
 
 ```
 
+# Druid
+
+## Druid Intro
+What is Druid? Why are we using it?
+
+## Druid Concepts
+Segments, Deep Storage etc.
+
+## Druid Services
+zookeeper, broker, coordinator, overlord, middle-manager, historical and router
+
+## Druid setup on iGoT
+Dev setup and Prod Cluster setup
+
+## Druid Ingestion
+How to write an ingestion spec for Druid?
+
+## Druid Querying
+How to query Druid? JSON vs SQL, Datasketches
+
+## DevOps
+Environments, Configurations, Ansible, Kubernetes, Helm, Deployments
+
+## Monitoring and Debugging
+How to monitor, obtain logs, for services, debug, resolve common issues for a druid cluster setup application in the dev environment
+
+# Monitoring
+
+## Why?
+Why is there a need for monitoring?
+
+## Flink
+Flink monitoring setup, metric collection, grafana dashboards
+
+## Secor
+Secor monitoring processes
+
+## Spark
+Spark monitoring setup
+
+## Druid
+Druid monitoring setup
+
+## Prometheus
+Intro to prometheus
+
+## Grafana
+data-pipeline grafana dashboards
+
+# DevOps
+
+## Devops intro
+Environments, configuration, proivate repo
+
+## Git
+Git intro and devlopment processes
+
+## Ansible
+Ansible into, roles, templates and configurations
+
+## Kubernetes
+Kubernetes, usage, config, Helm
+
+## Jenkins
+provision, build, deployment
+
+## Processes
+Processes and Documentation
