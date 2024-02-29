@@ -1,5 +1,5 @@
-#### TOC
-1. [Architecture](#architecture-overview)
+# TOC
+1. [Architecture Overview](#architecture-overview)
 2. [Telemetry](#telemetry)
 3. [Kafka](#kafka)
 4. [Flink](#flink)
@@ -727,69 +727,517 @@ ls -ltrh
 
 # Druid
 
-## Druid Intro
-What is Druid? Why are we using it?
+Apache Druid is an open-source distributed data store designed for real-time analytics on large datasets. It provides low-latency queries, scalable data ingestion, and flexible data exploration capabilities, making it suitable for a wide range of use cases in modern data-driven applications. Here are some key use cases for Apache Druid:
+
+- Real-Time Analytics: Apache Druid is well-suited for real-time analytics use cases where low-latency queries on large volumes of data are required. It can ingest and query streaming data with millisecond-level latency, enabling organizations to make timely and informed decisions based on up-to-date data.
+- Event Monitoring and Dashboards: Druid can be used to build interactive dashboards and monitoring systems for tracking events, metrics, and key performance indicators (KPIs) in real-time. It allows users to slice and dice data dynamically, drill down into details, and visualize insights through various chart types.
+- Time Series Data Analysis: Druid excels at analyzing time-series data, such as logs, metrics, sensor data, and IoT (Internet of Things) data. It supports efficient storage and querying of time-stamped data, enabling users to perform time-based aggregations, filtering, and transformations at scale.
+- Operational Intelligence: Druid is commonly used for operational intelligence use cases, such as monitoring system performance, detecting anomalies, and troubleshooting issues in real-time. It can ingest data from various sources, including application logs, infrastructure metrics, and system events, and provide actionable insights for operational teams.
+- Ad Hoc Data Exploration: Druid enables ad hoc data exploration and analysis by providing fast query response times and interactive querying capabilities. Users can explore large datasets, perform aggregations, apply filters, and visualize results in real-time using SQL-like queries or intuitive GUI tools.
+- Personalization and Recommendation Systems: Druid can power personalization and recommendation systems by ingesting and querying user behavior data, such as clicks, views, and purchases. It allows organizations to analyze user interactions, identify patterns, and deliver personalized recommendations or content in real-time.
+- Fraud Detection and Security Analytics: Druid can be used for detecting fraud, anomalies, and security threats by analyzing large volumes of transactional data, user behavior logs, and network traffic data in real-time. It enables organizations to identify suspicious patterns, detect deviations from normal behavior, and take proactive measures to mitigate risks.
+- Customer Analytics and Marketing Attribution: Druid can help organizations analyze customer behavior, track marketing campaigns, and measure the effectiveness of advertising channels. It enables marketers to gain insights into customer interactions, segment audiences, and attribute conversions across various touchpoints.
+- Business Intelligence and Reporting: Druid can serve as a backend data store for business intelligence (BI) and reporting tools, providing fast query performance and high concurrency for interactive dashboards and ad hoc queries. It allows users to analyze historical and real-time data, generate reports, and derive actionable insights to drive business decisions.
+- Machine Learning and AI Applications: Druid can be integrated with machine learning (ML) and artificial intelligence (AI) platforms to build predictive models, perform advanced analytics, and automate decision-making processes. It provides the necessary data infrastructure for ingesting, storing, and querying large datasets used in ML and AI workflows.
 
 ## Druid Concepts
-Segments, Deep Storage etc.
+- Segments: In Druid, data is stored in segments, which are immutable, append-only files that contain pre-aggregated data. Segments are created by ingesting raw data and processing it into a summarized format that can be efficiently queried. Each segment typically represents a time interval (e.g., one hour, one day) and contains aggregated data for that period.
+- Data Source: A data source in Druid represents a collection of data ingested into the system. It corresponds to a specific dataset or table from which data can be queried. Each data source is associated with one or more segments that contain the actual data.
+- Dimensions: Dimensions in Druid are the attributes or categorical variables on which data can be grouped, filtered, and aggregated. Examples of dimensions include user ID, product category, country, etc. Dimensions provide context and granularity to the data and are used extensively in queries to analyze and aggregate data.
+- Metrics: Metrics in Druid are the numerical values that are aggregated and analyzed during queries. Examples of metrics include counts, sums, averages, minimums, maximums, etc. Metrics provide quantitative measurements of the data and are often aggregated based on dimensions to produce meaningful insights.
+- Granularity: Granularity in Druid refers to the level of detail or precision at which data is aggregated and stored in segments. Druid supports various granularities, such as seconds, minutes, hours, days, and months, allowing users to choose the appropriate level of aggregation based on their data and query requirements.
+- Rollup: Rollup is a data optimization technique used in Druid to reduce storage and improve query performance. It involves pre-aggregating data at ingestion time based on specified dimensions and metrics. Rollup reduces the number of unique values for dimensions and eliminates low-cardinality data, resulting in smaller segments and faster queries.
+- Deep Storage: Persistent storage system where data segments are stored for long-term retention and durability. Deep storage serves as the primary storage layer for historical nodes, allowing them to store and serve data segments efficiently for query execution.
 
 ## Druid Services
-zookeeper, broker, coordinator, overlord, middle-manager, historical and router
-
-## Druid setup on iGoT
-Dev setup and Prod Cluster setup
+- Zookeeper: Distributed coordination service, providing cluster management, configuration synchronization, and leader election capabilities.
+- Coordinator: The Coordinator service is responsible for managing the cluster's metadata and coordinating segment assignments across nodes. It maintains information about available segments, segment versions, and segment replicas, ensuring data availability, consistency, and load balancing. The Coordinator also handles data retention policies and segment lifecycle management.
+- Overlord: The Overlord service is responsible for managing ingestion tasks and coordinating the ingestion process. It receives ingestion requests, schedules tasks, and monitors the progress of data ingestion jobs. Overlord ensures that data is ingested into the cluster efficiently and reliably, coordinating real-time and batch ingestion workflows.
+- Historical: The Historical service is responsible for storing and serving data segments to query nodes. It hosts one or more segments and handles read-only queries by fetching and serving data from local disk storage. Historical nodes are horizontally scalable, allowing them to scale out to accommodate growing data volumes and query loads.
+- Broker: The Broker service acts as a query router and coordinator for query execution. It receives query requests from clients, determines the optimal data nodes to execute the query, and forwards the requests to the appropriate nodes. Brokers aggregate results from multiple nodes and return them to the client, providing a single entry point for querying the cluster.
+- MiddleManager: The MiddleManager service is responsible for managing the ingestion process on individual nodes. It runs ingestion tasks, processes data streams, and converts them into segments that can be queried. MiddleManagers distribute the workload of data ingestion across nodes, ensuring efficient resource utilization and fault tolerance.
+- Router: Service responsible for routing query requests from clients to the appropriate nodes in the cluster for query execution. The router acts as an intermediary between clients and the various nodes (historical, broker, and coordinator) in the Druid cluster, ensuring that queries are executed efficiently and results are returned to the client.
+- Indexing Service: The Indexing Service is responsible for creating and managing inverted indexes for Druid segments. It runs indexing tasks to build indexes from raw data, optimize query performance, and support fast filtering and aggregation. Indexing tasks are executed asynchronously and can be scheduled to run on demand or on a recurring basis.
+- Druid Console: Web-based interface for managing and monitoring the Druid cluster. It provides a graphical user interface for configuring data sources, managing segments, monitoring ingestion tasks, and viewing cluster metrics and status. The Coordinator Console enables administrators to monitor the health and performance of the cluster and perform administrative tasks easily.
 
 ## Druid Ingestion
-How to write an ingestion spec for Druid?
+
+https://druid.apache.org/docs/latest/ingestion/ingestion-spec/
+
+[Sample](../ansible/roles/druid-ingestion/templates/raw_dashboards_user_org)
 
 ## Druid Querying
-How to query Druid? JSON vs SQL, Datasketches
+SQL API
+
+https://druid.apache.org/docs/latest/api-reference/sql-api/
+
+https://druid.apache.org/docs/latest/querying/sql
+
+Native Queries
+
+https://druid.apache.org/docs/latest/querying/
+
+Datasketches
+
+https://druid.apache.org/docs/latest/development/extensions-core/datasketches-extension/
 
 ## DevOps
-Environments, Configurations, Ansible, Kubernetes, Helm, Deployments
+- Provisioning [Jenkinsfile](../pipelines/provision/druid/Jenkinsfile)
+- Configurations [config](../ansible/roles/analytics-druid/templates)
+- Druid Ingestion [druid-ingestion.yml](../ansible/druid-ingestion.yml)
 
-## Monitoring and Debugging
-How to monitor, obtain logs, for services, debug, resolve common issues for a druid cluster setup application in the dev environment
+## Druid Console demo
+
+- Submitting ingestion spec
+- Suspending supervisors
+- Hard Reset
+- Querying
+- Setting retention rules
+- Deleting segments
+
+
+### Change log level for druid services
+
+to change log level for any of the druid services edit their respective `log4j2.xml` file.
+for example to set broker log level to warn, edit it's `log4j2.xml` -
+
+Note: setting loglevel above `WARN` (e.g. `INFO`) will make logs very busy, and log files would inflate to
+MBs in a couple of minutes, set loglevel back to `ERROR` as soon as done with debugging
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <RollingFile name="File" fileName="/var/log/druid//broker.log" filePattern="/var/log/druid//broker.%i.log">
+      <PatternLayout>
+        <Pattern>"%d{ISO8601} %p [%t] %c - %m%n"</Pattern>
+      </PatternLayout>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="50 MB"/>
+      </Policies>
+      <DefaultRolloverStrategy max="20"/>
+    </RollingFile>
+  </Appenders>
+  <Loggers>
+    <Root level="warn">
+      <AppenderRef ref="File"/>
+    </Root>
+  </Loggers>
+</Configuration>
+```
+
+#### for s3 compatible deep storage
+
+to use s3 as deep storage make sure `common.runtime.properties` contains following config
+
+```
+druid.extensions.loadList=["druid-s3-extensions"]
+druid.extensions.directory=/data/druid/extensions
+
+druid.storage.type=s3
+druid.storage.bucket=<bucket>
+druid.storage.baseKey=druid/segments
+
+druid.s3.accessKey=<access_key>
+druid.s3.secretKey=<secret_key>
+
+# set protocol and endpoint together
+druid.s3.endpoint.url=<prototocol>://<host>
+
+# or separately as
+# druid.s3.endpoint.url=<host>
+# druid.s3.endpoint.protocol=<prototocol>
+```
+
+for non-aws s3-like stores (like ceph), we might have to add additional config
+```
+# enable access of bucket from any region
+druid.s3.forceGlobalBucketAccessEnabled=true
+
+# to enable path like access
+# if true,  url=<protocol>://<host>/<bucket> 
+# if false, url=<protocol>://<bucket>.<host> 
+druid.s3.enablePathStyleAccess=true
+```
+
+to allow Druid to publish task logs to s3 add following config
+```
+druid.indexer.logs.type=s3
+druid.indexer.logs.s3Bucket=<bucket>
+# path to logs within the bucker
+druid.indexer.logs.s3Prefix=druid/stage/indexing_logs
+```
+
+additional config for s3 deep storage (optional)
+```
+# uncomment to enable server side encryption for s3
+# druid.storage.sse.type=s3
+
+# uncomment to enable v4 signing of requests
+# druid.s3.endpoint.signingRegion=<aws-region-code>
+
+# uncomment to disable chunk encoding
+# druid.s3.disableChunkedEncoding=true
+```
+
+#### S3 bucket policy
+
+Druid should have permissions to read and write from `druid` dir of the bucket
+For S3, we would require `GetObject`, `PutObject`, `GetObjectAcl`, `PutObjectAcl` permissions
+
+Example policy might look like-
+
+`policy.json`
+```json
+{
+  "Statement": [
+    {
+      "Action": [
+        "s3:ListAllMyBuckets"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:s3:::*"
+    },
+    {
+      "Action": [
+        "s3:ListBucket",
+        "s3:ListBucketMultipartUploads",
+        "s3:GetBucketLocation",
+        "s3:AbortMultipartUpload",
+        "s3:GetObjectAcl",
+        "s3:GetObjectVersion",
+        "s3:DeleteObject",
+        "s3:DeleteObjectVersion",
+        "s3:GetObject",
+        "s3:PutObjectAcl",
+        "s3:PutObject",
+        "s3:GetObjectVersionAcl"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+          "arn:aws:s3:::<bucket>/druid",
+          "arn:aws:s3:::<bucket>/druid/*"
+      ]
+    }
+  ]
+}
+```
+
+to update bucket policy using `s3cmd`, first install s3cmd and configure using `s3cmd --configure`, then run
+
+```sh
+s3cmd setpolicy policy.json s3://<bucket>
+```
+
+Depending on the library being used to upload files to storage, to make files accessible publicly we might need to set acl to public using `s3cmd`
+
+```sh
+s3cmd setacl s3://<bucket>/<folder>/* --acl-public
+```
+
+#### for azure deep storage
+
+to use azure as deep storage make sure `common.runtime.properties` contains following config
+
+```
+druid.extensions.loadList=["druid-azure-extensions"]
+druid.extensions.directory=/data/druid/extensions
+
+druid.storage.type=azure
+druid.azure.account=<account>
+druid.azure.key=<key>
+druid.azure.container=<container>
+```
+
+to allow Druid to publish task logs to azure add following config
+```
+druid.indexer.logs.type=azure
+druid.indexer.logs.container=<container>
+druid.indexer.logs.prefix=<prefix e.g. druidlogs>
+```
+
+#### misc config
+```
+# uncomment to disable acl for deep storage
+# druid.storage.disableAcl=true
+
+# uncomment to disable acl for only logs
+# druid.indexer.logs.disableAcl=true
+```
+
+### Druid graceful restart / rolling update
+
+For configurations to take effect Druid services for which config has changed must be restarted.
+All Druid services except for `middlemanager` can be restarted safely through `systemctl`
+
+```sh
+# ssh to druid
+systemctl restart druid_broker.service
+systemctl restart druid_coordinator.service
+systemctl restart druid_historical.service
+systemctl restart druid_overlord.service
+```
+
+to gracefully restart `middlemanager` first we have to suspend all running supervisors. this publishes
+segments which have not been published yet
+
+```sh
+# ssh to druid
+# get running supervisor names
+curl -X GET http://localhost:8081/druid/indexer/v1/supervisor -i
+
+# do this for all running supervisors
+# suspend supervisor (stop running tasks and publish segments)
+curl -X POST http://localhost:8090/druid/indexer/v1/supervisor/<supervisor-name>/suspend
+
+# restart middlemanager service
+systemctl restart druid_middlemanager.service
+
+# resume suspended supervisors
+curl -X POST http://localhost:8090/druid/indexer/v1/supervisor/<supervisor-name>/resume
+```
+
+### Druid API
+
+ports - to find out what ports each of the services are running check `runtime.properties` file in `/data/druid/conf/druid/<service>/`
+
+default ports -
+```sh
+# coordinator - 8081
+# broker - 8082
+# historical - 8083
+# overlord - 8090
+# middlemanager - 8091
+```
+
+Check status, get data sources
+```sh
+# check status of overlord service
+curl -X GET http://localhost:8090/status
+
+# show data sources
+curl -X GET http://localhost:8081/druid/coordinator/v1/datasources -i
+```
+
+Manage Ingestion
+```sh
+# get running supervisor names
+curl -X GET http://localhost:8081/druid/indexer/v1/supervisor -i
+
+# inspect particular supervisor ingestion config
+curl -X GET http://localhost:8081/druid/indexer/v1/supervisor/<supervisor-name> -i
+
+# inspect particular supervisor status
+curl -X GET http://localhost:8081/druid/indexer/v1/supervisor/<supervisor-name>/status -i
+
+# inspect particular supervisor task stats
+curl -X GET http://localhost:8081/druid/indexer/v1/supervisor/<supervisor-name>/stats -i
+
+# inspect tasks
+curl -X GET http://localhost:8081/druid/indexer/v1/supervisor/tasks -i
+
+# inspect pending tasks
+curl -X GET http://localhost:8081/druid/indexer/v1/supervisor/pendingTasks -i
+
+# inspect running tasks
+curl -X GET http://localhost:8081/druid/indexer/v1/supervisor/runningTasks -i
+
+
+# add new supervisor
+curl -X POST -H 'Content-Type: application/json' -d @spec.json http://localhost:8090/druid/indexer/v1/supervisor
+
+# stop and delete supervisor
+curl -X POST http://localhost:8090/druid/indexer/v1/supervisor/<supervisor-name>/terminate -i
+
+# suspend supervisor (stop running tasks and publish segments)
+curl -X POST http://localhost:8090/druid/indexer/v1/supervisor/<supervisor-name>/suspend
+
+# resume supervisor
+curl -X POST http://localhost:8090/druid/indexer/v1/supervisor/<supervisor-name>/resume
+
+```
 
 # Monitoring
 
 ## Why?
-Why is there a need for monitoring?
+- Data Quality Assurance: Data pipelines are responsible for moving data from various sources to destinations, transforming it along the way. Monitoring ensures that data quality is maintained throughout this process. By tracking metrics such as data completeness, accuracy, consistency, and timeliness, organizations can ensure that the data being processed is reliable and fit for use in analytics, decision-making, and other applications.
+- Performance Optimization: Monitoring helps identify bottlenecks, inefficiencies, and other performance issues within data pipelines. By tracking metrics such as processing time, resource utilization, and throughput, organizations can optimize pipeline performance to ensure timely data delivery and efficient resource utilization.
+- Fault Detection and Troubleshooting: Data pipelines are complex systems that can encounter various issues such as software bugs, hardware failures, network issues, data schema changes, and data source changes. Monitoring helps detect these issues in real-time or near real-time, allowing for prompt troubleshooting and resolution to minimize downtime and data loss.
+- Compliance and Governance: Many industries are subject to regulatory requirements regarding data handling, storage, and processing (e.g., GDPR, HIPAA). Monitoring helps ensure compliance with these regulations by tracking data access, usage, and security-related metrics, thus enabling organizations to demonstrate adherence to regulatory standards and mitigate risks associated with non-compliance.
+- Cost Optimization: Data processing and storage can be costly, especially at scale. Monitoring helps organizations track resource utilization and costs associated with data pipelines, allowing them to identify opportunities for optimization, such as optimizing resource allocation, reducing unnecessary data processing, or choosing more cost-effective data storage options.
+- Business Insights and Decision-Making: Monitoring data pipelines provides valuable insights into data usage patterns, trends, and anomalies, which can inform strategic decision-making, business process improvements, and product enhancements. By analyzing monitoring data, organizations can gain a better understanding of their data assets and how they are being utilized, enabling them to make data-driven decisions and derive actionable insights.
 
 ## Flink
-Flink monitoring setup, metric collection, grafana dashboards
+- Instrumentation: Kubernetes and the applications running on it need to be instrumented to expose metrics in a format that Prometheus can scrape. This typically involves adding libraries or exporters to the codebase of your applications or deploying Prometheus-compatible exporters for Kubernetes components (e.g., kube-state-metrics for cluster state, node-exporter for node metrics, etc.).
+- Deployment of Prometheus: Prometheus needs to be deployed within the Kubernetes cluster. This can be done using Helm charts, YAML manifests, or Kubernetes operators. Prometheus should be configured with appropriate scrape configurations to collect metrics from the instrumented applications and Kubernetes components.
+- Service Discovery: Prometheus needs to be configured to discover the endpoints of the applications and Kubernetes components it needs to monitor. Kubernetes provides service discovery mechanisms that Prometheus can leverage, such as DNS-based service discovery or Kubernetes service discovery.
+- Alerting Rules: Prometheus allows you to define alerting rules based on the collected metrics. You can define rules to trigger alerts when certain conditions are met (e.g., CPU usage exceeds a threshold, number of error responses exceeds a threshold, etc.). These alerting rules are written in Prometheus Query Language (PromQL).
+- Alertmanager Configuration: Alertmanager is a component that handles alerts sent by Prometheus and manages the routing, grouping, and notification of alerts. You need to configure Alertmanager to define notification channels (e.g., email, Slack, PagerDuty, etc.) and routing rules for different types of alerts.
+- Grafana Integration: Grafana is a popular visualization tool that can be integrated with Prometheus to create dashboards and visualize metrics. You can deploy Grafana within the Kubernetes cluster and configure it to connect to Prometheus as a data source. Grafana allows you to create custom dashboards to visualize the collected metrics and monitor the health and performance of your Kubernetes cluster and applications.
+
+### deploying Monitoring
+[Monitoring Jenkinsfile](../kubernetes/pipelines/monitoring/Jenkinsfile)
+
+### Adding monitoring config for new flink jobs
+[dp_alertrules.yaml](../kubernetes/ansible/roles/sunbird-monitoring/templates/dp_alertrules.yaml)
+
+[dp_prometheus-adapter.yaml](../kubernetes/ansible/roles/sunbird-monitoring/templates/dp_prometheus-adapter.yaml)
+
+[flinkjobs.yaml](../kubernetes/helm_charts/monitoring/alertrules/templates/flinkjobs.yaml)
 
 ## Secor
-Secor monitoring processes
+Secor monitoring is done using cron jobs
+
+[How monitoring script is copied over](../ansible/roles/secor-deploy)
+
+[How monitoring cron jobs are scheduled](../ansible/roles/secor-telemetry-backup-deploy)
 
 ## Spark
-Spark monitoring setup
+Spark monitoring setup - not enabled
 
 ## Druid
-Druid monitoring setup
-
-## Prometheus
-Intro to prometheus
+Druid monitoring setup - through Graphite, does not seem to be configured in Graphana
 
 ## Grafana
-data-pipeline grafana dashboards
+Data-pipeline Grafana Dashboards in production
+
+[DPLag Dashboard](https://igotkarmayogi.gov.in/grafana/d/vfdQRdtMDp/dplag-dashboard?orgId=1&refresh=5s)
+- flink lag
+- secor lag
+
+[Data Pipeline Metrics Flink](https://igotkarmayogi.gov.in/grafana/d/Ynghyskz/data-pipeline-metrics-flink?orgId=1&refresh=30s)
+
+[Lag Dashboard](https://igotkarmayogi.gov.in/grafana/d/vfdQRdtMh/lag-dashboard?orgId=1&refresh=5s)
+
+[Server Metrics](https://igotkarmayogi.gov.in/grafana/d/Ne61eqpSz/node-exporter-server-metrics-v1?orgId=1&var-node=192.168.3.119:9100&from=now-2d&to=now)
 
 # DevOps
 
 ## Devops intro
-Environments, configuration, proivate repo
 
-## Git
-Git intro and devlopment processes
+Environments
+- Pre-prod
+- QA
+- BM
+- Prod
 
-## Ansible
-Ansible into, roles, templates and configurations
+Default Configuration
+- Common defaults [all.yml](../ansible/inventory/env/group_vars/all.yml)
+- Role specific defaults [example](../ansible/roles/analytics-druid/defaults/main.yml)
 
-## Kubernetes
-Kubernetes, usage, config, Helm
+### Private repo overrides
+
+[inventory](../ansible/inventory)
+
+`common.yml` file
+- configuration defined in yml format
+- need to override the entire dictionary
+
+`hosts` file:
+```shell
+[druid-postgres]
+10.0.0.0
+
+[raw-zookeeper]
+10.0.0.1
+10.0.0.2
+```
+
+```yaml
+druid_zookeeper_host: "{{ groups[cluster+'-zookeeper']|join(':2181,')}}:2181"
+druid_postgres_host: "{{ groups['druid-postgres'][0] }}"
+```
 
 ## Jenkins
-provision, build, deployment
+Jenkins is an open-source automation server widely used for continuous integration (CI) and continuous delivery (CD) pipelines
 
-## Processes
-Processes and Documentation
+### Important Jenkins Jobs for data-pipeline
+
+#### Kafka
+- deployment - KafkaSetup
+
+#### Flink
+- build
+- artifact upload
+- deploy
+
+### Secor
+- build
+- artifact upload
+- deploy
+
+#### Spark
+- spark provisioning
+- analytics-core
+  - build
+  - artifact upload
+  - deploy
+- core-dataproducts
+  - build
+  - artifact upload
+  - deploy
+
+#### Druid
+- Provisioning
+- druid-ingestion deploy
+
+## Ansible
+Ansible is an open-source automation tool used for configuration management, application deployment, infrastructure provisioning, and orchestration. It simplifies the management and automation of IT infrastructure by allowing users to define tasks in simple, human-readable YAML format, known as playbooks, which are then executed against remote servers or infrastructure nodes.
+
+### Core Concepts:
+- Agentless Architecture: Ansible operates in an agentless manner, meaning it doesn't require any software agents to be installed on managed nodes. Instead, it uses SSH (Secure Shell) protocol to establish connections and execute tasks remotely, making it lightweight and easy to deploy.
+- Inventory: The inventory file is a list of managed hosts or nodes that Ansible will operate on. It can be defined in a simple text file or dynamically generated using scripts or plugins. Ansible uses this inventory to determine the target hosts for executing tasks.
+- Playbooks: Playbooks are the heart of Ansible automation. They are YAML files that define a series of tasks to be executed on remote hosts. Playbooks can contain multiple plays, each consisting of one or more tasks. Tasks define the actions to be performed, such as installing packages, copying files, starting services, etc.
+- Tasks: Tasks are individual units of work defined within playbooks. They represent the actions that Ansible will perform on remote hosts. Tasks can include modules, which are Ansible's building blocks for performing specific actions (e.g., yum for package management, copy for file transfer, service for managing services, etc.).
+- Modules: Modules are small programs that Ansible executes on remote hosts to perform specific tasks. Ansible ships with a large number of built-in modules covering various aspects of system administration, networking, cloud management, and more. Users can also create custom modules to extend Ansible's functionality.
+- Roles: Roles are a way of organizing and reusing Ansible content. They provide a structured approach for grouping related tasks, variables, files, and handlers into reusable units. Roles promote modularity, scalability, and maintainability of Ansible playbooks.
+
+### Key Features:
+- Idempotent Execution: Ansible ensures idempotent execution, meaning running the same playbook multiple times has the same effect as running it once. This helps in maintaining the desired state of the infrastructure and prevents unintended changes.
+- Declarative Syntax: Ansible playbooks use a declarative syntax, allowing users to specify the desired state of the system rather than imperatively listing the steps to achieve it. This makes playbooks easier to read, write, and understand.
+- Extensibility: Ansible is highly extensible and can be integrated with other tools and technologies. It supports plugins, custom modules, dynamic inventories, and can be extended using various programming languages.
+- Parallel Execution: Ansible can execute tasks in parallel across multiple hosts simultaneously, improving the speed and efficiency of automation workflows.
+- Integration with Cloud Providers: Ansible provides modules and plugins for managing cloud resources on popular cloud platforms such as AWS, Azure, Google Cloud, and OpenStack, allowing users to automate cloud infrastructure provisioning and management.
+- Community and Ecosystem: Ansible has a vibrant community with extensive documentation, tutorials, and support resources. It also integrates with configuration management frameworks, monitoring tools, version control systems, and CI/CD pipelines, enabling seamless integration into existing DevOps workflows.
+
+### Use Cases:
+- Configuration Management: Ansible can be used to enforce and maintain the desired configuration of servers, applications, and networking devices across an IT infrastructure.
+- Application Deployment: Ansible automates the deployment of applications and services, ensuring consistency and repeatability across development, testing, and production environments.
+- Infrastructure Provisioning: Ansible facilitates the provisioning and lifecycle management of infrastructure resources, including virtual machines, containers, cloud instances, and network devices.
+- Orchestration: Ansible orchestrates complex workflows and tasks involving multiple systems, services, and dependencies, enabling end-to-end automation of IT processes.
+- Continuous Delivery: Ansible integrates with CI/CD pipelines to automate the deployment, testing, and release of software applications, accelerating the delivery of software updates and features.
+
+## Kubernetes
+Kubernetes is an open-source container orchestration platform designed to automate the deployment, scaling, and management of containerized applications. It was originally developed by Google and is now maintained by the Cloud Native Computing Foundation (CNCF). Kubernetes provides a flexible and scalable platform for deploying and managing containerized workloads across a cluster of machines.
+
+### Core Concepts:
+- Containerization: Kubernetes is built around the concept of containers, lightweight and portable units of software that package an application and its dependencies. Kubernetes supports popular container runtimes such as Docker and containerd.
+- Cluster: A Kubernetes cluster is a set of nodes (servers) that run containerized applications orchestrated by Kubernetes. A cluster typically consists of one or more master nodes (control plane) and multiple worker nodes (compute nodes).
+- Master Node: The master node is responsible for managing the Kubernetes cluster and its resources. It includes several components:
+  - API Server: Exposes the Kubernetes API, which allows users and external components to interact with the cluster.
+  - Scheduler: Assigns pods (groups of containers) to nodes based on resource availability and workload requirements.
+  - Controller Manager: Manages various controllers responsible for maintaining the desired state of the cluster, such as replication controller, endpoint controller, and namespace controller.
+  - etcd: Consistent and highly available key-value store used for storing cluster state and configuration data.
+- Worker Node: Worker nodes are responsible for running containerized workloads (pods) and providing the necessary compute resources. Each worker node includes:
+  - Kubelet: An agent that runs on each node and communicates with the master node. It manages the pods and containers running on the node.
+  - Container Runtime: Software responsible for running containers, such as Docker or containerd.
+  - Kube-proxy: A network proxy that maintains network rules and enables communication between pods and services.
+- Pod: The smallest deployable unit in Kubernetes. A pod encapsulates one or more containers that share networking and storage resources. Pods are ephemeral and can be scheduled, scaled, and managed independently.
+- Deployment: A Kubernetes Deployment is a higher-level abstraction that manages the deployment and scaling of replica sets. It allows users to define and manage the desired state of applications, including the number of replicas, update strategy, and rolling updates.
+- Service: Kubernetes Service is an abstraction that defines a logical set of pods and a policy by which to access them. Services provide a stable endpoint (IP address and port) for accessing applications running within the cluster, enabling load balancing and service discovery.
+
+### Key Features:
+- Automatic Scaling: Kubernetes can automatically scale applications based on resource utilization metrics, such as CPU and memory usage, ensuring optimal performance and resource utilization.
+- Self-Healing: Kubernetes monitors the health of applications and automatically restarts or reschedules containers that fail or become unresponsive, improving application availability and reliability.
+- Rolling Updates and Rollbacks: Kubernetes supports rolling updates for deploying new versions of applications without downtime. It also allows for rollback to previous versions in case of deployment failures or issues.
+- Service Discovery and Load Balancing: Kubernetes provides built-in service discovery and load balancing for distributing traffic across multiple instances of an application, improving scalability and reliability.
+- Storage Orchestration: Kubernetes offers flexible storage options for persisting data, including local storage, network-attached storage (NAS), and cloud storage solutions. It supports dynamic provisioning and management of storage volumes.
+- Configuration Management: Kubernetes enables the declarative management of application configuration and environment variables, allowing users to define the desired state of applications and infrastructure using YAML or JSON manifests.
+- Multi-Tenancy and Security: Kubernetes provides features for securing and isolating workloads within a cluster, including role-based access control (RBAC), network policies, and pod security policies (PSPs).
+
+### Use Cases:
+- Microservices Architecture: Kubernetes is well-suited for deploying and managing microservices-based applications, allowing teams to develop, deploy, and scale individual services independently.
+- Continuous Integration/Continuous Deployment (CI/CD): Kubernetes integrates seamlessly with CI/CD pipelines, enabling automated testing, deployment, and delivery of applications with high velocity and efficiency.
+- Hybrid and Multi-Cloud Deployments: Kubernetes provides a consistent platform for deploying and managing applications across on-premises data centers, public clouds, and hybrid cloud environments, offering flexibility and portability.
+- Big Data and Machine Learning Workloads: Kubernetes can orchestrate complex data processing and analytics workloads, including big data frameworks (e.g., Apache Spark, Hadoop) and machine learning frameworks (e.g., TensorFlow, PyTorch), allowing organizations to scale and manage these workloads efficiently.
+- Edge Computing: Kubernetes can be used to deploy and manage containerized applications at the network edge, bringing compute resources closer to end-users and devices for low-latency processing and improved performance.
