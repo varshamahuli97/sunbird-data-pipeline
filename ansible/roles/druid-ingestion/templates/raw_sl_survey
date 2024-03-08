@@ -85,6 +85,10 @@
                "name": "solutionId"
              },
              {
+              "type": "string",
+              "name": "evidences"
+             },
+             {
                "type": "string",
                "name": "solutionName"
              },
