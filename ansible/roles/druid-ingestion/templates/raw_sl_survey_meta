@@ -6,68 +6,31 @@
       "type": "string",
       "parseSpec": {
         "format": "json",
-        "timestampSpec": {},
+        "timestampSpec": {
+          "column": "completedDate",
+          "format": "auto"
+        },
         "dimensionsSpec": {
           "dimensions": [
             {
               "type": "string",
-              "name": "completedDate"
+              "name": "createdBy"
             },
             {
               "type": "string",
-              "name": "cluster"
+              "name": "isAPrivateProgram"
             },
             {
               "type": "string",
-              "name": "surveyId"
+              "name": "organisation_name"
             },
             {
               "type": "string",
-              "name": "program_name"
+              "name": "solutionExternalId"
             },
             {
               "type": "string",
-              "name": "survey_submission_id"
-            },
-            {
-              "type": "string",
-              "name": "board_name"
-            },
-            {
-              "type": "string",
-              "name": "user_type"
-            },
-            {
-              "type": "string",
-              "name": "school"
-            },
-            {
-              "type": "string",
-              "name": "district"
-            },
-            {
-              "type": "string",
-              "name": "schoolId"
-            },
-            {
-              "type": "string",
-              "name": "block"
-            },
-            {
-              "type": "string",
-              "name": "state"
-            },
-            {
-              "type": "string",
-              "name": "UUID"
-            },
-            {
-              "type": "string",
-              "name": "org_name"
-            },
-            {
-              "type": "string",
-              "name": "programId"
+              "name": "solutionId"
             },
             {
               "type": "string",
@@ -75,11 +38,15 @@
             },
             {
               "type": "string",
-              "name": "survey_externalId"
+              "name": "survey_submission_id"
             },
             {
               "type": "string",
-              "name": "solution_id"
+              "name": "surveyId"
+            },
+            {
+              "type": "string",
+              "name": "userProfile"
             }
           ]
         }
