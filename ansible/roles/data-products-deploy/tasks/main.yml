@@ -275,6 +275,13 @@
     - spark1-jobs
     - default-jobs
 
+- name: Create daily cron jobs for survey-question-report
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh survey-question-report"
+  with_dict: "{{ run_survey-question-report_job }}"
+  tags:
+    - spark1-jobs
+    - default-jobs
+
 - name: Create monthly cron jobs for hall-of-fame
   cron: name="{{env}}-{{ item.key }}" day={{ item.value.day }} minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh hall-of-fame"
   with_dict: "{{ run_hall_of_fame_job }}"
@@ -411,7 +418,7 @@
   tags:
     - cronjobs
     # - default-jobs
-    - spark-jobs 
+    - spark-jobs
 
 - name: Copy sourcing-summary ingestion spec
   copy: src="sourcing-ingestion-spec.json" dest={{ analytics.home }}/scripts/ mode=755 owner={{ analytics_user }} group={{ analytics_group }}
