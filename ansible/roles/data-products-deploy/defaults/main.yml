@@ -58,7 +58,12 @@ dashboards_cassandra_karma_points_table: "user_karma_points"
 dashboards_cassandra_karma_points_lookup_table: "user_karma_points_credit_lookup"
 dashboards_cassandra_mdo_karma_points_table: "mdo_karma_points"
 dashboards_cassandra_user_feed_table: "notification_feed"
-dashboards_cassandra_user_feed_keyspace: "sunbird_notifications"
+dashboards_cassandra_learner_leaderboard_lookup_table: ""
+dashboards_cassandra_learner_leaderboard_table: ""
+zip_reports_prefix_directory_path: "/mount/data/analytics/reports/standalone-reports"
+zip_reports_destination_path: "/mount/data/analytics/reports/standalone-reports/merged"
+zip_reports_password: "123456"
+directories_to_select: "blended-program-report-mdo,cbp-report-mdo-summary,course-report,cba-report,cbp-report-mdo-enrolment,user-report,user-enrollment-report,kcm-report"
 
 app_postgres_host: "{{groups['app-postgres'][0]}}:5432"
 dw_postgres_host: "{{groups['dw-postgres'][0]}}:5432"
@@ -225,19 +230,27 @@ run_weekly_claps_job:
   weekly-claps:
     hour: 07
     minute: 15
-run_comms_console_job:
-  comms-console:
+run_in_app_review_feed_job:
+  in-app-review-feed:
     hour: 07
     minute: 30
 run_survey_nps_job:
   survey-nps:
     hour: 08
     minute: 00
-run_hall_of_fame_job:
-  hall-of-fame:
-    day: 01
+run_zip_upload_job:
+  zip-upload:
     hour: 08
     minute: 30
+run_comms_console_job:
+  comms-console:
+    hour: 09
+    minute: 30
+run_learner_leaderboard_job:
+  learner-leaderboard:
+    day: 01
+    hour: 09
+    minute: 45
 
 run_monitor_job:
   monitor-job-summ:
