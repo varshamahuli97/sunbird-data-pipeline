@@ -282,6 +282,13 @@
     - spark1-jobs
     - default-jobs
 
+- name: Create daily cron jobs for survey-question-report
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh survey-question-report"
+  with_dict: "{{ run_survey_question_report_job }}"
+  tags:
+    - spark1-jobs
+    - default-jobs
+
 - name: Create daily cron jobs for in-app-review-feed
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh in-app-review-feed"
   with_dict: "{{ run_in_app_review_feed_job }}"
@@ -425,7 +432,7 @@
   tags:
     - cronjobs
     # - default-jobs
-    - spark-jobs 
+    - spark-jobs
 
 - name: Copy sourcing-summary ingestion spec
   copy: src="sourcing-ingestion-spec.json" dest={{ analytics.home }}/scripts/ mode=755 owner={{ analytics_user }} group={{ analytics_group }}

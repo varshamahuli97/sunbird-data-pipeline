@@ -37,6 +37,74 @@
                "name": "criteriaName"
              },
              {
+              "type": "string",
+              "name": "evidence_count"
+             },
+             {
+              "type": "string",
+              "name": "evidences"
+             },
+             {
+              "type": "string",
+              "name": "isAPrivateProgram"
+             },
+             {
+              "type": "string",
+              "name": "organisation_id"
+             },
+             {
+              "type": "string",
+              "name": "organisation_name"
+             },
+             {
+              "type": "string",
+              "name": "questionAnswer"
+             },
+             {
+              "type": "string",
+              "name": "questionECM"
+             },
+             {
+              "type": "string",
+              "name": "questionExternalId"
+             },
+             {
+              "type": "string",
+              "name": "questionId"
+             },
+             {
+              "type": "string",
+              "name": "questionName"
+             },
+             {
+              "type": "string",
+              "name": "questionResponseLabel"
+             },
+             {
+              "type": "string",
+              "name": "questionResponseLabel_number"
+             },
+             {
+              "type": "string",
+              "name": "questionResponseType"
+             },
+             {
+              "type": "string",
+              "name": "remarks"
+             },
+             {
+              "type": "string",
+              "name": "solutionExternalId"
+             },
+             {
+              "type": "string",
+              "name": "solutionId"
+             },
+             {
+              "type": "string",
+              "name": "solutionName"
+             },
+             {
                "type": "string",
                "name": "surveyId"
              },
@@ -49,244 +117,16 @@
                "name": "surveySubmissionId"
              },
              {
-               "type": "string",
-               "name": "questionAnswer"
-             },
-             {
-               "type": "string",
-               "name": "questionECM"
-             },
-             {
-               "type": "string",
-               "name": "questionExternalId"
-             },
-             {
-               "type": "string",
-               "name": "questionId"
-             },
-             {
-               "type": "string",
-               "name": "questionName"
-             },
-             {
-               "type": "string",
-               "name": "questionResponseLabel"
-             },
-             {
-               "type": "string",
-               "name": "questionResponseType"
-             },
-             {
-               "type": "string",
-               "name": "solutionExternalId"
-             },
-             {
-               "type": "string",
-               "name": "solutionId"
-             },
-             {
               "type": "string",
-              "name": "evidences"
-             },
-             {
-               "type": "string",
-               "name": "solutionName"
+              "name": "total_evidences"
              },
              {
                "type": "string",
                "name": "updatedAt"
              },
              {
-               "type": "string",
-               "name": "instanceParentId"
-             },
-             {
-               "type": "string",
-               "name": "instanceId"
-             },
-             {
-               "type": "string",
-               "name": "instanceParentResponsetype"
-             },
-             {
-               "type": "string",
-               "name": "instanceParentQuestion"
-             },
-             {
-               "type": "string",
-               "name": "questionSequenceByEcm"
-             },
-             {
-               "type": "string",
-               "name": "maxScore"
-             },
-             {
-               "type": "string",
-               "name": "minScore"
-             },
-             {
-               "type": "string",
-               "name": "percentageScore"
-             },
-             {
-               "type": "string",
-               "name": "pointsBasedScoreInParent"
-             },
-             {
-               "type": "string",
-               "name": "totalScore"
-             },
-             {
-               "type": "string",
-               "name": "scoreAchieved"
-             },
-             {
-               "type": "string",
-               "name": "totalpercentage"
-             },
-             {
-               "type": "string",
-               "name": "instanceParentExternalId"
-             },
-             {
-               "type": "string",
-               "name": "instanceParentEcmSequence"
-             },
-             {
-               "type": "string",
-               "name": "remarks"
-             },
-             {
-               "type": "string",
-               "name": "total_evidences"
-             },
-             {
-               "type": "string",
-               "name": "evidence_count"
-             },
-             {
-               "type": "string",
-               "name": "instanceParentCriteriaId"
-             },
-             {
-               "type": "string",
-               "name": "instanceParentCriteriaExternalId"
-             },
-             {
-               "type": "string",
-               "name": "instanceParentCriteriaName"
-             },
-             {
-               "type": "string",
-               "name": "isAPrivateProgram"
-             },
-             {
-               "type": "string",
-               "name": "programId"
-             },
-             {
-               "type": "string",
-               "name": "programName"
-             },
-             {
-               "type": "string",
-               "name": "programExternalId"
-             },
-             {
-               "name": "questionResponseLabel_number",
-               "type": "float"
-             },
-             {
-               "type": "string",
-               "name": "channel"
-             },
-             {
-               "type": "string",
-               "name": "parent_channel"
-             },
-             {
-               "type": "string",
-               "name": "appName"
-             },
-             {
-               "type": "string",
-               "name": "organisation_name"
-             },
-             {
-               "type": "string",
-               "name": "user_subtype"
-             },
-             {
-               "type": "string",
-               "name": "user_type"
-             },
-             {
-               "type": "string",
-               "name": "board_name"
-             },
-             {
-               "type": "string",
-               "name": "district_code"
-             },
-             {
-               "type": "string",
-               "name": "district_name"
-             },
-             {
-               "type": "string",
-               "name": "district_externalId"
-             },
-             {
-               "type": "string",
-               "name": "block_code"
-             },
-             {
-               "type": "string",
-               "name": "block_name"
-             },
-             {
-               "type": "string",
-               "name": "block_externalId"
-             },
-             {
-               "type": "string",
-               "name": "school_code"
-             },
-             {
-               "type": "string",
-               "name": "school_name"
-             },
-             {
-               "type": "string",
-               "name": "school_externalId"
-             },
-             {
-               "type": "string",
-               "name": "cluster_code"
-             },
-             {
-               "type": "string",
-               "name": "cluster_name"
-             },
-             {
-               "type": "string",
-               "name": "cluster_externalId"
-             },
-             {
-               "type": "string",
-               "name": "state_code"
-             },
-             {
-               "type": "string",
-               "name": "state_name"
-             },
-             {
-               "type": "string",
-               "name": "state_externalId"
-             },
-             {
-               "type": "string",
-               "name": "organisation_id"
+              "type": "string",
+              "name": "userProfile"
              }
            ]
          }
