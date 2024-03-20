@@ -141,6 +141,8 @@ cassandra_hierarchy_store_keyspace: "{{ env_name}}_hierarchy_store"
 spark_version: 2.4.4
 model_version: "2.0"
 heap_memory: "-Xmx5120m"
+# config to enable/disable report sync
+report_sync_enable: true
 
 spark:
   home: "{{ analytics.home }}/spark-{{ spark_version }}-bin-hadoop2.7"
@@ -449,6 +451,5 @@ uci_pdata_id: "{{uci_env|default('dev')}}.uci.{{sunbird_instance|default('igot')
 
 # Exhaust sanity check vars
 cassandra_migrator_job_name: "Cassandra Migrator"
-# config to enable/disable report sync
-report_sync_enable: "{{ operational_report_sync_enable | default(true) }}"
+
 
