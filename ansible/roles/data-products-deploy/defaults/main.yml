@@ -436,4 +436,6 @@ uci_pdata_id: "{{uci_env|default('dev')}}.uci.{{sunbird_instance|default('igot')
 
 # Exhaust sanity check vars
 cassandra_migrator_job_name: "Cassandra Migrator"
+# config to enable/disable report sync
+reportSyncEnable: "{{ report_sync_enable | default(true) }}"
 
