@@ -243,6 +243,10 @@ run_zip_upload_job:
   zip-upload:
     hour: 10
     minute: 30
+run_in_app_review_feed_job:
+  in-app-review-feed:
+    hour: 11
+    minute: 00
 run_learner_leaderboard_job:
   learner-leaderboard:
     day: 01
