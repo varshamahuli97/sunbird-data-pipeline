@@ -245,7 +245,7 @@ run_hall_of_fame_job:
     day: 01
     hour: 10
     minute: 30
-run_survey-question-report_job:
+run_survey_question_report_job:
   survey-question-report:
     hour: 11
     minute: 00
