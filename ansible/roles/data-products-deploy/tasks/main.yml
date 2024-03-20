@@ -1,3 +1,4 @@
+
 ## Data products deployment ##
 - name: Ensure azure blob storage container exists
   command: az storage container create --name {{ bucket }}
@@ -15,7 +16,7 @@
   async: 3600
   poll: 10
   tags:
-    - dataproducts-spark-cluster 
+    - dataproducts-spark-cluster
 
 - name: Unarchive Ed Data Products
   become: yes
@@ -28,7 +29,7 @@
   async: 3600
   poll: 10
   tags:
-    - ed-dataproducts-spark-cluster      
+    - ed-dataproducts-spark-cluster
 
 - name: Copy Framework Library
   copy: src={{ analytics_core_artifact }} dest={{ analytics.home }}/models-{{ model_version }}
@@ -45,14 +46,14 @@
 - name: Copy Scruid Library
   copy: src={{ scruid_artifact }} dest={{ analytics.home }}/models-{{ model_version }}
   tags:
-    - framework  
+    - framework
 
 - name: Copy Scruid Library to azure blob
   command: az storage blob upload --overwrite -c {{ bucket }} --name models-{{ model_version }}/{{ scruid_artifact }} -f {{ analytics.home }}/models-{{ model_version }}/{{ scruid_artifact }}
   async: 3600
   poll: 10
   tags:
-    - framework-spark-cluster  
+    - framework-spark-cluster
 
 - name: Copy Job Manager
   copy: src={{ analytics_job_manager_artifact }} dest={{ analytics.home }}/models-{{ model_version }}
@@ -94,14 +95,14 @@
     regexp: '^log.appender.kafka.enable="false"'
     line: 'log.appender.kafka.enable="true"'
   tags:
-    - framework-spark-cluster       
+    - framework-spark-cluster
 
 - name: Copy configuration file to azure blob
   command: az storage blob upload --overwrite -c {{ bucket }} -f {{ analytics.home }}/models-{{ model_version }}/application.conf --name models-{{ model_version }}/application.conf
   async: 3600
   poll: 10
   tags:
-    - framework-spark-cluster    
+    - framework-spark-cluster
 
 - name: Copy log4j2 xml file
   template: src=log4j2.xml.j2 dest={{ analytics.home }}/models-{{ model_version }}/log4j2.xml mode=755 owner={{ analytics_user }} group={{ analytics_group }}
@@ -163,12 +164,12 @@
     - spark1-jobs
     - clean-cronjobs
 
-- name: Create daily cron jobs for data-exhaust
-  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh data-exhaust"
-  with_dict: "{{ run_data_exhaust_job }}"
-  tags:
-    - spark1-jobs
-    - default-jobs
+#- name: Create daily cron jobs for data-exhaust
+#  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh data-exhaust"
+#  with_dict: "{{ run_data_exhaust_job }}"
+#  tags:
+#    - spark1-jobs
+#    - default-jobs
 
 - name: Create daily cron jobs for dashboard-sync
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh dashboard-sync"
@@ -275,34 +276,6 @@
     - spark1-jobs
     - default-jobs
 
-- name: Create daily cron jobs for zip-upload
-  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh zip-upload"
-  with_dict: "{{ run_zip_upload_job }}"
-  tags:
-    - spark1-jobs
-    - default-jobs
-
-- name: Create daily cron jobs for survey-question-report
-  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh survey-question-report"
-  with_dict: "{{ run_survey_question_report_job }}"
-  tags:
-    - spark1-jobs
-    - default-jobs
-
-- name: Create daily cron jobs for in-app-review-feed
-  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh in-app-review-feed"
-  with_dict: "{{ run_in_app_review_feed_job }}"
-  tags:
-    - spark1-jobs
-    - default-jobs
-
-- name: Create monthly cron jobs for learner-leaderboard
-  cron: name="{{env}}-{{ item.key }}" day={{ item.value.day }} minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh learner-leaderboard"
-  with_dict: "{{ run_learner_leaderboard_job }}"
-  tags:
-    - spark1-jobs
-    - default-jobs
-
 - name: Create daily cron jobs for monitor job
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh monitor-job-summ"
   with_dict: "{{ run_monitor_job }}"
@@ -337,7 +310,7 @@
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh admin-user-reports"
   with_dict: "{{ run_admin_user_reports_job }}"
   tags:
-    - cronjobs 
+    - cronjobs
     # - default-jobs
     - spark-jobs
 - name: Create admin-geo-reports cron job
@@ -346,7 +319,7 @@
   tags:
     - cronjobs
     # - default-jobs
-    - spark-jobs 
+    - spark-jobs
 
 - name: Create assessment-aggregator reports cron job
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="/bin/bash {{ analytics.home }}/adhoc-scripts/run_exporter.sh > /home/analytics/output.log"
@@ -354,7 +327,7 @@
   tags:
     - cronjobs
     # - default-jobs
-    - spark-jobs  
+    - spark-jobs
 
 - name: Create etb metrics cron job
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }} weekday={{ item.value.weekday }}  job="{{ analytics.home }}/scripts/run-job.sh etb-metrics"
@@ -387,7 +360,7 @@
     - cronjobs
     # - default-jobs
     - spark-jobs
-    
+
 
 - name: Create userinfo-exhaust cron job
   cron: name="{{ env }}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }} job="{{ analytics.home }}/scripts/run-job.sh userinfo-exhaust"
@@ -464,7 +437,7 @@
 
 - name: Copy model-config.sh file
   template: src=model-config.j2 dest={{ analytics_cluster.home }}/model-config.sh
-  delegate_to: localhost  
+  delegate_to: localhost
   tags:
     - replay-job
     - run-job
@@ -475,7 +448,7 @@
   async: "{{ (pause_min * 60) }}"
   poll: 0
   tags:
-    - replay-job 
+    - replay-job
 
 - name: Run Job
   shell: "nohup {{ analytics_cluster.home }}/submit-script.sh --job {{ job_id }} --mode {{ mode }} --partitions {{ partitions }} --parallelisation {{ parallelisation }} --sparkMaster {{ sparkMaster }} --selectedPartitions {{ selected_partitions }} --batch_id {{ batch_id }} &"
@@ -499,11 +472,11 @@
       - pandas
       - IPython
   tags:
-    - parallel-jobs-submit  
+    - parallel-jobs-submit
 
 - name: Copy python script file
   template: src=update-job-requests.py.j2 dest={{ analytics_cluster.home }}/update-job-requests.py
-  delegate_to: localhost  
+  delegate_to: localhost
   tags:
     - parallel-jobs-submit
 
@@ -524,7 +497,7 @@
 - debug:
     var: jobsCountStr
   tags:
-    - parallel-jobs-submit  
+    - parallel-jobs-submit
 
 - name: Get stdout with parallelisation value from python script to tmp file
   shell: echo "{{ jobsCountStr.stdout }}" > /tmp/test.txt
@@ -546,19 +519,19 @@
 - set_fact:
     jobs_count: "{{ jobsCountOut.stdout }}"
   tags:
-    - parallel-jobs-submit  
+    - parallel-jobs-submit
 
 - name: Submit parallel exhaust jobs
   shell: "nohup {{ analytics_cluster.home }}/submit-script.sh --job {{ jobs }} --mode parallel-jobs --parallelisation {{ jobs_count }} &"
   poll: 30
   tags:
-    - parallel-jobs-submit 
+    - parallel-jobs-submit
   register: submitOutput
 
 - debug:
-    var: submitOutput 
+    var: submitOutput
   tags:
-    - parallel-jobs-submit      
+    - parallel-jobs-submit
 
 # Execute Exhaust job sanity check script tasks
 
@@ -567,7 +540,7 @@
     name:
       - requests
   tags:
-    - run-sanity    
+    - run-sanity
 
 - name: Run sanity check python script
   shell: python {{ analytics.home }}/scripts/exhaust_sanity_check.py

@@ -59,12 +59,6 @@ dashboards_cassandra_karma_points_lookup_table: "user_karma_points_credit_lookup
 dashboards_cassandra_mdo_karma_points_table: "mdo_karma_points"
 dashboards_cassandra_user_feed_table: "notification_feed"
 dashboards_cassandra_user_feed_keyspace: "sunbird_notifications"
-dashboards_cassandra_learner_leaderboard_lookup_table: "learner_leaderboard_lookup"
-dashboards_cassandra_learner_leaderboard_table: "learner_leaderboard"
-zip_reports_prefix_directory_path: "/mount/data/analytics/reports/standalone-reports"
-zip_reports_destination_path: "/mount/data/analytics/reports/standalone-reports/merged"
-zip_reports_password: "123456"
-directories_to_select: "blended-program-report-mdo,cbp-report-mdo-summary,course-report,cba-report,cbp-report-mdo-enrolment,user-report,user-enrollment-report,kcm-report"
 
 app_postgres_host: "{{groups['app-postgres'][0]}}:5432"
 dw_postgres_host: "{{groups['dw-postgres'][0]}}:5432"
@@ -73,8 +67,6 @@ dw_postgres_credential: "Password@12345678"
 mongo_node_bb_host: "{{groups['mongodb-nodebb'][0]}}"
 dashboards_mongo_discussions_db: "nodebb"
 dashboards_mongo_discussions_db_collection: "objects"
-dashboards_mongo_survey_observation_db: "ml-survey"
-dashboards_mongo_survey_collection: "solutions"
 dashboards_platform_rating_survey_id: "{{ platform_rating_survey_id }}"
 
 dashboards_frac_backend_host: "frac-dictionary-backend.igot-{{ env }}.in"
@@ -101,11 +93,6 @@ acbp_report_path: "standalone-reports/cbp-report"
 acbp_mdo_enrolment_report_path: "standalone-reports/cbp-report-mdo-enrolment"
 acbp_mdo_summary_report_path: "standalone-reports/cbp-report-mdo-summary"
 kcm_report_path: "standalone-reports/kcm-report"
-ml_report_path: "standalone-reports/ml-report"
-
-report_solution_ids: ""
-report_grace_period: "2"
-report_base_url_for_evidences: "www.https://igotkarmayogi.gov.in/"
 
 comms_console_prarambh_email_suffix: ".kb@karmayogi.in"
 comms_console_num_days_to_consider: "15"
@@ -141,8 +128,6 @@ cassandra_hierarchy_store_keyspace: "{{ env_name}}_hierarchy_store"
 spark_version: 2.4.4
 model_version: "2.0"
 heap_memory: "-Xmx5120m"
-# config to enable/disable report sync
-report_sync_enable: true
 
 spark:
   home: "{{ analytics.home }}/spark-{{ spark_version }}-bin-hadoop2.7"
@@ -187,7 +172,7 @@ course_batch_status_updater_job_schedule: 60
 run_data_exhaust_job:
   data-exhaust:
     hour: 00
-    minute: 05
+    minute: 10
 run_dashboard_sync_job:
   dashboard-sync:
     hour: 00
@@ -195,76 +180,60 @@ run_dashboard_sync_job:
 run_assessment_metrics_job:
   assessment-metrics:
     hour: 01
-    minute: 00
+    minute: 30
 run_course_report_job:
   course-report:
-    hour: 01
-    minute: 15
-run_acbp_report_job:
-  acbp-report:
-    hour: 01
-    minute: 30
-run_user_report_job:
-  user-report:
     hour: 02
     minute: 00
 run_user_enrolment_report_job:
   user-enrolment-report:
     hour: 02
-    minute: 45
-run_cba_report_job:
-  course-based-assessment-report:
-    hour: 04
-    minute: 00
-run_blended_program_report_job:
-  blended-program-report:
-    hour: 04
     minute: 30
-run_kcm_report_job:
-  kcm-report:
-    hour: 05
+run_user_report_job:
+  user-report:
+    hour: 04
     minute: 00
 run_wfs_job:
   wfs:
-    hour: 05
+    hour: 5
     minute: 30
-run_data_warehouse_job:
-  data-warehouse-sync:
+run_cba_report_job:
+  course-based-assessment-report:
     hour: 06
     minute: 00
+run_blended_program_report_job:
+  blended-program-report:
+    hour: 06
+    minute: 30
 run_summary_redis_sync_job:
   summary-redis-sync:
-    hour: 07
+    hour: 7
     minute: 00
-run_weekly_claps_job:
-  weekly-claps:
-    hour: 07
-    minute: 15
-run_in_app_review_feed_job:
-  in-app-review-feed:
+run_data_warehouse_job:
+  data-warehouse-sync:
     hour: 07
     minute: 30
-run_survey_nps_job:
-  survey-nps:
+run_weekly_claps_job:
+  weekly-claps:
     hour: 08
     minute: 00
-run_zip_upload_job:
-  zip-upload:
+run_acbp_report_job:
+  acbp-report:
     hour: 08
     minute: 30
 run_comms_console_job:
   comms-console:
     hour: 09
-    minute: 30
-run_learner_leaderboard_job:
-  learner-leaderboard:
-    day: 01
-    hour: 09
-    minute: 45
-run_survey_question_report_job:
-  survey-question-report:
-    hour: 11
     minute: 00
+run_survey_nps_job:
+  survey-nps:
+    hour: 09
+    minute: 30
+run_kcm_report_job:
+  kcm-report:
+    hour: 10
+    minute: 00
+
 run_monitor_job:
   monitor-job-summ:
     hour: 03
@@ -275,14 +244,14 @@ run_admin_user_reports_job:
     minute: 30
   admin-user-reports-2PMIST:
     hour: 8
-    minute: 30  
+    minute: 30
 run_admin_geo_reports_job:
   admin-geo-reports-4AMIST:
     hour: 22
     minute: 30
   admin-geo-reports-3PMIST:
     hour: 9
-    minute: 30     
+    minute: 30
 
 run_assessment_aggregator_report_job:
   assessment-aggregator-report:
@@ -341,13 +310,13 @@ run_cassandra_migration:
 run_uci_private_exhaust_job:
   uci-private-exhaust:
     hour: 03
-    minute: 00 
+    minute: 00
 
 run_uci_response_exhaust_job:
   uci-response-exhaust:
     hour: 02
     minute: 00
-    
+
 
 service:
   search:
@@ -394,7 +363,7 @@ spark_cluster:
 analytics_cluster:
   home: "/tmp"
 
-analytics_ed_dataporducts_jar_artifact: "data-products-{{ analytics_ed_dataporducts_artifact_ver }}.jar"  
+analytics_ed_dataporducts_jar_artifact: "data-products-{{ analytics_ed_dataporducts_artifact_ver }}.jar"
 
 spark_enable_dynamic_allocation: false
 # Spark Cassandra config-vars
@@ -407,7 +376,7 @@ druid_report_postgres_db_name: druid
 druid_report_postgres_db_username: druid
 
 
-#Override this variable in production and point to druid rollup ingestion cluster 
+#Override this variable in production and point to druid rollup ingestion cluster
 # Example: "http://$rollup_cluster_ip:8090"
 druid_rollup_cluster_ingestion_task_url: "http://{{groups['raw-overlord'][0]}}:8081"
 
@@ -447,9 +416,7 @@ uci_postgres:
 uci_encryption_secret_key: "{{uci_encryption_key_base64}}"
 uci_pdata_id: "{{uci_env|default('dev')}}.uci.{{sunbird_instance|default('igot')}}"
 
-# End Of UCI Related Variables 
+# End Of UCI Related Variables
 
 # Exhaust sanity check vars
 cassandra_migrator_job_name: "Cassandra Migrator"
-
-
