@@ -21,9 +21,9 @@ config() {
 	baseScriptPath="{{ spark_output_temp_dir }}"
 	reportPostContainer="{{ reports_container }}"
 	druidIngestionURL="{{ druid_rollup_cluster_ingestion_task_url }}/druid/indexer/v1/task"
-    assessTopic="{{ assess_topic }}"
-    reportMDOIDs="{{ report_mdo_ids }}"
-    reportSolutionIDs= "{{ report_solution_ids }}"
+  assessTopic="{{ assess_topic }}"
+  reportMDOIDs="{{ report_mdo_ids }}"
+  reportSolutionIDs= "{{ report_solution_ids }}"
 
 
 	if [ -z "$2" ]; then endDate=$(date --date yesterday "+%Y-%m-%d"); else endDate=$2; fi
