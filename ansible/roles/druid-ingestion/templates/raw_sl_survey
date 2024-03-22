@@ -81,7 +81,7 @@
               "name": "questionResponseLabel"
              },
              {
-              "type": "string",
+              "type": "float",
               "name": "questionResponseLabel_number"
              },
              {
