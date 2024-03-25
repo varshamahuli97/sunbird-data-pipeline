@@ -38,6 +38,10 @@
             },
             {
               "type": "string",
+              "name": "solutionName"
+            },
+            {
+              "type": "string",
               "name": "surveyName"
             },
             {
