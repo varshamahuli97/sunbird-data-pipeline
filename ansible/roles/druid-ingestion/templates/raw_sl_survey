@@ -38,7 +38,7 @@
              },
              {
               "type": "string",
-              "name": "evidence_count"
+              "name": "evidenceCount"
              },
              {
               "type": "string",
@@ -50,11 +50,11 @@
              },
              {
               "type": "string",
-              "name": "organisation_id"
+              "name": "organisationId"
              },
              {
               "type": "string",
-              "name": "organisation_name"
+              "name": "organisationName"
              },
              {
               "type": "string",
@@ -118,7 +118,7 @@
              },
              {
               "type": "string",
-              "name": "total_evidences"
+              "name": "totalEvidences"
              },
              {
                "type": "string",
