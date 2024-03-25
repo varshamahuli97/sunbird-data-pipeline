@@ -26,7 +26,7 @@
             },
             {
               "type": "string",
-              "name": "organisation_name"
+              "name": "organisationName"
             },
             {
               "type": "string",
@@ -38,11 +38,11 @@
             },
             {
               "type": "string",
-              "name": "survey_name"
+              "name": "surveyName"
             },
             {
               "type": "string",
-              "name": "survey_submission_id"
+              "name": "surveySubmissionId"
             },
             {
               "type": "string",
