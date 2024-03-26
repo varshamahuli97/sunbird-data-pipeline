@@ -130,15 +130,15 @@
             },
             {
               "type": "long",
-              "name": "total_evidences"
+              "name": "totalEvidences"
             },
             {
               "type": "string",
-              "name": "evidence_count"
+              "name": "evidenceCount"
             },
             {
               "type": "string",
-              "name": "role_title"
+              "name": "roleTitle"
             },
             {
               "type": "string",
@@ -165,7 +165,7 @@
               "name": "programExternalId"
             },
             {
-              "name": "questionResponseLabel_number",
+              "name": "questionResponseLabelNumber",
               "type": "float"
             },
             {
@@ -182,7 +182,7 @@
             },
             {
               "type": "string",
-              "name": "parent_channel"
+              "name": "parentChannel"
             },
             {
               "type": "string",
@@ -214,19 +214,19 @@
             },
             {
               "type": "string",
-              "name": "organisation_name"
+              "name": "organisationName"
             },
             {
               "type": "string",
-              "name": "organisation_id"
+              "name": "organisationId"
             },
             {
               "type": "string",
-              "name": "user_type"
+              "name": "userType"
             },
             {
               "type": "string",
-              "name": "user_boardName"
+              "name": "userBoardName"
             },
             {
               "type": "string",
@@ -252,7 +252,7 @@
       {
         "type": "floatSum",
         "name": "question_response_number",
-        "fieldName": "questionResponseLabel_number"
+        "fieldName": "questionResponseLabelNumber"
       }
     ],
     "granularitySpec": {

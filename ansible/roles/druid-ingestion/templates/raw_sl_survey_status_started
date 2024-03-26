@@ -7,14 +7,14 @@
       "parseSpec": {
         "format": "json",
         "timestampSpec": {
-          "column": "started_at",
+          "column": "startedAt",
           "format": "auto"
         },
         "dimensionsSpec": {
           "dimensions": [
             {
               "type": "string",
-              "name": "started_at"
+              "name": "startedAt"
             },
             {
               "type": "string",

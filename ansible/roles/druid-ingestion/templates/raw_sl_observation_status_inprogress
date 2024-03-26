@@ -7,14 +7,14 @@
       "parseSpec": {
         "format": "json",
         "timestampSpec": {
-          "column": "inprogress_at",
+          "column": "inprogressAt",
           "format": "auto"
         },
         "dimensionsSpec": {
           "dimensions": [
             {
               "type": "string",
-              "name": "inprogress_at"
+              "name": "inprogressAt"
             },
             {
               "type": "string",
