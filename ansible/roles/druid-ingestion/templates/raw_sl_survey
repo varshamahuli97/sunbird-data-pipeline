@@ -135,7 +135,7 @@
      "metricsSpec": [
        {
          "type": "floatSum",
-         "name": "question_response_number",
+         "name": "questionResponseNumber",
          "fieldName": "questionResponseLabelNumber"
        }
      ],
