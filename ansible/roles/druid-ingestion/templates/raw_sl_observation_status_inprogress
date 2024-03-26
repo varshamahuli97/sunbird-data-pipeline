@@ -1,24 +1,24 @@
 {
   "type": "kafka",
   "dataSchema": {
-    "dataSource": "sl-survey-status-started",
+    "dataSource": "sl-observation-status-inprogress",
     "parser": {
       "type": "string",
       "parseSpec": {
         "format": "json",
         "timestampSpec": {
-          "column": "startedAt",
+          "column": "inprogressAt",
           "format": "auto"
         },
         "dimensionsSpec": {
           "dimensions": [
             {
               "type": "string",
-              "name": "startedAt"
+              "name": "inprogressAt"
             },
             {
               "type": "string",
-              "name": "surveySubmissionId"
+              "name": "observationSubmissionId"
             }
           ]
         }
@@ -37,7 +37,7 @@
     "reportParseExceptions": false
   },
   "ioConfig": {
-    "topic": "{{env}}.ml.survey.status.started",
+    "topic": "{{env}}.ml.observation.status.inprogress",
     "consumerProperties": {
       "bootstrap.servers": "{{kafka_brokers}}"
     },

@@ -7,18 +7,18 @@
       "parseSpec": {
         "format": "json",
         "timestampSpec": {
-          "column": "completed_at",
+          "column": "completedAt",
           "format": "auto"
         },
         "dimensionsSpec": {
           "dimensions": [
             {
               "type": "string",
-              "name": "completed_at"
+              "name": "completedAt"
             },
             {
               "type": "string",
-              "name": "survey_submission_id"
+              "name": "surveySubmissionId"
             }
           ]
         }

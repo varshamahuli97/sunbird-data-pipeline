@@ -1,7 +1,7 @@
 {
   "type": "kafka",
   "dataSchema": {
-    "dataSource": "sl-survey-status-started",
+    "dataSource": "sl-observation-status-started",
     "parser": {
       "type": "string",
       "parseSpec": {
@@ -18,7 +18,7 @@
             },
             {
               "type": "string",
-              "name": "surveySubmissionId"
+              "name": "observationSubmissionId"
             }
           ]
         }
@@ -37,7 +37,7 @@
     "reportParseExceptions": false
   },
   "ioConfig": {
-    "topic": "{{env}}.ml.survey.status.started",
+    "topic": "{{env}}.ml.observation.status.started",
     "consumerProperties": {
       "bootstrap.servers": "{{kafka_brokers}}"
     },

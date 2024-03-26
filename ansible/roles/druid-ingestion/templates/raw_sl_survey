@@ -38,7 +38,7 @@
              },
              {
               "type": "string",
-              "name": "evidence_count"
+              "name": "evidenceCount"
              },
              {
               "type": "string",
@@ -50,11 +50,11 @@
              },
              {
               "type": "string",
-              "name": "organisation_id"
+              "name": "organisationId"
              },
              {
               "type": "string",
-              "name": "organisation_name"
+              "name": "organisationName"
              },
              {
               "type": "string",
@@ -82,7 +82,7 @@
              },
              {
               "type": "float",
-              "name": "questionResponseLabel_number"
+              "name": "questionResponseLabelNumber"
              },
              {
               "type": "string",
@@ -118,7 +118,7 @@
              },
              {
               "type": "string",
-              "name": "total_evidences"
+              "name": "totalEvidences"
              },
              {
                "type": "string",
@@ -135,8 +135,8 @@
      "metricsSpec": [
        {
          "type": "floatSum",
-         "name": "question_response_number",
-         "fieldName": "questionResponseLabel_number"
+         "name": "questionResponseNumber",
+         "fieldName": "questionResponseLabelNumber"
        }
      ],
      "granularitySpec": {
