@@ -18,7 +18,7 @@
             },
             {
               "type": "string",
-              "name": "survey_submission_id"
+              "name": "surveySubmissionId"
             }
           ]
         }
