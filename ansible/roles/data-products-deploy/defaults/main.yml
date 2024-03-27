@@ -132,7 +132,7 @@ report_user_enrolment_table: "report_user_enrolments"
 zip_reports_prefix_directory_path: "standalone-reports"
 zip_reports_destination_path: "standalone-reports/merged"
 zip_reports_password: "123456"
-directories_to_select: "blended-program-report-mdo,cbp-report-mdo-summary,course-report,cba-report,cbp-report-mdo-enrolment,user-report,user-enrollment-report,kcm-report"
+directories_to_select: "blended-program-report-mdo,cbp-report-mdo-summary,course-report,cba-report,cbp-report-mdo-enrolment,user-report,user-enrollment-report"
 
 analytics_job_list: '"wfs", "dashboard-sync", "assessment-metrics", "monitor-job-summ", "user-report-job", "survey-nps"'
 analytics_jobs_count: 6
