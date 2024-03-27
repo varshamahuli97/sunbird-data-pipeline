@@ -103,8 +103,8 @@ ml_report_path: "standalone-reports/ml-report"
 report_solution_ids: ""
 report_grace_period: "2"
 report_base_url_for_evidences: "www.https://igotkarmayogi.gov.in/"
-report_survey_question_report_columns_config: "{"reportColumns":{"createdBy":"UUID","organisation_name":"Organisation Name","organisation_id":"Organisation Id","surveyName":"Survey Name","surveyId":"Survey Id","surveySubmissionId":"Survey Submission Id","questionExternalId":"Question External Id","questionName":"Question","questionResponseLabel":"Answer","evidences":"Evidences","remarks":"Remarks"},"userProfileColumns":{"maskedPhone":"Masked Phone","firstName":"First Name","profileDetails-academics-nameOfQualification":"Academics Qualification","profileDetails-academics-type":"Academics Type","last_login":"Last Login"},"sortingColumns":"UUID,First Name,Masked Phone,Organisation Name,Organisation Id,Survey Name,Survey Id,Survey Submission Id,Question External Id,Question,Answer,Evidences,Remarks,Academics Qualification,Academics Type,Last Login"}"
-report_survey_status_report_columns_config: "{"reportColumns":{"createdBy":"UUID","organisation_name":"Organisation Name","survey_name":"Survey Name","surveyId":"Survey Id","survey_submission_id":"Survey Submission Id"},"userProfileColumns":{"firstName":"First Name","lastName":"Last Name","identifier":"Identifier","last_login":"Last Login"},"sortingColumns":"UUID,First Name,Last Name,Identifier,Last Login,Organisation Name,Survey Name,Survey Id,Survey Submission Id, Status of Submission, Submission Date"}"
+report_survey_question_report_columns_config: '{"reportColumns":{"createdBy":"UUID","organisation_name":"Organisation Name","organisation_id":"Organisation Id","surveyName":"Survey Name","surveyId":"Survey Id","surveySubmissionId":"Survey Submission Id","questionExternalId":"Question External Id","questionName":"Question","questionResponseLabel":"Answer","evidences":"Evidences","remarks":"Remarks"},"userProfileColumns":{"maskedPhone":"Masked Phone","firstName":"First Name","profileDetails-academics-nameOfQualification":"Academics Qualification","profileDetails-academics-type":"Academics Type","last_login":"Last Login"},"sortingColumns":"UUID,First Name,Masked Phone,Organisation Name,Organisation Id,Survey Name,Survey Id,Survey Submission Id,Question External Id,Question,Answer,Evidences,Remarks,Academics Qualification,Academics Type,Last Login"}'
+report_survey_status_report_columns_config: '{"reportColumns":{"createdBy":"UUID","organisation_name":"Organisation Name","survey_name":"Survey Name","surveyId":"Survey Id","survey_submission_id":"Survey Submission Id"},"userProfileColumns":{"firstName":"First Name","lastName":"Last Name","identifier":"Identifier","last_login":"Last Login"},"sortingColumns":"UUID,First Name,Last Name,Identifier,Last Login,Organisation Name,Survey Name,Survey Id,Survey Submission Id, Status of Submission, Submission Date"}'
 
 comms_console_prarambh_email_suffix: ".kb@karmayogi.in"
 comms_console_num_days_to_consider: "15"
@@ -129,10 +129,10 @@ job_request_table: "{{ env }}_job_request"
 dataset_metadata_table: "{{ env }}_dataset_metadata"
 report_user_table_keyspace: "sunbird_courses"
 report_user_enrolment_table: "report_user_enrolments"
-zip_reports_prefix_directory_path: "/mount/data/analytics/reports/standalone-reports"
-zip_reports_destination_path: "/mount/data/analytics/reports/standalone-reports/merged"
+zip_reports_prefix_directory_path: "standalone-reports"
+zip_reports_destination_path: "standalone-reports/merged"
 zip_reports_password: "123456"
-directories_to_select: "blended-program-report-mdo,cbp-report-mdo-summary,course-report,cba-report,cbp-report-mdo-enrolment,user-report,user-enrollment-report,kcm-report"
+directories_to_select: "blended-program-report-mdo,cbp-report-mdo-summary,course-report,cba-report,cbp-report-mdo-enrolment,user-report,user-enrollment-report"
 
 analytics_job_list: '"wfs", "dashboard-sync", "assessment-metrics", "monitor-job-summ", "user-report-job", "survey-nps"'
 analytics_jobs_count: 6
