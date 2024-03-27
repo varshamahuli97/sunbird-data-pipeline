@@ -980,6 +980,10 @@
             },
             {
               "type": "string",
+              "name": "edata_query"
+            },
+            {
+              "type": "string",
               "name": "edata_mode"
             },
             {
