@@ -102,7 +102,7 @@ acbp_mdo_summary_report_path: "standalone-reports/cbp-report-mdo-summary"
 kcm_report_path: "standalone-reports/kcm-report"
 ml_report_path: "standalone-reports/ml-report"
 
-report_solution_ids: "660b934ad2bc56000784fb45,660b933bd2bc56000784fae5"
+report_solution_ids: ""
 report_grace_period: "2"
 report_base_url_for_evidences: "https://portal.karmayogi.nic.in/content-store/"
 report_include_expired_solution_ids: true
