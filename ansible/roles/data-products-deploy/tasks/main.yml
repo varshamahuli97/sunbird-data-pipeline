@@ -304,6 +304,13 @@
     - spark1-jobs
     - default-jobs
 
+- name: Create daily cron jobs for observation-question-report
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh observation-question-report"
+  with_dict: "{{ run_observation_question_report_job }}"
+  tags:
+    - spark1-jobs
+    - default-jobs
+
 - name: Create monthly cron jobs for learner-leaderboard
   cron: name="{{env}}-{{ item.key }}" day={{ item.value.day }} minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh learner-leaderboard"
   with_dict: "{{ run_learner_leaderboard_job }}"
