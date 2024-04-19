@@ -61,6 +61,7 @@ dashboards_cassandra_learner_leaderboard_lookup_table: "learner_leaderboard_look
 dashboards_cassandra_learner_leaderboard_table: "learner_leaderboard"
 dashboards_cassandra_user_feed_table: "notification_feed"
 dashboards_cassandra_user_feed_keyspace: "sunbird_notifications"
+dashboards_cassandra_karma_points_summary_table: "user_karma_points_summary"
 
 app_postgres_host: "{{groups['app-postgres'][0]}}:5432"
 dw_postgres_host: "{{groups['dw-postgres'][0]}}:5432"
