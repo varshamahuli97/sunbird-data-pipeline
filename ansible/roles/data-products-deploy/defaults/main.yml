@@ -280,6 +280,10 @@ run_observation_question_report_job:
   observation-question-report:
     hour: 12
     minute: 00
+run_observation_status_report_job:
+  observation-status-report:
+    hour: 12
+    minute: 30
 run_monitor_job:
   monitor-job-summ:
     hour: 03
