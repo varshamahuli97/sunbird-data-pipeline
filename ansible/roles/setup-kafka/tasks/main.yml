@@ -1,5 +1,5 @@
 - name: create topics
-  command: /opt/kafka/bin/kafka-topics.sh --zookeeper {{ingestion_zookeeper_ip}}:2181 --create --topic {{env}}.{{item.name}} --partitions {{ item.num_of_partitions }} --replication-factor {{ item.replication_factor }}
+  command: /opt/kafka/bin/kafka-topics.sh --zookeeper {{ingestion_zookeeper_ip}}:2181 --list | grep -w "{{env}}.{{ item.name}}" || kafka-topics.sh --zookeeper {{ingestion_zookeeper_ip}}:2181 --create --topic "{{env}}.{{ item.name}}" --partitions {{ item.num_of_partitions}} --replication-factor {{ item.replication_factor}}
   with_items: "{{ingestion_kafka_topics}}"
   ignore_errors: true
   when: kafka_id=="1"
@@ -14,7 +14,7 @@
     - ingestion-kafka
 
 - name: create topics
-  command: /opt/kafka/bin/kafka-topics.sh --zookeeper {{processing_zookeeper_ip}}:2181 --create --topic {{env}}.{{item.name}} --partitions {{ item.num_of_partitions }} --replication-factor {{ item.replication_factor }}
+  command: /opt/kafka/bin/kafka-topics.sh --zookeeper {{processing_zookeeper_ip}}:2181 --list | grep -w "{{env}}.{{ item.name}}" || kafka-topics.sh --zookeeper {{processing_zookeeper_ip}}:2181 --create --topic "{{env}}.{{ item.name}}" --partitions {{ item.num_of_partitions}} --replication-factor {{ item.replication_factor}}
   with_items: "{{processing_kafka_topics}}"
   ignore_errors: true
   when: kafka_id=="1"
