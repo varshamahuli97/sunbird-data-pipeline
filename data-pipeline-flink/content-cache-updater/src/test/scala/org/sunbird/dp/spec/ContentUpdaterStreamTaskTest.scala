@@ -95,7 +95,7 @@ class ContentUpdaterStreamTaskTest extends BaseTestSpec {
         task.process()
         BaseMetricsReporter.gaugeMetrics(s"${contentConfig.jobName}.${contentConfig.skippedEventCount}").getValue() should be(1)
         BaseMetricsReporter.gaugeMetrics(s"${contentConfig.jobName}.${contentConfig.dialCodeApiHit}").getValue() should be(1)
-        BaseMetricsReporter.gaugeMetrics(s"${contentConfig.jobName}.${contentConfig.contentCacheHit}").getValue() should be(10)
+        BaseMetricsReporter.gaugeMetrics(s"${contentConfig.jobName}.${contentConfig.contentCacheHit}").getValue() should be(11)
         BaseMetricsReporter.gaugeMetrics(s"${contentConfig.jobName}.${contentConfig.dialCodeApiMissHit}").getValue() should be(1)
         BaseMetricsReporter.gaugeMetrics(s"${contentConfig.jobName}.${contentConfig.dialCodeCacheHit}").getValue() should be(2)
         BaseMetricsReporter.gaugeMetrics(s"${contentConfig.jobName}.${contentConfig.totaldialCodeCount}").getValue() should be(3)
@@ -108,6 +108,7 @@ class ContentUpdaterStreamTaskTest extends BaseTestSpec {
         assert(!contentJedis.get("do_312999792564027392148").contains("Class 12"))
         assert(contentJedis.get("do_312999792564027392148").contains("\"copyright\":\"Ekstep\""))
         assert(!contentJedis.get("do_312999792564027392148").contains("\"copyright\":\"EKSTEP\""))
+        assert(contentJedis.get("do_312999792564027392148").contains(""""keywords":["Story"]"""))
     }
 }
 
@@ -126,6 +127,8 @@ class ContentDialCodeSource extends SourceFunction[Event] {
         val event8 = JSONUtil.deserialize[util.HashMap[String, Any]](EventFixture.invalid_data)
         val event9 = JSONUtil.deserialize[util.HashMap[String, Any]](EventFixture.empty_dialcode)
         val event10 = JSONUtil.deserialize[util.HashMap[String, Any]](EventFixture.contentUpdateData3)
+        val event11 = JSONUtil.deserialize[util.HashMap[String, Any]](EventFixture.invalidNewValueEvent)
+
         ctx.collect(new Event(event1))
         ctx.collect(new Event(event2))
         ctx.collect(new Event(event3))
@@ -136,6 +139,7 @@ class ContentDialCodeSource extends SourceFunction[Event] {
         ctx.collect(new Event(event8))
         ctx.collect(new Event(event9))
         ctx.collect(new Event(event10))
+        ctx.collect(new Event(event11))
         // for invalid event check - EventSerializationSchema returns empty map for invalid JSON.
         // EX: """Type":"DialCode"}""" and """reatedOn":"2021-02-11T07:41:59.691+0000","objectType":"DialCode"}"""
         ctx.collect(new Event(new util.HashMap[String, Any]()))

@@ -2,12 +2,13 @@ package org.sunbird.dp.core.job
 
 import java.util.Properties
 import java.io.Serializable
-
 import com.typesafe.config.Config
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.api.java.typeutils.TypeExtractor
+import org.apache.flink.streaming.api.scala.{OutputTag, createTypeInformation}
 import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.sunbird.dp.core.domain.Events
 
 class BaseJobConfig(val config: Config, val jobName: String) extends Serializable {
 
@@ -21,6 +22,7 @@ class BaseJobConfig(val config: Config, val jobName: String) extends Serializabl
   val kafkaProducerMaxRequestSize: Int = config.getInt("kafka.producer.max-request-size")
   val kafkaProducerBatchSize: Int = config.getInt("kafka.producer.batch.size")
   val kafkaProducerLingerMs: Int = config.getInt("kafka.producer.linger.ms")
+  val kafkaProducerCompression: String = if (config.hasPath("kafka.producer.compression")) config.getString("kafka.producer.compression") else "snappy"
   val groupId: String = config.getString("kafka.groupId")
   val restartAttempts: Int = config.getInt("task.restart-strategy.attempts")
   val delayBetweenAttempts: Long = config.getLong("task.restart-strategy.delay")
@@ -44,7 +46,6 @@ class BaseJobConfig(val config: Config, val jobName: String) extends Serializabl
   val enableDistributedCheckpointing: Option[Boolean] = if (config.hasPath("job")) Option(config.getBoolean("job.enable.distributed.checkpointing")) else None
   val checkpointingBaseUrl: Option[String] = if (config.hasPath("job")) Option(config.getString("job.statebackend.base.url")) else None
 
-
   def kafkaConsumerProperties: Properties = {
     val properties = new Properties()
     properties.setProperty("bootstrap.servers", kafkaConsumerBrokerServers)
@@ -59,7 +60,7 @@ class BaseJobConfig(val config: Config, val jobName: String) extends Serializabl
     properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProducerBrokerServers)
     properties.put(ProducerConfig.LINGER_MS_CONFIG, new Integer(kafkaProducerLingerMs))
     properties.put(ProducerConfig.BATCH_SIZE_CONFIG, new Integer(kafkaProducerBatchSize))
-    properties.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "snappy")
+    properties.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, kafkaProducerCompression)
     properties.put(ProducerConfig.MAX_REQUEST_SIZE_CONFIG, new Integer(kafkaProducerMaxRequestSize))
     properties
   }

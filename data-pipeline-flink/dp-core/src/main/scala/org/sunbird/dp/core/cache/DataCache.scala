@@ -1,12 +1,11 @@
 package org.sunbird.dp.core.cache
 
 import java.util
-
 import com.google.gson.Gson
 import org.slf4j.LoggerFactory
 import org.sunbird.dp.core.job.BaseJobConfig
 import redis.clients.jedis.Jedis
-import redis.clients.jedis.exceptions.{JedisConnectionException, JedisException}
+import redis.clients.jedis.exceptions.JedisException
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable
@@ -131,7 +130,7 @@ class DataCache(val config: BaseJobConfig, val redisConnect: RedisConnect, val d
     try {
       set(key, value);
     } catch {
-      case ex@(_: JedisConnectionException | _: JedisException) =>
+      case ex: JedisException =>
         logger.error("Exception when update data to redis cache", ex)
         this.redisConnection.close()
         this.redisConnection = redisConnect.getConnection(dbIndex);
@@ -155,6 +154,39 @@ class DataCache(val config: BaseJobConfig, val redisConnect: RedisConnect, val d
         this.redisConnection.close()
         this.redisConnection = redisConnect.getConnection(dbIndex)
         sMembers(key)
+    }
+  }
+
+  def hdel(key: String, fieldSeq: Seq[String]): Unit = {
+    this.redisConnection.hdel(key, fieldSeq: _*)
+  }
+
+  def hdelWithRetry(key: String, fieldSeq: Seq[String]): Unit = {
+    try {
+      hdel(key, fieldSeq)
+    } catch {
+      case ex: JedisException =>
+        logger.error("Exception when deleting fields in hash", ex)
+        this.redisConnection.close()
+        this.redisConnection = redisConnect.getConnection(dbIndex)
+        hdel(key, fieldSeq)
+    }
+  }
+
+  def hIncBy(key: String, field: String, value: Long): Unit = {
+    this.redisConnection.hincrBy(key, field, value)
+  }
+
+  def hIncByWithRetry(key: String, field: String, value: Long): Unit = {
+    try {
+      hIncBy(key, field, value)
+    } catch {
+      case ex: JedisException => {
+        logger.error(s"Exception while incrementing count key=${key}, field=${field}, value=${value}", ex)
+        this.redisConnection.close()
+        this.redisConnection = redisConnect.getConnection(dbIndex)
+        hIncBy(key, field, value)
+      }
     }
   }
 

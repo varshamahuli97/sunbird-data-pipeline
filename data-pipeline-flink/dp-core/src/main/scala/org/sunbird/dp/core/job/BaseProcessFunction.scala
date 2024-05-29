@@ -3,13 +3,14 @@ package org.sunbird.dp.core.job
 import java.lang
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
-
 import org.apache.flink.api.scala.metrics.ScalaGauge
 import org.apache.flink.configuration.Configuration
 import org.apache.flink.streaming.api.functions.ProcessFunction
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction
+import org.apache.flink.streaming.api.scala.{OutputTag, createTypeInformation}
 import org.apache.flink.streaming.api.windowing.windows.GlobalWindow
 import org.apache.flink.util.Collector
+import org.slf4j.LoggerFactory
 
 case class Metrics(metrics: ConcurrentHashMap[String, AtomicLong]) {
   def incCounter(metric: String): Unit = {
@@ -32,6 +33,7 @@ trait JobMetrics {
 abstract class BaseProcessFunction[T, R](config: BaseJobConfig) extends ProcessFunction[T, R] with BaseDeduplication with JobMetrics {
 
   private val metrics: Metrics = registerMetrics(metricsList())
+  private[this] val logger = LoggerFactory.getLogger(classOf[BaseProcessFunction[T, R]])
 
   override def open(parameters: Configuration): Unit = {
     metricsList().map { metric =>
@@ -51,6 +53,7 @@ abstract class BaseProcessFunction[T, R](config: BaseJobConfig) extends ProcessF
 abstract class WindowBaseProcessFunction[I, O, K](config: BaseJobConfig) extends ProcessWindowFunction[I, O, K, GlobalWindow] with BaseDeduplication with JobMetrics {
 
   private val metrics: Metrics = registerMetrics(metricsList())
+  private[this] val logger = LoggerFactory.getLogger(classOf[WindowBaseProcessFunction[I, O, K]])
 
   override def open(parameters: Configuration): Unit = {
     metricsList().map { metric =>

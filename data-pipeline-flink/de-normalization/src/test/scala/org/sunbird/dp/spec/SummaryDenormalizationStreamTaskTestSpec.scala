@@ -124,9 +124,15 @@ class SummaryDenormalizationStreamTaskTestSpec extends BaseTestSpec {
     val event2UserData = event2.getTelemetry.read[util.HashMap[String, AnyRef]]("userdata").getOrElse(new util.HashMap()).asScala
     event2UserData("usersignintype") should be ("Self-Signed-In")
     event2UserData("userlogintype") should be ("Student")
-    event2UserData("usertype") should be ("TEACHER")
+    event2UserData("usertype") should be ("administrator")
+    event2UserData("usersubtype") should be ("deo,hm")
     event2UserData("subject").asInstanceOf[util.List[String]].asScala should be(List("English"))
+    event2UserData("cluster") should be ("Cluster001")
+    event2UserData("schoolname") should be ("[RPMMAT M.S UDHADIH")
+    event2UserData("block") should be ("Sri Sai ACC Block")
 
+    val event2ContentData = event2.getTelemetry.read[util.HashMap[String, AnyRef]]("contentdata").getOrElse(new util.HashMap()).asScala
+    event2ContentData.get("keywords").get.asInstanceOf[util.ArrayList[String]].get(0) should be ("Story")
 
     BaseMetricsReporter.gaugeMetrics(s"${denormConfig.jobName}.${denormConfig.locCacheHit}").getValue() should be (2)
     BaseMetricsReporter.gaugeMetrics(s"${denormConfig.jobName}.${denormConfig.locCacheMiss}").getValue() should be (0)

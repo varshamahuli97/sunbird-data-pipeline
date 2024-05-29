@@ -8,16 +8,12 @@ cd {{ analytics.home }}/scripts
 source model-config.sh
 today=$(date "+%Y-%m-%d")
 
-libs_path="{{ analytics.home }}/models-{{ model_version }}/data-products-1.0"
+mongo_host={{ mongo_node_bb_host }}
 
-telemetry_converter_ver=0.0.8
+libs_path="{{ analytics.home }}/models-{{ model_version }}/data-products-1.0"
 
 get_report_job_model_name(){
 	case "$1" in
-		"assessment-dashboard-metrics") echo 'org.sunbird.analytics.job.report.AssessmentMetricsJobV2'
-		;;
-		"course-dashboard-metrics") echo 'org.sunbird.analytics.job.report.CourseMetricsJobV2'
-		;;
 		"course-enrollment-report") echo 'org.sunbird.analytics.job.report.CourseEnrollmentJob'
 		;;
 		"course-consumption-report") echo 'org.sunbird.analytics.job.report.CourseConsumptionJob'
@@ -36,20 +32,38 @@ get_report_job_model_name(){
 		;;
 		"response-exhaust") echo 'org.sunbird.analytics.exhaust.collection.ResponseExhaustJob'
 		;;
+    "response-exhaust-v2") echo 'org.sunbird.analytics.exhaust.collection.ResponseExhaustJobV2'
+		;;
 		"progress-exhaust") echo 'org.sunbird.analytics.exhaust.collection.ProgressExhaustJob'
 		;;
+		"progress-exhaust-v2") echo 'org.sunbird.analytics.exhaust.collection.ProgressExhaustJobV2'
+		;;
+		"cassandra-migration") echo 'org.sunbird.analytics.updater.CassandraMigratorJob'
+    ;;
 		"collection-summary-report") echo 'org.sunbird.analytics.job.report.CollectionSummaryJob'
 		;;
 		"program-collection-summary-report") echo 'org.sunbird.analytics.job.report.CollectionSummaryJob'
 		;;
 		"collection-summary-report-v2") echo 'org.sunbird.analytics.job.report.CollectionSummaryJobV2'
 		;;
+		"assessment-score-metric-correction") echo 'org.sunbird.analytics.audit.AssessmentScoreCorrectionJob'
+		;;
 		"course-batch-status-updater") echo 'org.sunbird.analytics.audit.CourseBatchStatusUpdaterJob'
 		;;
 		"collection-reconciliation-job") echo 'org.sunbird.analytics.audit.CollectionReconciliationJob'
 		;;
 		"assessment-correction") echo 'org.sunbird.analytics.job.report.AssessmentCorrectionJob'
-        ;;
+	  ;;
+	  "score-metric-migration-job") echo 'org.sunbird.analytics.audit.ScoreMetricMigrationJob'
+	  ;;
+    "assessment-archival") echo 'org.sunbird.analytics.job.report.AssessmentArchivalJob'
+    ;;
+    "assessment-archived-removal") echo 'org.sunbird.analytics.job.report.AssessmentArchivalJob'
+		;;
+    "uci-private-exhaust") echo 'org.sunbird.analytics.exhaust.uci.UCIPrivateExhaustJob'
+    ;;
+    "uci-response-exhaust") echo 'org.sunbird.analytics.exhaust.uci.UCIResponseExhaustJob'
+    ;;
 		*) echo $1
 		;;
 	esac
@@ -66,6 +80,6 @@ echo "Starting the job - $1" >> "$DP_LOGS/$today-job-execution.log"
 
 echo "Job modelName - $job_id" >> "$DP_LOGS/$today-job-execution.log"
 
-nohup $SPARK_HOME/bin/spark-submit --master local[*] --jars $(echo ${libs_path}/lib/*.jar | tr ' ' ','),$MODELS_HOME/analytics-framework-2.0.jar,$MODELS_HOME/scruid_2.11-2.4.0.jar,$MODELS_HOME/batch-models-2.0.jar --class org.ekstep.analytics.job.JobExecutor $MODELS_HOME/batch-models-2.0.jar --model "$job_id" --config "$job_config$batchIds" >> "$DP_LOGS/$today-job-execution.log" 2>&1
+nohup $SPARK_HOME/bin/spark-submit --master local[*] --conf spark.sql.caseSensitive=true --conf spark.mongodb.input.uri=mongodb://$mongo_host/Nodebb.Objects --jars $MODELS_HOME/analytics-framework-2.0.jar,$MODELS_HOME/scruid_2.11-2.4.0.jar,$MODELS_HOME/batch-models-2.0.jar --class org.ekstep.analytics.job.JobExecutor $MODELS_HOME/batch-models-2.0.jar --model "$job_id" --config "$job_config$batchIds" >> "$DP_LOGS/$today-job-execution.log" 2>&1
 
 echo "Job execution completed - $1" >> "$DP_LOGS/$today-job-execution.log"

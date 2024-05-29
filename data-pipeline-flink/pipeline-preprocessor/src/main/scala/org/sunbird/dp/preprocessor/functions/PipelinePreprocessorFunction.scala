@@ -30,7 +30,8 @@ class PipelinePreprocessorFunction(config: PipelinePreprocessorConfig,
       config.shareEventsRouterMetricCount,
       config.shareItemEventsMetircsCount,
       config.denormSecondaryEventsRouterMetricsCount,
-      config.denormPrimaryEventsRouterMetricsCount
+      config.denormPrimaryEventsRouterMetricsCount,
+      config.cbAuditEventRouterMetricCount
     ) ::: deduplicationMetrics
   }
 
@@ -56,12 +57,24 @@ class PipelinePreprocessorFunction(config: PipelinePreprocessorConfig,
   }
 
   def isDuplicateCheckRequired(producerId: String): Boolean = {
-    config.includedProducersForDedup.contains(producerId)
+    // config.includedProducersForDedup.contains(producerId)
+    true
+  }
+
+  def addHubField(event: Event): Unit = {
+    val clientEventTypes = Set("IMPRESSION", "INTERACT", "START", "END")
+    val envHubMap = Map("learn" -> "learn", "course" -> "learn", "discuss" -> "discuss", "network" -> "network",
+      "careers" -> "careers", "competency" -> "competency", "events" -> "events")
+    if (clientEventTypes.contains(event.eid().toUpperCase())) {
+      val hub = envHubMap.getOrElse(event.env.toLowerCase(), "other")
+      event.updateHub(hub)
+    }
   }
 
   override def processElement(event: Event,
                               context: ProcessFunction[Event, Event]#Context,
                               metrics: Metrics): Unit = {
+
     val isValid = telemetryValidator.validate(event, context, metrics)
 
     if (isValid) {
@@ -80,8 +93,12 @@ class PipelinePreprocessorFunction(config: PipelinePreprocessorConfig,
         }
 
         if (isUnique) {
+
+          // add hub info
+          addHubField(event)
+
           if("ERROR".equalsIgnoreCase(event.eid())) {
-              metrics.incCounter(metric = config.errorEventsRouterMetricsCount)
+            metrics.incCounter(metric = config.errorEventsRouterMetricsCount)
           } else if (config.secondaryEvents.contains(event.eid())) {
             context.output(config.denormSecondaryEventsRouteOutputTag, event)
             metrics.incCounter(metric = config.denormSecondaryEventsRouterMetricsCount)
@@ -101,6 +118,9 @@ class PipelinePreprocessorFunction(config: PipelinePreprocessorConfig,
               metrics.incCounter(metric = config.primaryRouterMetricCount) // // Since we are are sinking the SHARE Event into primary router topic
             case "ERROR" =>
               context.output(config.errorEventOutputTag, event)
+            case "CB_AUDIT" =>
+              context.output(config.cbAuditRouteEventsOutputTag, event)  // cbAudit event are not routed to denorm topic
+              metrics.incCounter(metric = config.cbAuditEventRouterMetricCount) // //   metric for cb_audit events
             case _ => context.output(config.primaryRouteEventsOutputTag, event)
               metrics.incCounter(metric = config.primaryRouterMetricCount)
           }

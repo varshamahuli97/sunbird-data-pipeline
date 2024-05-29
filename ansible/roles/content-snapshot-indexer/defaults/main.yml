@@ -46,12 +46,15 @@ cloud_storage:
   container: "telemetry-data-store" # Container is different in all env so override this.
   object_key: "druid-content-snapshot/snapshot.txt"
   provider: "azure"
-  account_name: "{{sunbird_private_storage_account_name}}"
-  account_key: "{{sunbird_private_storage_account_key}}"
+  account_name: "{{sunbird_public_storage_account_name}}"
+  account_key: "{{sunbird_public_storage_account_key}}"
 
 cassandra:
-  host: "{{groups['lp-cassandra'][0]}}" ## LMS-Cassandra IP Address.
+  host: "{{lp_cassandra_host}}" ## LMS-Cassandra IP Address.
   keyspace: "sunbird"
+  read_timeout: "500000"
+  retry_count: "100"
+  input_consistency_level: "LOCAL_QUORUM"
   user:
     table: "user"
   device_profile:
@@ -59,7 +62,7 @@ cassandra:
     new_table: "device_profile_temp"
 
 druid:
-  coordinator_host: "{{groups['rollup-coordinator'][0]}}" 
+  coordinator_host: "{{ groups['rollup-coordinator'][0] | default(groups['raw-coordinator'][0]) }}" 
   data_source: "content-model-snapshot"
   ingestion_spec_path: "{{ content_snapshot_jar_path }}/etl-jobs-1.0/druid_models/content_index_batch.json"
 
