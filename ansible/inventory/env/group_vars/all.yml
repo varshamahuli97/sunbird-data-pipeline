@@ -187,7 +187,7 @@ s3_storage_container: ""
 s3_dp_storage_container: ""
 
 
-postgres_address_space: "{{groups['postgresql-master'][0].split(\".\")[0]}}.0.0.0/8"
+postgres_address_space: "{{groups['postgres'][0].split(\".\")[0]}}.0.0.0/8"
 postgres_exporter_user: postgres_exporter
 postgresql_hba_entries:
   - { type: local, database: all, user: postgres, auth_method: peer }
