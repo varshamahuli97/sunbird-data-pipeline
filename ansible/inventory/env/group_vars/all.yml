@@ -63,7 +63,7 @@ secor:
 postgresql_databases:
   - name: analytics
     owner: analytics
-    
+
 postgresql_users:
   - name: analytics
     password: "{{dp_vault_pgdb_password}}"
@@ -77,8 +77,6 @@ postgres:
   db_port: 5432
   db_admin_user: analytics
   db_admin_password: "{{dp_vault_pgdb_admin_password}}"
-
-postgres_address_space: 0.0.0.0/0 # Postgres trust address space
 
 lp_composite_search: "http://{{ groups['composite-search-cluster'][0] }}:9200" # Composite Cluster ip of LP
 lp_composite_search_host: "{{ groups['composite-search-cluster'][0] }}"
@@ -139,7 +137,7 @@ job_names:
   ContentCacheUpdater_1:
       job_file_name: 'content-cache-updater'
   ShareEventsFlattener_1:
-      job_file_name: 'share-events-flattener'    
+      job_file_name: 'share-events-flattener'
 
 druid_ingestion_specs:
   telemetry-events:
@@ -168,7 +166,7 @@ device_port: 6380
 user_port: 6381
 dialcode_port: 6382
 
-### kafka and zookeeper ip vars and being used in kafka topiccreation role. 
+### kafka and zookeeper ip vars and being used in kafka topiccreation role.
 ingestion_zookeeper_ip: "{{ groups['ingestion-cluster-zookeepers'][0] }}"
 processing_zookeeper_ip: "{{ groups['processing-cluster-zookeepers'][0] }}"
 ### docker image pull secrets name and this will be created in kubernetes
@@ -187,3 +185,14 @@ s3_https_only: false
 s3_default_bucket_location: ""
 s3_storage_container: ""
 s3_dp_storage_container: ""
+
+
+postgres_address_space: "{{groups['postgres'][0].split(\".\")[0]}}.0.0.0/8"
+postgres_exporter_user: postgres_exporter
+postgresql_hba_entries:
+  - { type: local, database: all, user: postgres, auth_method: peer }
+  - { type: local, database: all, user: all, auth_method: peer }
+  - { type: host, database: all, user: all, address: '127.0.0.1/32', auth_method: md5 }
+  - { type: host, database: all, user: all, address: '::1/128', auth_method: md5 }
+  - { type: host, database: all, user: "{{ postgres_exporter_user }}", address: '{{ postgres_address_space }}', auth_method: md5 }
+  - { type: host, database: all, user: all, address: '{{ postgres_address_space }}', auth_method: md5 }

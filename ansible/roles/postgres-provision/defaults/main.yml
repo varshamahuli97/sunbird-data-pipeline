@@ -31,7 +31,6 @@ postgresql_hba_entries:
   - {type: local, database: all, user: all, auth_method: peer}
   - {type: host, database: all, user: all, address: '127.0.0.1/32', auth_method: "{{ postgresql_auth_method }}"}
   - {type: host, database: all, user: all, address: '::1/128', auth_method: "{{ postgresql_auth_method }}"}
-  - {type: host, database: all, user: all, address: '{{ postgres_address_space }}', auth_method: md5}
 
 # Debian only. Used to generate the locales used by PostgreSQL databases.
 postgresql_locales:
@@ -69,3 +68,7 @@ postgresql_users: []
 
 # Whether to output user data when managing users.
 postgres_users_no_log: true
+
+# apt postgres repo details
+postgres_repo_key: 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
+postgres_repo: 'deb http://apt.postgresql.org/pub/repos/apt/ jammy-pgdg main'
