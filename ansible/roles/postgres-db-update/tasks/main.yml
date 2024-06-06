@@ -1,11 +1,10 @@
 - name: Install PostgreSQL client
   apt: name={{ item }} update_cache=yes cache_valid_time=36000 state=installed
   with_items:
-    - python-psycopg2
+    - python3-psycopg2
     - postgresql-client
   ignore_errors: yes
 
-# Configure PostgreSQL.
 - import_tasks: users.yml
 - import_tasks: users_props.yml
 
