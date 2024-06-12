@@ -41,10 +41,9 @@
 - name: Write GCP service account file
   copy:
     content: "{{ gcp_artifcats_upload_service_account }}"
-    dest: /mount/{{ item.0 }}/gcp_service_account.json
-    mode: "0600"
-  with_nested:
-    - "{{ secor_service_name }}"
+    dest: /mount/{{ item }}/gcp_service_account.json
+    mode: "0640"
+  with_items: "{{ secor_service_name }}"
 
 - name: Clean cron jobs
   command: crontab -r
