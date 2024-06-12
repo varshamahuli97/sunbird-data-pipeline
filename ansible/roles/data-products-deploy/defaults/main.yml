@@ -107,10 +107,6 @@ report_solution_ids: ""
 report_grace_period: "2"
 report_base_url_for_evidences: "https://{{ domain_name }}/content-store/"
 report_include_expired_solution_ids: true
-survey_question_report_batch_size: "{{ survey_question_report_batch_size }}"
-survey_status_report_batch_size: "{{ survey_status_report_batch_size }}"
-observation_question_report_batch_size: "{{ observation_question_report_batch_size }}"
-observation_status_report_batch_size: "{{ observation_status_report_batch_size }}"
 
 comms_console_prarambh_email_suffix: ".kb@karmayogi.in"
 comms_console_num_days_to_consider: "15"
