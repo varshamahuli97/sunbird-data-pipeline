@@ -6,7 +6,7 @@
   roles:
     - role: artifacts-upload-gcp
       vars:
-        service_account:  "{{ gcp_artifcats_upload_service_account }}"
+        service_account: "{{ gcp_artifcats_upload_service_account }}"
       tags: gcp
     - role: artifacts-upload-azure
       environment:
