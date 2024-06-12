@@ -42,7 +42,7 @@ secor.gs.upload.direct=false
 # Application credentials configuration file
 # https://developers.google.com/identity/protocols/application-default-credentials
 # It can be empty when secor running in Google Cloud VMs with proper scopes
-secor.gs.credentials.path=/mount/{{ item.0 }}/google_app_credentials.json
+secor.gs.credentials.path=/mount/{{ item.0 }}/gcp_service_account.json
 
 
 # Output file pattern excluding prefix. Defaults to topic/partition/generation_kafkaPartition_fmOffset.gz.
