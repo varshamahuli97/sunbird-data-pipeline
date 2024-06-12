@@ -45,16 +45,6 @@ secor.gs.upload.direct=false
 secor.gs.credentials.path=/mount/{{ item.0 }}/google_app_credentials.json
 
 
-###############
-#  Using S3   #
-###############
-
-# Name of the s3 bucket where log files are stored.
-secor.s3.bucket={{ cloud_storage_bucket_secor }}
-
-# S3 path where sequence files are stored.
-secor.s3.path={{ s3_base_path }}/{{ secor_service_name[item[0]].base_path }}
-
 # Output file pattern excluding prefix. Defaults to topic/partition/generation_kafkaPartition_fmOffset.gz.
 # Available placeholders are
 # topic - The topic name the data is being fetched
