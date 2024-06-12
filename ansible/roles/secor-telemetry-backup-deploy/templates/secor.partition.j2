@@ -20,76 +20,29 @@ include=secor.properties
 # in the choice option you can fill S3, GS, Swift or Azure
 cloud.service={{ secor_cloud_service }}
 
-# AWS authentication credentials.
-# Leave empty if using IAM role-based authentication with s3a filesystem.
-aws.access.key={{ s3_access_key }}
-aws.secret.key={{ s3_secret_key }}
-aws.role=
-
-# Optional Proxy Setting. Set to true to enable proxy
-# Only applicable to S3UploadManager
-aws.proxy.isEnabled=false
-aws.proxy.http.host=
-aws.proxy.http.port=
-
-# AWS region or endpoint. region should be a known region name (eg.
-# us-east-1). endpoint should be a known S3 endpoint url. If neither
-# are specified, then the default region (us-east-1) is used. If both
-# are specified then endpoint is used.
-#
-# Only apply if the the S3UploadManager is used - see
-# secor.upload.manager.class.
-#
-# http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
-aws.region={{ s3_region }}
-aws.endpoint={{ s3_endpoint }}
-
-# Toggle the AWS S3 client between virtual host style access and path style
-# access. See http://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html
-aws.client.pathstyleaccess={{ s3_path_style_access }}
-
-###########################
-# START AWS S3 ENCRYPTION #
-###########################
-
-# AWS specify type of server-side encryption, if any
-# set to S3 to enable S3-managed encryption
-# set to KMS to enable AWS KMS-managed encryption (see aws.sse.kms.key)
-# set to customer to enable customer-managed encryption (see aws.sse.customer.key)
-# set empty to disable encryption
-aws.sse.type=
-
-# Key to use for S3 server-side encryption, base64-encoded
-# Note: requires aws.sse.type to be set to customer to be used
-aws.sse.customer.key=
-
-# KMS Key to use for S3 server-side encryption, base64-encoded
-# Leave empty to use default generated key
-# Note: requires aws.sse.type to be set to  KMS to be used
-aws.sse.kms.key=
-
-#########################
-# END AWS S3 ENCRYPTION #
-#########################
-
-# Hadoop filesystem to use. Choices are s3n or s3a.
-# See https://wiki.apache.org/hadoop/AmazonS3 for details.
-secor.s3.filesystem=s3n
 
 # Class that will manage uploads. Default is to use the hadoop
 # interface to S3.
-secor.upload.manager.class=com.pinterest.secor.uploader.S3UploadManager
+secor.upload.manager.class={{ cloud_storage_uploadmanager }}
 
 
-# Set below property to true if you want to have the md5hash appended to your s3 path.
-# This helps for better partitioning of the data on s3. Which gives better performance while reading and writing on s3
-secor.s3.prefix.md5hash=false
+# Name of the Google cloud storage bucket where log files are stored.
+secor.gs.bucket={{ cloud_storage_bucket_secor }}
 
-# After the given date, secor will upload files to the supplied s3 alternative path
-secor.s3.alter.path.date=
+# Google cloud storage path where files are stored within the bucket.
+secor.gs.path={{ gs_base_path }}/{{ secor_service_name[item[0]].base_path }}
 
-# An alternative S3 path for secor to upload files to
-secor.s3.alternative.path=
+# Use direct uploads
+# WARNING: disables resumable uploads, files are uploaded in a single request
+# This may help prevent IOException: insufficient data written,
+# see https://github.com/pinterest/secor/issues/177
+# https://cloud.google.com/storage/docs/json_api/v1/how-tos/upload
+secor.gs.upload.direct=false
+
+# Application credentials configuration file
+# https://developers.google.com/identity/protocols/application-default-credentials
+# It can be empty when secor running in Google Cloud VMs with proper scopes
+secor.gs.credentials.path=/mount/{{ item.0 }}/google_app_credentials.json
 
 
 ###############
@@ -97,7 +50,7 @@ secor.s3.alternative.path=
 ###############
 
 # Name of the s3 bucket where log files are stored.
-secor.s3.bucket={{ s3_container_name }}
+secor.s3.bucket={{ cloud_storage_bucket_secor }}
 
 # S3 path where sequence files are stored.
 secor.s3.path={{ s3_base_path }}/{{ secor_service_name[item[0]].base_path }}
