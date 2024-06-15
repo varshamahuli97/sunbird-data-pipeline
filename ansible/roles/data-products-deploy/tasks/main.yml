@@ -68,6 +68,12 @@
     - framework
   when: dockdataproducts is undefined
 
+- name: Write GCP service account file
+  copy:
+    content: "{{ gcp_artifcats_upload_service_account }}"
+    dest:  {{ analytics.home }}/models-{{ model_version }}/gcp_service_account.json
+    mode: "0640"
+
 - name: Copy configuration file
   template: src=common.conf.j2 dest={{ analytics.home }}/models-{{ model_version }}/dock-{{ env }}.conf mode=755 owner={{ analytics_user }} group={{ analytics_group }}
   tags:
