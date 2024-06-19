@@ -139,7 +139,7 @@ default_druid_configs:
   #Druid S3 Details
   druid_storage_type: "{{ druid_storage_type }}"
   druid_gcloud_bucket: "{{ druid_gcloud_bucket }}"
-  druid_gcloud_prefix: ""
+  druid_gcloud_prefix: "druid/raw/segments"
   druid_gcloud_indexer_logs_bucket: "{{ druid_gcloud_bucket }}"
   druid_gcloud_indexer_logs_prefix: "druid/raw/logs/indexer"
   druid_gcloud_max_list_length: 1024
