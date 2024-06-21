@@ -1,16 +1,5 @@
 ## Bootstrap for spark ##
 
-- name: Adding ENV Vars to bashrc file of spark.
-  become: yes
-  become_user: "{{ analytics_user }}"
-  lineinfile:
-    path: '{{ analytics_user_home }}/.bashrc'
-    line: 'export {{item.var}}={{item.value}}'
-    regexp: "export {{ item.var }}.*"
-  with_items:
-    - {var: 'azure_storage_key', value: '{{ sunbird_private_storage_account_name }}'}
-    - {var: 'azure_storage_secret', value: '{{ sunbird_private_storage_account_key }}'}
-
 - name: Adding ENV Vars to spark servers environment.
   become: yes
   lineinfile:
@@ -18,17 +7,6 @@
     line: '{{item.var}}={{item.value}}'
     regexp: "{{ item.var }}.*"
   with_items:
-    - {var: 'azure_storage_key', value: '{{ sunbird_private_storage_account_name }}'}
-    - {var: 'azure_storage_secret', value: '{{ sunbird_private_storage_account_key }}'}
-    - {var: 'AZURE_STORAGE_ACCOUNT', value: '{{ sunbird_private_storage_account_name }}'}
-    - {var: 'AZURE_STORAGE_ACCESS_KEY', value: '{{ sunbird_private_storage_account_key }}'}
-    - {var: 'PUBLIC_AZURE_STORAGE_ACCOUNT', value: '{{ sunbird_public_storage_account_name }}'}
-    - {var: 'PUBLIC_AZURE_STORAGE_ACCESS_KEY', value: '{{ sunbird_public_storage_account_key }}'}
-    - {var: 'PRIVATE_REPORT_CONTAINER', value: '{{ sunbird_private_azure_report_container_name }}'}
-    - {var: 'PUBLIC_REPORT_CONTAINER', value: '{{ sunbird_public_azure_report_container_name }}'}
-    - {var: 'REPORT_BACKUP_CONTAINER', value: 'portal-reports-backup'}
-    - {var: 'GOOGLE_CREDENTIALS_PATH', value: '/home/analytics/credentials'}
-    - {var: 'STORAGE_PROVIDER', value: 'AZURE'}
     - {var: 'ENV', value: '{{env}}'}
     - {var: 'KAFKA_BROKER_HOST', value: "{{groups['processing-cluster-kafka'][0]}}:9092"}
 

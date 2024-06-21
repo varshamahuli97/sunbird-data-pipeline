@@ -130,11 +130,11 @@ default_druid_configs:
   druid_postgres_user: "{{ druid_postgres_user | default('druid@' + postgres.db_url) }}"
   druid_postgres_pass: "{{ dp_vault_druid_postgress_pass }}"
   #Druid Azure Details
-  azure_account_name: "{{ sunbird_druid_storage_account_name }}"
-  azure_storage_secret: "{{ sunbird_druid_storage_account_key }}"
-  azure_container: "{{ druid_azure_container_name }}"
+  azure_account_name: "{{ sunbird_druid_storage_account_name | default('') }}"
+  azure_storage_secret: "{{ sunbird_druid_storage_account_key | default('') }}"
+  azure_container: "{{ druid_azure_container_name | default('') }}"
   #Logging the indexing logs to azure
-  druid_log_azure_container: "{{ druid_azure_container_name }}"
+  druid_log_azure_container: "{{ druid_azure_container_name | default('') }}"
   druid_log_azure_folder: "druidlogs"
   #Druid S3 Details
   druid_storage_type: "{{ druid_storage_type }}"
@@ -207,25 +207,21 @@ default_druid_configs:
   druid_postgres_port: "{{ postgres.db_port }}"
   druid_postgres_user: "{{ druid_postgres_user | default('druid@' + postgres.db_url) }}"
   druid_postgres_pass: "{{ dp_vault_druid_postgress_pass }}"
-  #Druid Azure Details
-  azure_account_name: "{{ sunbird_druid_storage_account_name }}"
-  azure_storage_secret: "{{ sunbird_druid_storage_account_key }}"
-  azure_container: "{{ druid_azure_container_name }}"
+
+  azure_account_name: "{{ sunbird_druid_storage_account_name | default('') }}"
+  azure_storage_secret: "{{ sunbird_druid_storage_account_key | default('') }}"
+  azure_container: "{{ druid_azure_container_name | default('') }}"
   #Logging the indexing logs to azure
-  druid_log_azure_container: "{{ druid_azure_container_name }}"
+  druid_log_azure_container: "{{ druid_azure_container_name | default('') }}"
   druid_log_azure_folder: "druidlogs"
   #Druid S3 Details
   druid_storage_type: "{{ druid_storage_type }}"
-  s3_access_key: "{{ s3_storage_key }}"
-  s3_secret_key: "{{ s3_storage_secret }}"
-  s3_bucket: "{{ s3_dp_storage_container }}"
-  s3_endpoint: "{{ s3_storage_endpoint }}"
-  s3_segment_dir: "druid/rollup/segments"
-  s3_path_like_access: "{{ s3_path_style_access }}"
-  s3_v4_sign_region: "{{ s3_default_bucket_location }}"
-  #Logging the indexing logs to s3
-  s3_logging_bucket: "{{ s3_dp_storage_container }}"
-  s3_indexer_logs_dir: "druid/rollup/stage/indexing_logs"
+  druid_gcloud_bucket: "{{ druid_gcloud_bucket }}"
+  druid_gcloud_prefix: "druid/raw/segments"
+  druid_gcloud_indexer_logs_bucket: "{{ druid_gcloud_bucket }}"
+  druid_gcloud_indexer_logs_prefix: "druid/raw/logs/indexer"
+  druid_gcloud_max_list_length: 1024
+
   #Druid coordinator node configuration
   druid_coordinator_min_heap_size: 128m
   druid_coordinator_max_heap_size: 128m
