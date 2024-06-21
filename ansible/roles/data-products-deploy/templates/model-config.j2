@@ -3,33 +3,13 @@
 config() {
 	bucket={{ secor_bucket }}
 	brokerList={{ brokerlist }}
-	zookeeper={{ zookeeper }}
-	brokerIngestionList={{ ingestion_kafka_brokers }}
-	job_topic={{ analytics_job_queue_topic }}
 	topic={{ topic }}
-	analyticsMetricsTopic={{ analytics_metrics_topic }}
-	sinkTopic={{ sink_topic }}
-	metricsTopic={{ metrics_topic }}
-	analytics_home={{ analytics.home }}
-	temp_folder={{ job_manager_tmp_dir }}
 	sparkCassandraConnectionHost="{{ lp_cassandra_host  }}"
-	sparkRedisConnectionHost={{ metadata2_redis_host }}
-	sunbirdPlatformCassandraHost="{{ core_cassandra_host }}"
-	sunbirdPlatformElasticsearchHost="{{ sunbird_es_host }}"
-	jobManagerJobsCount="{{ analytics_jobs_count }}"
-	producerEnv="{{ producer_env }}"
-	baseScriptPath="{{ spark_output_temp_dir }}"
-	reportPostContainer="{{ reports_container }}"
-	druidIngestionURL="{{ druid_rollup_cluster_ingestion_task_url }}/druid/indexer/v1/task"
-  assessTopic="{{ assess_topic }}"
   reportMDOIDs="{{ report_mdo_ids }}"
   reportSolutionIDs="{{ report_solution_ids }}"
 
-
 	if [ -z "$2" ]; then endDate=$(date --date yesterday "+%Y-%m-%d"); else endDate=$2; fi
-	if [ ! -z "$3" ]; then inputBucket=$3; fi
-	if [ ! -z "$4" ]; then sinkTopic=$4; fi
-	if [ ! -z "$2" ]; then keyword=$2; fi
+
 	case "$1" in
 		"wfs")
 		echo '{"search":{"type":"gcloud","queries":[{"bucket":"'$bucket'","prefix":"{{ dp_raw_telemetry_backup_location }}","endDate":"'$endDate'","delta":0}]},"model":"org.ekstep.analytics.model.WorkflowSummary","modelParams":{"storageKeyConfig":"storage.key.config", "storageSecretConfig":"storage.secret.config", "apiVersion":"v2", "parallelization":200},"output":[{"to":"kafka","params":{"brokerList":"'$brokerList'","topic":"'$topic'","compression":"{{ dashboards_broker_compression }}"} }],"parallelization":200,"appName":"Workflow Summarizer","deviceMapping":true}'
