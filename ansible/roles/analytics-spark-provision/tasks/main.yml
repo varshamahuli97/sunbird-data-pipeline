@@ -133,24 +133,24 @@
   become_user: "{{ analytics_user }}"
   shell: "export PATH=$PATH:/home/analytics/.rvm/bin && yes | rvm install ruby-2.6"
 
-- name: Install ruby-kafka
-  become: yes
-  become_user: "{{ analytics_user }}"
-  shell: "bash -ilc 'export PATH=$PATH:/home/analytics/.rvm/bin && rvm --default use ruby-2.6 && gem install --user-install --no-document ruby-kafka'"
-
-- name: Download Kafka-2.11
-  become: yes
-  become_user: "{{ analytics_user }}"
-  get_url: url=https://archive.apache.org/dist/kafka/0.10.1.0/kafka_2.11-0.10.1.0.tgz dest={{ analytics.home }}/kafka_2.11-0.10.1.0.tgz force=no owner={{ analytics_user }} group={{ analytics_group }}
-  tags:
-    - kafka-provision
-
-- name: Unarchive Kafka
-  become: yes
-  become_user: "{{ analytics_user }}"
-  unarchive: src={{ analytics.soft_path }}/kafka_2.11-0.10.1.0.tgz dest={{ analytics.home }}/ copy=no owner={{ analytics_user }} group={{ analytics_group }} creates={{ analytics.home }}/kafka_2.11-0.10.1.0
-  tags:
-    - kafka-provision
+#- name: Install ruby-kafka
+#  become: yes
+#  become_user: "{{ analytics_user }}"
+#  shell: "bash -ilc 'export PATH=$PATH:/home/analytics/.rvm/bin && rvm --default use ruby-2.6 && gem install --user-install --no-document ruby-kafka'"
+#
+#- name: Download Kafka-2.11
+#  become: yes
+#  become_user: "{{ analytics_user }}"
+#  get_url: url=https://archive.apache.org/dist/kafka/0.10.1.0/kafka_2.11-0.10.1.0.tgz dest={{ analytics.home }}/kafka_2.11-0.10.1.0.tgz force=no owner={{ analytics_user }} group={{ analytics_group }}
+#  tags:
+#    - kafka-provision
+#
+#- name: Unarchive Kafka
+#  become: yes
+#  become_user: "{{ analytics_user }}"
+#  unarchive: src={{ analytics.soft_path }}/kafka_2.11-0.10.1.0.tgz dest={{ analytics.home }}/ copy=no owner={{ analytics_user }} group={{ analytics_group }} creates={{ analytics.home }}/kafka_2.11-0.10.1.0
+#  tags:
+#    - kafka-provision
 
 - name: Add python ppa
   become: yes
