@@ -51,8 +51,8 @@ secor:
   artifact_dir: /mount/secor
   artifact_ver: "0.25"
   azure:
-    account_name: "{{sunbird_private_storage_account_name}}"
-    account_key: "{{sunbird_private_storage_account_key}}"
+    account_name: "{{sunbird_private_storage_account_name | default('')}}"
+    account_key: "{{sunbird_private_storage_account_key | default('')}}"
     container_name: "{{channel_data_exhaust_bucket}}"
   paths: ['/mount/secor', '/mount/secor/reports', '/mount/secor/logs', '/home/analytics/sbin', '/mount/data/analytics']
   channel: "{{secor_alerts_slack_channel}}"
