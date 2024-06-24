@@ -151,6 +151,16 @@ base_config: |
     job {
       env = "{{ env_name }}"
       enable.distributed.checkpointing = false
+      statebackend {
+        blob {
+          storage {
+            account = ""
+            container = ""
+            checkpointing.dir = "checkpoint"
+          }
+        }
+        base.url = ""
+      }
     }
     task {
       parallelism = 1
