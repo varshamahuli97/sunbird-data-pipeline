@@ -3,7 +3,6 @@ imagepullsecrets: {{ imagepullsecrets }}
 dockerhub: {{ dockerhub }}
 repository: {{flink_repository|default('sunbird-datapipeline')}}
 image_tag: {{ image_tag }}
-checkpoint_store_type: {{ checkpoint_store_type }}
 
 serviceMonitor:
   enabled: {{ service_monitor_enabled | lower}}
