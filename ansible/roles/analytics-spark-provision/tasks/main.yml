@@ -91,37 +91,6 @@
     update_cache: true
     cache_valid_time: 3600
 
-- name: Install software-properties-common
-  apt:
-    name: software-properties-common
-    state: present
-
-- name: Add RVM repository
-  become: true
-  apt_repository:
-    repo: ppa:rael-gc/rvm
-    state: present
-
-- name: Update apt cache
-  become: true
-  apt:
-    update_cache: yes
-
-- name: Install RVM
-  become: true
-  apt:
-    name:
-    - rvm
-    - libssl1.1
-    state: present
-
-- name: Add user to rvm group
-  become: true
-  user:
-    name: "{{ analytics_user }}"
-    groups: rvm
-    append: yes
-
 - name: Change ownership
   file:
     path: "{{ analytics.base_path }}"
@@ -130,15 +99,46 @@
     recurse: yes
   become: true
 
+- name: Import keys
+  become: true
+  shell: "command curl -sSL https://rvm.io/mpapis.asc | sudo gpg2 --import - && command curl -sSL https://rvm.io/pkuczynski.asc | sudo gpg2 --import - && gpg2 --keyserver hkp://keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB"
+
+- name: Install rvm
+  become: true
+  become_user: "{{ analytics_user }}"
+  shell: "curl -sSL https://get.rvm.io | bash -s stable"
+
+- name: Add RVM to PATH and source it in .bashrc
+  become: true
+  become_user: "{{ analytics_user }}"
+  lineinfile:
+    path: "{{ analytics.base_path }}/.bashrc"
+    line: 'export PATH="{{ analytics.base_path }}/.rvm/bin:$PATH"'
+    create: yes
+    state: present
+
+- name: Source RVM script in .bashrc
+  become: true
+  become_user: "{{ analytics_user }}"
+  lineinfile:
+    path: "{{ analytics.base_path }}/.bashrc"
+    line: "source {{ analytics.base_path }}/.rvm/scripts/rvm"
+    state: present
+
+- name: Install openssl
+  become: true
+  become_user: "{{ analytics_user }}"
+  shell: "bash -ilc 'rvm pkg install openssl'"
+
 - name: Install latest ruby
   become: true
   become_user: "{{ analytics_user }}"
-  shell: "export PATH=$PATH:/home/analytics/.rvm/bin && yes | rvm install ruby-2.6"
+  shell: "bash -ilc 'rvm install ruby-2.6 --with-openssl-dir={{ analytics.base_path }}/.rvm/usr'"
 
 - name: Install ruby-kafka
   become: true
   become_user: "{{ analytics_user }}"
-  shell: "bash -ilc 'export PATH=$PATH:/home/analytics/.rvm/bin && rvm --default use ruby-2.6 && gem install --user-install --no-document ruby-kafka'"
+  shell: "bash -ilc 'rvm --default use ruby-2.6 && gem install --user-install --no-document ruby-kafka'"
 
 - name: Download Kafka-2.11
   become: true
