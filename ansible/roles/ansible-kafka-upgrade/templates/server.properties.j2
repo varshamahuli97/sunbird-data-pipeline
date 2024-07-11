@@ -5,6 +5,8 @@
   {%- set url_host = url.split(':')[0] -%}
   {%- if url_host == ansible_fqdn or url_host in ansible_all_ipv4_addresses -%}
 broker.id={{loop.index0 + 1}}
+listeners=PLAINTEXT://0.0.0.0:9092
+advertised.listeners=PLAINTEXT://{{ansible_host}}:9092
 
 ############################# Socket Server Settings #############################
 
