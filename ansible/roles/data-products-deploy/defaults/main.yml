@@ -172,7 +172,7 @@ spark:
     cores: 6
     memory: 14g
     memoryOverhead: 2g
-  driver_memory: 12g
+  driver_memory: 55g
   executor_extraJavaOptions: -Dconfig.file=/mount/data/analytics/models-{{ model_version }}/{{ env }}.conf -Dlog4j.configurationFile=file:////mount/data/analytics/models-{{ model_version }}/log4j2.xml
   driver_extraJavaOptions: -Dconfig.file=/mount/data/analytics/models-{{ model_version }}/{{ env }}.conf -Dlog4j.configurationFile=file:////mount/data/analytics/models-{{ model_version }}/log4j2.xml
   memory_fraction: 0.3
