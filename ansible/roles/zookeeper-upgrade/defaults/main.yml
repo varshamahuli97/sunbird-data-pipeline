@@ -13,7 +13,7 @@ maxclinetconnection_limit: 200
 zookeeper_data_dir: /opt/zookeeper
 log_dir: /var/log/zookeeper
 client_port: "{{ zookeeper_port }}"
-zookeeper_group: "{{ groups['zookeeper'] }}"
+zookeeper_group: "{{ groups[remote] }}"
 zookeeper_user: zookeeper
 zookeeper_dir: /opt
 zookeeper_systemd_service: /etc/systemd/system/zookeeper.service
