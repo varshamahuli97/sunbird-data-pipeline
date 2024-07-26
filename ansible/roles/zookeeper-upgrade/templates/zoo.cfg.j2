@@ -8,7 +8,7 @@ maxClientCnxns={{ maxclinetconnection_limit }}
 admin.enableServer={{ admin_enableserver | default('false') }}
 admin.serverPort=8081
 {% if zookeeper_group | length > 1 %}
-{% for ansible_host in zookeeper_group %}
-server.{{hostvars[ansible_host]['server_id']}}={{ host }}:2888:3888
+{% for host in zookeeper_group %}
+server.{{hostvars[host]['server_id']}}={{ host }}:2888:3888
 {% endfor %}
 {% endif %}
