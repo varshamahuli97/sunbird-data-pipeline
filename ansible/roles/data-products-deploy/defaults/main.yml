@@ -105,7 +105,7 @@ ml_report_path: "standalone-reports/ml-report"
 
 report_solution_ids: ""
 report_grace_period: "2"
-report_base_url_for_evidences: "https://{{ domain_name }}/content-store/"
+report_base_url_for_evidences: "{{ report_base_url_for_evidences }}"
 report_include_expired_solution_ids: true
 
 comms_console_prarambh_email_suffix: ".kb@karmayogi.in"
