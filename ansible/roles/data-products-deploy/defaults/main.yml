@@ -145,6 +145,10 @@ analytics_jobs_count: 6
 operational_report_sync_enable: false
 operational_report_zip_sync_enable: true
 operational_sl_report_sync_enable: true
+SurveyQuestionReportBatchSize: 2000
+SurveyStatusReportBatchSize: 40000
+ObservationQuestionReportBatchSize: 2000
+ObservationStatusReportBatchSize: 15000
 
 cassandra_keyspace_prefix: '{{ env }}_'
 report_cassandra_cluster_host: "{{ report_cassandra_host | default(core_cassandra_host) }}"
