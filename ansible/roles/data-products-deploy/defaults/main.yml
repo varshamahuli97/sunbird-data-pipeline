@@ -238,18 +238,18 @@ run_kcm_report_job:
   kcm-report:
     hour: 05
     minute: 20
+run_wfs_job:
+  wfs:
+    hour: 05
+    minute: 25
 run_data_warehouse_job:
   data-warehouse-sync:
     hour: 05
-    minute: 25
-run_wfs_job:
-  wfs:
-    hour: 06
-    minute: 15
+    minute: 45
 run_summary_redis_sync_job:
   summary-redis-sync:
-    hour: 7
-    minute: 00
+    hour: 6
+    minute: 30
 run_weekly_claps_job:
   weekly-claps:
     hour: 07
