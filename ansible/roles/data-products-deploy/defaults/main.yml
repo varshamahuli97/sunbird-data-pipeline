@@ -143,17 +143,7 @@ zip_reports_destination_path: "standalone-reports/merged"
 zip_reports_password: "123456"
 directories_to_select: "blended-program-report-mdo,cbp-report-mdo-summary,course-report,cba-report,cbp-report-mdo-enrolment,user-report,user-enrollment-report"
 
-bq_script_path: "/mount/data/analytics/bq_scripts"
-assessment_script_file_name: "assessment_details.sh"
-bp_enrolments_script_file_name: "bp_enrolments.sh"
-cb_plan_script_file_name: "cb_plan.sh"
-content_script_file_name: "content.sh"
-content_resource_script_file_name: "content_resource.sh"
-kcm_content_mapping_script_file_name: "kcm_content_mapping.sh"
-kcm_dictionary_script_file_name: "kcm_directory.sh"
-org_hierarchy_script_file_name: "org_hierarchy.sh"
-user_detail_script_file_name: "user_detail.sh"
-user_enrolments_script_file_name: "user_enrolments.sh"
+bq_script_path: "/mount/data/analytics/bq-scripts.sh"
 
 analytics_job_list: '"wfs", "dashboard-sync", "assessment-metrics", "monitor-job-summ", "user-report-job", "survey-nps"'
 analytics_jobs_count: 6
