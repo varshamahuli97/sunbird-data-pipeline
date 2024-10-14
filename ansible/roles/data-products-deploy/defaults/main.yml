@@ -147,6 +147,8 @@ zip_reports_destination_path: "standalone-reports/merged"
 zip_reports_password: "123456"
 directories_to_select: "blended-program-report-mdo,cbp-report-mdo-summary,course-report,cba-report,cbp-report-mdo-enrolment,user-report,user-enrollment-report"
 
+bq_script_path: "/mount/data/analytics/bq-scripts.sh"
+
 analytics_job_list: '"wfs", "dashboard-sync", "assessment-metrics", "monitor-job-summ", "user-report-job", "survey-nps"'
 analytics_jobs_count: 6
 operational_report_sync_enable: false
@@ -256,50 +258,54 @@ run_data_warehouse_job:
   data-warehouse-sync:
     hour: 05
     minute: 45
+run_bq_data_job:
+  bq-data-push:
+    hour: 6
+    minutes: 30
 run_summary_redis_sync_job:
   summary-redis-sync:
-    hour: 6
-    minute: 30
+    hour: 7
+    minute: 00
 run_weekly_claps_job:
   weekly-claps:
     hour: 07
-    minute: 15
+    minute: 45
 run_in_app_review_feed_job:
   in-app-review-feed:
-    hour: 07
-    minute: 30
+    hour: 08
+    minute: 00
 run_survey_nps_job:
   survey-nps:
     hour: 08
-    minute: 00
+    minute: 30
 run_ministry_metrics_job:
   ministry-metrics:
-    hour : 08
-    minute: 30
+    hour : 09
+    minute: 00
 run_zip_upload_job:
   zip-upload:
-    hour: 09
-    minute: 45
+    hour: 10
+    minute: 15
 run_comms_console_job:
   comms-console:
     hour: 11
-    minute: 15
+    minute: 45
 run_survey_question_report_job:
   survey-question-report:
-    hour: 11
-    minute: 30
+    hour: 12
+    minute: 00
 run_survey_status_report_job:
   survey-status-report:
     hour: 12
-    minute: 00
+    minute: 30
 run_observation_question_report_job:
   observation-question-report:
-    hour: 12
-    minute: 30
+    hour: 13
+    minute: 00
 run_observation_status_report_job:
   observation-status-report:
     hour: 13
-    minute: 00
+    minute: 30
 run_learner_leaderboard_job:
   learner-leaderboard:
     day: 01
@@ -308,12 +314,12 @@ run_learner_leaderboard_job:
 run_ministry_learner_leaderboard_job:
   ministry-learner-leaderboard:
     day: 01
-    hour: 12
-    minute: 30
+    hour: 13
+    minute: 00
 run_national_learning_week_job:
   national-learning-week:
     hour: 13
-    minute: 30
+    minute: 00
 run_monthly-requests_job:
   monthly-requests:
     day: 01
