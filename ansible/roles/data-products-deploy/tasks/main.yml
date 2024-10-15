@@ -304,7 +304,7 @@
     - spark1-jobs
     - default-jobs
 
-- name: Create monthly cron jobs for monthly-request-job
+- name: Create monthly cron jobs for monthly-requests
   cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh monthly-requests"
   with_dict: "{{ run_monthly_requests_job }}"
   tags:
