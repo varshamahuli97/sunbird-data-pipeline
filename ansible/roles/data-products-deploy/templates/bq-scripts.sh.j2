@@ -19,11 +19,17 @@ for TABLE_NAME in "assessment_detail" "bp_enrolments" "cb_plan" "content" "conte
   # Delete all existing avro files in Cloud Storage
   gsutil rm -a gs://$STORAGE_FOLDER/$TABLE_NAME/*.avro
 
-  # Delete all data from the BigQuery table
-  bq query --nouse_legacy_sql "DELETE FROM $PROJECT_ID.$DATASET_NAME.$TABLE_NAME WHERE 1=1"
-
   # Copy avro files to Cloud Storage
   gsutil cp /mount/data/analytics/warehouse/$TABLE_NAME/part*.avro gs://$STORAGE_FOLDER/$TABLE_NAME/
+
+  # Delete all data from the BigQuery table
+  # bq query --nouse_legacy_sql "DELETE FROM $PROJECT_ID.$DATASET_NAME.$TABLE_NAME WHERE 1=1"
+
+  # delete existing table
+  bq rm -f $DATASET_NAME.$TABLE_NAME
+
+  # create empty
+  bq mk --table $DATASET_NAME.$TABLE_NAME
 
   # Load data into the BigQuery table
   bq load \
