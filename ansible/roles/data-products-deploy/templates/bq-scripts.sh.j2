@@ -7,11 +7,7 @@ DATASET_NAME="{{bq_dataset_name}}"
 # cloud storage folder name
 STORAGE_FOLDER="{{cloud_storage_file_dest}}"
 
-# List of tables to process
-#TABLES=("assessment_detail" "bp_enrolments" "cb_plan" "content" "content_resource" "kcm_content_mapping" "kcm_dictionary" "org_hierarchy" "user_detail" "user_enrolments")
 # Loop over each table name
-#for TABLE_NAME in "${TABLES[@]}"; do
-
 for TABLE_NAME in "assessment_detail" "bp_enrolments" "cb_plan" "content" "content_resource" "kcm_content_mapping" "kcm_dictionary" "org_hierarchy" "user_detail" "user_enrolments"; do
 
   echo "Processing table: $TABLE_NAME"
@@ -19,11 +15,14 @@ for TABLE_NAME in "assessment_detail" "bp_enrolments" "cb_plan" "content" "conte
   # Delete all existing avro files in Cloud Storage
   gsutil rm -a gs://$STORAGE_FOLDER/$TABLE_NAME/*.avro
 
-  # Delete all data from the BigQuery table
-  bq query --nouse_legacy_sql "DELETE FROM $PROJECT_ID.$DATASET_NAME.$TABLE_NAME WHERE 1=1"
-
   # Copy avro files to Cloud Storage
   gsutil cp /mount/data/analytics/warehouse/$TABLE_NAME/part*.avro gs://$STORAGE_FOLDER/$TABLE_NAME/
+
+  # delete existing table
+  bq rm -f $DATASET_NAME.$TABLE_NAME
+
+  # create empty
+  bq mk --table $DATASET_NAME.$TABLE_NAME
 
   # Load data into the BigQuery table
   bq load \
