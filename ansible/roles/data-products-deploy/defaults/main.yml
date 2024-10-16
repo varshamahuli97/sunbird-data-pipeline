@@ -260,12 +260,12 @@ run_data_warehouse_job:
     minute: 45
 run_bq_data_job:
   bq-data-push:
-    hour: 6
-    minute: 30
+    hour: 07
+    minute: 00
 run_summary_redis_sync_job:
   summary-redis-sync:
-    hour: 7
-    minute: 00
+    hour: 06
+    minute: 30
 run_weekly_claps_job:
   weekly-claps:
     hour: 07
