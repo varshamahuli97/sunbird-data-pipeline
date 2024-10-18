@@ -67,6 +67,7 @@ dashboards_cassandra_old_assessment_table: "user_assessment_master"
 dashboards_cassandra_nlw_mdo_table: "nlw_mdo_leaderboard"
 dashboards_cassandra_nlw_user_table: "nlw_user_leaderboard"
 dashboards_cassandra_public_userassessmenttable: "public_user_assessment_data"
+dashboards_cassandra_user_entity_enrolment_table: "user_entity_enrolments"
 
 app_postgres_host: "{{groups['app-postgres'][0]}}:5432"
 dw_postgres_host: "{{groups['dw-postgres'][0]}}:5432"
