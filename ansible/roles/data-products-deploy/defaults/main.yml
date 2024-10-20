@@ -160,8 +160,8 @@ survey_status_report_batch_size: 40000
 observation_question_report_batch_size: 2000
 observation_status_report_batch_size: 15000
 
-national_learning_week_start: "2024-06-01 00:00:00"
-national_learning_week_end: "2024-07-15 23:59:59"
+national_learning_week_start: "2024-10-19 00:00:00"
+national_learning_week_end: "2024-10-25 23:59:59"
 
 cassandra_keyspace_prefix: '{{ env }}_'
 report_cassandra_cluster_host: "{{ report_cassandra_host | default(core_cassandra_host) }}"
