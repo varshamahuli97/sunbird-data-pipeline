@@ -1206,6 +1206,6 @@
   "tuningConfig": {
     "type": "kafka",
     "reportParseExceptions": false,
-    "maxRowsPerSegment": 5000000
+    "maxRowsPerSegment": 2000000
   }
 }
