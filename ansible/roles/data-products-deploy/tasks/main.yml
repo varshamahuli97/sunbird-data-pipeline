@@ -304,6 +304,13 @@
     - spark1-jobs
     - default-jobs
 
+- name: Create daily cron jobs for user-activity
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh user-activity"
+  with_dict: "{{ run_user_activity_job }}"
+  tags:
+    - spark1-jobs
+    - default-jobs
+
 - name: Create monthly cron jobs for monthly-requests
   cron: name="{{env}}-{{ item.key }}"  day={{ item.value.day }} minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh monthly-requests"
   with_dict: "{{ run_monthly_requests_job }}"
