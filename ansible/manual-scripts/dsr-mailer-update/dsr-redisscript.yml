@@ -66,7 +66,7 @@
 -  debug:
      var: newuser_registrations_yesterday
 - name: TotalUserCount
-  command: "redis-cli -n 12 GET lp_es_user_count"
+  command: "redis-cli -n 12 GET mdo_total_registered_officer_count"
   register: user_count
   ignore_errors: yes  # Ignore errors if the key doesn't exist
 - name: Set fact for lp_es_user_count
