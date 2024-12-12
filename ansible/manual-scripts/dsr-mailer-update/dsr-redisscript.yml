@@ -127,3 +127,36 @@
 
 - debug:
     var: user_loggedin_yesterday
+
+- name: TotalEventsEnrolmentCount
+  command: "redis-cli -n 12 GET dashboard_events_enrolment_count"
+  register: dashboard_events_enrolment_count
+  ignore_errors: yes  # Ignore errors if the key doesn't exist
+- name: Set fact for dashboard_events_enrolment_count
+  set_fact:
+    dashboard_events_enrolment_count: "{{ dashboard_events_enrolment_count.stdout }}"
+  when: dashboard_events_enrolment_count is succeeded
+-  debug:
+     var: dashboard_events_enrolment_count
+
+- name: TotalEventsPublishedCount
+  command: "redis-cli -n 12 GET dashboard_events_published_count"
+  register: dashboard_events_published_count
+  ignore_errors: yes  # Ignore errors if the key doesn't exist
+- name: Set fact for dashboard_events_published_count
+  set_fact:
+    dashboard_events_published_count: "{{ dashboard_events_published_count.stdout }}"
+  when: dashboard_events_published_count is succeeded
+-  debug:
+     var: dashboard_events_published_count
+
+- name: TotalEventsCompletedCount
+  command: "redis-cli -n 12 GET dashboard_events_completed_count"
+  register: dashboard_events_completed_count
+  ignore_errors: yes  # Ignore errors if the key doesn't exist
+- name: Set fact for dashboard_events_completed_count
+  set_fact:
+    dashboard_events_completed_count: "{{ dashboard_events_completed_count.stdout }}"
+  when: dashboard_events_completed_count is succeeded
+-  debug:
+     var: dashboard_events_completed_count
