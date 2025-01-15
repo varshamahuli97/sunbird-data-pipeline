@@ -219,7 +219,7 @@ run_data_exhaust_job:
 run_dashboard_sync_job:
   dashboard-sync:
     hour: 00
-    minute: 30
+    minute: 25
 run_assessment_metrics_job:
   assessment-metrics:
     hour: 01
