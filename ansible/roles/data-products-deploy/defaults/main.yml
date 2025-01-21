@@ -331,6 +331,7 @@ run_learner_leaderboard_job:
   learner-leaderboard:
     day: 01
     hour: 11
+    minute: 30
 run_odcs_recomendation_job:
   odcs-recomendation:
     hour: 12
