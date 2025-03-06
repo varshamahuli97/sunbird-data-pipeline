@@ -129,7 +129,7 @@
     - dataproducts
 
 - name: Copy es-form-data file
-  template: src=es-form-data.j2 dest={{ analytics.home }}/es-form-data.sh mode=755 owner={{ analytics_user }} group={{ analytics_group }}
+  template: src=es-form-data.j2 dest={{ analytics.home }}/scripts/es-form-data.sh mode=755 owner={{ analytics_user }} group={{ analytics_group }}
   tags:
     - dataproducts
 
