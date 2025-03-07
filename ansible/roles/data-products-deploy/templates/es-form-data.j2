@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Get the form ID from the argument
 FORM_ID=$1
@@ -14,7 +14,7 @@ INDEX_NAME="{{ es_form_data_index }}"
 # Elasticsearch URL and index name
 ES_URL="http://$ES_HOST:$ES_PORT"
 
-SCROLL_TIME=100  # Keep the search context alive
+SCROLL_TIME="1m"  # Keep the search context alive
 
 # Function to log messages
 log_message() {
@@ -24,7 +24,7 @@ log_message() {
 log_message "Fetching data for form ID: $FORM_ID using Scroll API"
 
 # Initial scroll request
-INITIAL_RESPONSE=$(curl -s -X POST "http://$ES_HOST:$ES_PORT/$INDEX_NAME/_search?scroll=$SCROLL_TIME" -H 'Content-Type: application/json' -d '{
+INITIAL_RESPONSE=$(curl -s -X POST "$ES_URL/$INDEX_NAME/_search?scroll=$SCROLL_TIME" -H 'Content-Type: application/json' -d '{
   "query": {
     "bool": {
       "must": [
