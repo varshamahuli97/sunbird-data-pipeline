@@ -166,7 +166,7 @@ observation_status_report_batch_size: 15000
 
 national_learning_week_start: "2024-10-19 00:00:00"
 national_learning_week_end: "2024-10-25 23:59:59"
-state_learning_week_start: "2025-03-17 00:00:00"
+state_learning_week_start: "2025-03-18 00:00:00"
 state_learning_week_end: "2025-03-23 23:59:59"
 
 cassandra_keyspace_prefix: '{{ env }}_'
