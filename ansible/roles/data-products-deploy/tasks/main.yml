@@ -128,10 +128,10 @@
   tags:
     - dataproducts
 
-name: Copy es-form-data file
+- name: Copy es-form-data file
   template: src=es-form-data.j2 dest={{ analytics.home }}/scripts/es-form-data.sh mode=755 owner={{ analytics_user }} group={{ analytics_group }}
-    tags:
-      - dataproducts
+  tags:
+    - dataproducts
 
 - name: Copy python sanity check script file
   template: src=exhaust_sanity_check.py.j2 dest={{ analytics.home }}/scripts/exhaust_sanity_check.py
@@ -247,11 +247,11 @@ name: Copy es-form-data file
     - default-jobs
 
 - name: Create weekly cron job for es-form-data
-    cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }} weekday={{ item.value.weekday }}  job="{{ analytics.home }}/scripts/run-job.sh es-form-data"
-    with_dict: "{{ run_es_form_data_job }}"
-    tags:
-      - spark1-jobs
-      - default-jobs
+  cron: name="{{env}}-{{ item.key }}" minute={{ item.value.minute }} hour={{ item.value.hour }} weekday={{ item.value.weekday }}  job="{{ analytics.home }}/scripts/run-job.sh es-form-data"
+  with_dict: "{{ run_es_form_data_job }}"
+  tags:
+    - spark1-jobs
+    - default-jobs
 
 - name: Create daily cron jobs for ministry-learner-leaderboard
   cron: name="{{env}}-{{ item.key }}" day={{ item.value.day }} minute={{ item.value.minute }} hour={{ item.value.hour }}  job="{{ analytics.home }}/scripts/run-job.sh ministry-learner-leaderboard"
