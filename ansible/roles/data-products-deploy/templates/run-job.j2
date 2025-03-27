@@ -34,7 +34,6 @@ $SPARK_HOME/bin/spark-submit \
 # Capture the exit status of the last command
 exit_status=$?
 
-
 # Append temp log to the main log
 cat "$temp_log_file" >> "$log_file"
 
@@ -50,6 +49,9 @@ if [ $exit_status -eq 0 ]; then
 else
   echo "Job execution failed with status $exit_status - $1" | tee -a "$log_file"
 fi
+
+chown analytics:analytics "$log_file"
+chown analytics:analytics {{ analytics.home }}/scripts/logs/joblog.log
 
 # Cleanup temp log file
 rm "$temp_log_file"
