@@ -274,8 +274,8 @@ run_survey_nps_job:
   survey-nps:
     hour: 07
     minute: 00
-run_ministry_metrics_job:
-  ministry-metrics:
+run_dsr_computation_job:
+  dsr-computation:
     hour : 07
     minute: 05
 run_summary_redis_sync_job:
@@ -335,6 +335,10 @@ run_odcs_recomendation_job:
 run_user_activity_job:
   user-activity:
     hour: 12
+    minute: 00
+run_ministry_metrics_job:
+  ministry-metrics:
+    hour : 13
     minute: 00
 run_monitor_job:
   monitor-job-summ:
