@@ -245,7 +245,7 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
       .from(config.dbKeyspace, config.ratingsLookupTable).
       where(QueryBuilder.eq("activityid", event.activityId))
       .and(QueryBuilder.eq("activitytype", event.activityType))
-      .and(QueryBuilder.eq("rating", prevRating)).toString
+      .and(QueryBuilder.eq("rating", prevRating)).limit(100).toString
 
     val row = cassandraUtil.findOne(query)
     logger.info("Successfully retrieved the rating for summary - activityId: "
