@@ -890,3 +890,6 @@ error-denormalization:
     parallelism.default: 1
     jobmanager.execution.failover-strategy: region
     taskmanager.memory.network.fraction: 0.1
+
+tolerations:
+  enabled: {{ dp_flink_tolerations_enabled | default('false') }}
