@@ -7,6 +7,7 @@ export DP_LOGS={{ analytics.home }}/logs/data-products
 cd {{ analytics.home }}/scripts
 source model-config.sh
 today=$(date "+%Y-%m-%d")
+timestamp=$(date "+%H-%M-%S")
 
 mongo_host={{ mongo_node_bb_host }}
 
@@ -15,7 +16,7 @@ if [ ! -z "$1" ]; then job_id=$1; fi
 if [ ! -z "$1" ]; then job_config=$(config $1 $2); else job_config="$2"; fi
 
 log_file="$DP_LOGS/$today-job-execution.log"
-temp_log_file="$DP_LOGS/$today-job-$job_id.log"
+temp_log_file="$DP_LOGS/$today-$timestamp-job-$job_id.log"
 
 echo "Starting the job - $1" | tee -a "$log_file"
 echo "Job modelName - $job_id" | tee -a "$log_file"
@@ -40,6 +41,8 @@ cat "$temp_log_file" >> "$log_file"
 # Check for OutOfMemoryError in the temp log only (not the full log file)
 if grep -q "OutOfMemoryError" "$temp_log_file"; then
   echo "Job failed due to OutOfMemoryError" | tee -a "$log_file"
+  cp "$temp_log_file" "$DP_LOGS/$today-$timestamp-job-$job_id_oom.log"
+  rm "$temp_log_file"
   exit 1
 fi
 
