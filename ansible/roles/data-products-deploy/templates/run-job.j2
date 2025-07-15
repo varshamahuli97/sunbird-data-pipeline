@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -o pipefail
 
 export SPARK_HOME={{ analytics.home }}/spark-{{ spark_version }}-bin-hadoop2.7
 export MODELS_HOME={{ analytics.home }}/models-{{ model_version }}
@@ -33,7 +34,7 @@ $SPARK_HOME/bin/spark-submit \
   --config "$job_config" 2>&1 | tee -a "$temp_log_file"
 
 # Capture the exit status of the last command
-exit_status=$?
+exit_status=${PIPESTATUS[0]}
 
 # Append temp log to the main log
 cat "$temp_log_file" >> "$log_file"
@@ -41,7 +42,7 @@ cat "$temp_log_file" >> "$log_file"
 # Check for OutOfMemoryError in the temp log only (not the full log file)
 if grep -q "OutOfMemoryError" "$temp_log_file"; then
   echo "Job failed due to OutOfMemoryError" | tee -a "$log_file"
-  cp "$temp_log_file" "$DP_LOGS/$today-$timestamp-job-$job_id_oom.log"
+  cp "$temp_log_file" "$DP_LOGS/$today-$timestamp-job-$job_id-oom.log"
   rm "$temp_log_file"
   exit 1
 fi
