@@ -41,10 +41,6 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
   override def processElement(event: Event, context: ProcessFunction[Event, Event]#Context, metrics: Metrics): Unit = {
     var userStatus: Boolean = false
     try {
-      val query = QueryBuilder.select().column("userid").from(config.dbCoursesKeyspace, config.courseTable)
-        .where(QueryBuilder.eq(config.userId, event.userId)).and(QueryBuilder.eq(config.courseId, event.activityId))
-      val rows: java.util.List[Row] = cassandraUtil.find(query.toString);
-      if (null != rows && !rows.isEmpty) {
         userStatus = true
         var delta = 0.0f
         val prevRatingValue = event.prevValues
@@ -125,11 +121,7 @@ class RatingFunction(config: RatingConfig, @transient var cassandraUtil: Cassand
             deleteRatingLookup(event)
           }
           saveRatingLookup(event)
-      } else {
-        context.output(config.failedEvent, event)
-      }
-    }
-    catch {
+    } catch {
       case ex: Exception => {
         ex.printStackTrace()
         context.output(config.failedEvent, event)
